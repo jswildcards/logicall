@@ -24,14 +24,16 @@ services:
     expose: 
       - 3000
     tty: true
+    depends_on: 
+      - mysql
 
-  vue:
-    container_name: vue
-    build: 
-      context: ./vue
-    expose: 
-      - 8080
-    tty: true
+  # vue:
+  #   container_name: vue
+  #   build: 
+  #     context: ./vue
+  #   expose: 
+  #     - 8080
+  #   tty: true
 
   nginx:
     build:
@@ -39,7 +41,10 @@ services:
     container_name: nginx
     volumes:
       - ./nginx/:/etc/nginx/site-available/
+      - ./vue/dist/:/usr/share/nginx/html
     ports:
       - 80:80
       - 443:443
     tty: true
+    depends_on: 
+      - node

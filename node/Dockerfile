@@ -1,6 +1,6 @@
 FROM node:14.11.0
 
-WORKDIR /app/server
+WORKDIR /app
 ENV TZ Asia/Hong_Kong
 
 COPY package.json yarn.lock ./

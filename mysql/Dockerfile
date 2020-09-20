@@ -1,8 +1,8 @@
 FROM mysql:5.7.31
 
-ADD ./my.cnf /etc/mysql/conf.d/my.cnf
+# ADD ./my.cnf /etc/mysql/conf.d/my.cnf
 
-RUN chown -R mysql:root /docker-entrypoint-initdb.d/
+# RUN chown -R mysql:root /docker-entrypoint-initdb.d/
 
 ARG MYSQL_DATABASE=classicmodels
 ARG MYSQL_USER=docker
