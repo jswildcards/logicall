@@ -11,16 +11,8 @@ import HelloWorld from '@/components/HelloWorld.vue'
 
 export default {
   name: 'Home',
-  data: function() {
-    return {
-      customers: []
-    };
-  },
   components: {
     HelloWorld
-  },
-  mounted: function() {
-    fetch('/api/customers').then(res => res.json()).then(res => this.customers = res).then(console.log);
   }
 }
 </script>

@@ -41,7 +41,7 @@ services:
     container_name: nginx
     volumes:
       - ./nginx/:/etc/nginx/site-available/
-      - ./vue/dist/:/usr/share/nginx/html
+      # - ./vue/dist/:/usr/share/nginx/html
     ports:
       - 80:80
       - 443:443
