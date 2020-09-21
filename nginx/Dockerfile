@@ -1,5 +1,8 @@
 # build stage
 FROM node:14.11.0 as build-stage
+
+LABEL maintainer="js.wildcards@gmail.com"
+
 WORKDIR /html
 COPY html/package.json html/yarn.lock ./
 RUN yarn install

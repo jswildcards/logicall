@@ -1,18 +1,13 @@
 FROM mysql:5.7.31
 
-# ADD ./my.cnf /etc/mysql/conf.d/my.cnf
+LABEL maintainer="js.wildcards@gmail.com"
 
-# RUN chown -R mysql:root /docker-entrypoint-initdb.d/
+COPY ./data/ /docker-entrypoint-initdb.d/
 
-ARG MYSQL_DATABASE=classicmodels
-ARG MYSQL_USER=docker
-ARG MYSQL_PASSWORD=docker
-ARG MYSQL_ROOT_PASSWORD=root
-
-ENV MYSQL_DATABASE=$MYSQL_DATABASE
-ENV MYSQL_USER=$MYSQL_USER
-ENV MYSQL_PASSWORD=$MYSQL_PASSWORD
-ENV MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+ENV MYSQL_DATABASE=classicmodels
+ENV MYSQL_USER=docker
+ENV MYSQL_PASSWORD=docker
+ENV MYSQL_ROOT_PASSWORD=root
 
 CMD ["mysqld"]
 EXPOSE 3306
