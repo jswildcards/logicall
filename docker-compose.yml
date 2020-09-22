@@ -9,6 +9,12 @@ services:
     expose: 
       - 3306
 
+  adminer:
+    image: "adminer:4.7.7"
+    container_name: adminer
+    expose: 
+      - 8080
+
   node:
     container_name: node
     build:
