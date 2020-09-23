@@ -4,7 +4,7 @@ const connection = mysql.createConnection({
   host: process?.env?.NODE_ENV === 'production' ? 'mysql' : 'localhost',
   user: 'docker',
   password: 'docker',
-  database: 'classicmodels'
+  database: 'mydb'
 }).promise();
 
 export default connection;

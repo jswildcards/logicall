@@ -13,6 +13,19 @@ export default {
   name: 'Home',
   components: {
     HelloWorld
+  },
+  data: function () {
+    return {
+      products: []
+    }
+  },
+  mounted: async function () {
+    const products = await fetch('/api/products?page[number]=2&page[size]=5')
+      .then(res => res.json())
+      .then(res => res?.data ?? { err: 'Unable to fetch resources' })
+
+    this.products = products
+    console.log(this.products)
   }
 }
 </script>
