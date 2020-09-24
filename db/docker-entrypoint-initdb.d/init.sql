@@ -1,3 +1,8 @@
+/*
+** This file will be generated (of data only) after tables.sql is defined well.
+** Reference: http://filldb.info/
+*/
+
 DROP DATABASE IF EXISTS `mydb`;
 
 CREATE DATABASE `mydb`;
