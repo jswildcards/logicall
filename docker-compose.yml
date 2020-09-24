@@ -2,11 +2,14 @@ version: '3.8'
 
 services:
 
-  mysql:
-    container_name: mysql
-    build:
-      context: ./mysql
-    expose: 
+  db:
+    image: "mysql:5.7.31"
+    container_name: db
+    env_file: .env
+    volumes: 
+      - ./db/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
+    command: ["mysqld"]
+    expose:
       - 3306
 
   adminer:
@@ -15,23 +18,18 @@ services:
     expose: 
       - 8080
 
-  node:
-    container_name: node
+  backend:
+    container_name: backend
     build:
-      context: ./node
+      context: ./backend
+    env_file: .env
     expose: 
       - 3000
-    environment: 
-      - NODE_ENV=production
-    tty: true
 
-  nginx:
+  webserver:
+    container_name: webserver
     build:
-      context: ./nginx
-    container_name: nginx
-    volumes:
-      - ./nginx/:/etc/nginx/site-available/
+      context: ./webserver
     ports:
       - 80:80
       - 443:443
-    tty: true
