@@ -9,10 +9,9 @@ The process of automatically assigning drivers/packages and optimising their rou
 ## Usage
 
 ```bash
-git clone https://github.com/jswildcards/logicall.git
-cd logicall
-docker-compose up -d
+$ git clone https://github.com/jswildcards/logicall.git
+$ cd logicall
+$ build.sh
 ```
 
-Then open http://localhost to view the homepage
-or open http://localhost/api/customers to start query some JSON results
+Then open http://localhost to view the homepage or open http://localhost/api/users to start query some JSON results

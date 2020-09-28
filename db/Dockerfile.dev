@@ -1,0 +1,11 @@
+FROM mysql:5.7.31
+
+ENV MYSQL_DATABASE=mydb
+ENV MYSQL_USER=docker
+ENV MYSQL_PASSWORD=docker
+ENV MYSQL_ROOT_PASSWORD=root
+
+COPY ./volumes/docker-entrypoint-initdb.d/ /docker-entrypoint-initdb.d/
+
+EXPOSE 3306
+CMD ["mysqld"]

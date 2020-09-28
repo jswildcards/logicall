@@ -7,7 +7,7 @@ services:
     container_name: db
     env_file: .env
     volumes: 
-      - ./db/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
+      - ./db/volumes/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
     command: ["mysqld"]
     expose:
       - 3306

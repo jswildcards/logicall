@@ -7,13 +7,13 @@ WORKDIR /html
 COPY frontend/package.json frontend/yarn.lock ./
 RUN yarn install
 COPY ./frontend .
-RUN yarn build
+RUN yarn build && yarn export
 
 # production stage
 FROM nginx:1.19.2-alpine as production-stage
-COPY --from=build-stage /html/build /usr/share/nginx/html
+COPY --from=build-stage /html/out /usr/share/nginx/html
 
 RUN rm /etc/nginx/conf.d/default.conf
-COPY ./etc/nginx/ /etc/nginx/
+COPY ./volumes/etc/nginx/ /etc/nginx/
 
 CMD ["nginx"]
