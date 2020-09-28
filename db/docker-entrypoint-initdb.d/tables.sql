@@ -3,7 +3,7 @@
 ** Reference: https://www.mysqltutorial.org/mysql-sample-database.aspx/
 */
 
-CREATE TABLE `products` (
+CREATE TABLE IF NOT EXISTS `products` (
   `productId` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `description` varchar(255) DEFAULT '',
@@ -12,7 +12,7 @@ CREATE TABLE `products` (
   PRIMARY KEY (`productId`)
 );
 
-CREATE TABLE `customers` (
+CREATE TABLE IF NOT EXISTS `customers` (
   `customerId` int(11) NOT NULL AUTO_INCREMENT,
   `firstName` varchar(255) NOT NULL,
   `lastName` varchar(255) NOT NULL,
@@ -23,14 +23,14 @@ CREATE TABLE `customers` (
   UNIQUE KEY `email` (`email`)
 );
 
-CREATE TABLE `orders` (
+CREATE TABLE IF NOT EXISTS `orders` (
   `orderId` varchar(255) NOT NULL,
   `customerId` int(11) NOT NULL,
   PRIMARY KEY (`orderId`),
   CONTRAINT `FK_Customer` FOREIGN KEY (`customerId`) REFERENCES `customers`(`id`)
 );
 
-CREATE TABLE `orderdetails` (
+CREATE TABLE IF NOT EXISTS `orderdetails` (
   `orderId` varchar(255) NOT NULL,
   `productId` int(11) NOT NULL,
   `quantity` float(23, 2) NOT NULL,

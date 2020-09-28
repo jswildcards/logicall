@@ -1,4 +1,5 @@
-FROM node:14.11.0
+# build stage
+FROM node:12.18.4-alpine as build-stage
 
 LABEL maintainer="js.wildcards@gmail.com"
 
@@ -8,10 +9,19 @@ COPY package.json yarn.lock ./
 RUN yarn install
 
 COPY . ./
-RUN yarn tsc
+RUN yarn tsc && npm prune --production
+
+# production stage
+FROM node:12.18.4-alpine as production-stage
+
+WORKDIR /usr/src/app
+
+COPY --from=build-stage /app/dist/ ./src/
+COPY --from=build-stage /app/node_modules/ ./node_modules/
+COPY --from=build-stage /app/package.json /app/yarn.lock ./
 
 ENV NODE_ENV production
 ENV TZ Asia/Hong_Kong
 
 EXPOSE 3000
-CMD ["node", "dist/index.js"]
+CMD ["node", "./src/index.js"]

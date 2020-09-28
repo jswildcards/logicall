@@ -1,5 +1,5 @@
 # build stage
-FROM node:14.11.0 as build-stage
+FROM node:12.18.4-alpine as build-stage
 
 LABEL maintainer="js.wildcards@gmail.com"
 
@@ -10,7 +10,7 @@ COPY ./frontend .
 RUN yarn build
 
 # production stage
-FROM nginx:1.19.2 as production-stage
+FROM nginx:1.19.2-alpine as production-stage
 COPY --from=build-stage /html/build /usr/share/nginx/html
 
 RUN rm /etc/nginx/conf.d/default.conf
