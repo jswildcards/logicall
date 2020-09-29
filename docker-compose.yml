@@ -26,6 +26,13 @@ services:
     expose: 
       - 3000
 
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+    expose:
+      - 3000
+
   webserver:
     container_name: webserver
     build:
