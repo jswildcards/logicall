@@ -9,8 +9,8 @@ services:
     volumes: 
       - ./db/volumes/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
     command: ["mysqld"]
-    expose:
-      - 3306
+    ports:
+      - 3306:3306
 
   adminer:
     image: "adminer:4.7.7"
