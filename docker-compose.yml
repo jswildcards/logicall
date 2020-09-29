@@ -12,18 +12,20 @@ services:
     expose:
       - 3306
 
-  adminer:
-    image: "adminer:4.7.7"
-    container_name: adminer
-    expose: 
-      - 8080
-
   backend:
     container_name: backend
     build:
       context: ./backend
     env_file: .env
     expose: 
+      - 3000
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+    env_file: .env
+    expose:
       - 3000
 
   webserver:

@@ -1,0 +1,6 @@
+.dockerignore
+Dockerfile
+*.md
+node_modules/
+.next/
+out/

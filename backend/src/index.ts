@@ -10,10 +10,10 @@ const PAGE_SIZE = 20;
 // TODO: implement Authorization method (probably using JWT)
 // EDIT: should be moved to [AUTH SERVICE]
 app.use(function(req, res, next) {
-  if(!req.headers.authorization) {
-    res.status(400).json({ error: {} });
-    return;
-  }
+  // if(!req.headers.authorization) {
+  //   res.status(400).json({ error: {} });
+  //   return;
+  // }
 
   const page = req.query.page as { number: string, size: string, }; // number = 2, size = 5 => (5, 5) gives row 6 - 10
   const number = parseInt(page?.number) || PAGE_NUMBER;
