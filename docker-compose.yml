@@ -12,12 +12,6 @@ services:
     expose:
       - 3306
 
-  adminer:
-    image: "adminer:4.7.7"
-    container_name: adminer
-    expose: 
-      - 8080
-
   backend:
     container_name: backend
     build:

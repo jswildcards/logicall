@@ -1,5 +1,5 @@
 /*
-** This file will be generated (of data only) after @/db/tables.sql is defined well.
+** This file will be generated (of data only) after @/db/dev.sql is defined well.
 ** Reference: http://filldb.info/
 */
 
