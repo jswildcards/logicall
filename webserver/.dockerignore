@@ -1,9 +1,0 @@
-.dockerignore
-*.md
-.gitignore
-.next/
-out/
-Dockerfile
-node_modules/
-dist/
-build/

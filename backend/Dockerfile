@@ -21,8 +21,5 @@ COPY --from=build-stage /app/node_modules/ ./node_modules/
 COPY --from=build-stage /app/package.json ./
 COPY --from=build-stage /app/yarn.lock ./
 
-ENV NODE_ENV production
-ENV TZ Asia/Hong_Kong
-
 EXPOSE 3000
 CMD ["node", "./src/index.js"]

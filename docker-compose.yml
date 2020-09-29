@@ -30,6 +30,7 @@ services:
     container_name: frontend
     build:
       context: ./frontend
+    env_file: .env
     expose:
       - 3000
 
