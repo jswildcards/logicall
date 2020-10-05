@@ -1,14 +1,22 @@
-// import Head from 'next/head'
-import React from 'react'
+import React from 'react';
+import { Button, TextField, FormControl } from '@material-ui/core';
 import Link from 'next/link';
-// import styles from '../styles/Home.module.css'
 
 export default class Home extends React.Component {
+  signIn() {
+
+  }
+
   render() {
     return (
       <div>
-        <h3>Hello</h3>
-        <Link href="/clock">Clock</Link>
+        <FormControl fullWidth>
+          <TextField label="Username" />
+        </FormControl>
+        <FormControl fullWidth>
+          <TextField label="Password" />
+        </FormControl>
+        <Button variant="contained" color="primary" onClick={() => this.signIn()}>Sign In</Button>
       </div>
     )
   }

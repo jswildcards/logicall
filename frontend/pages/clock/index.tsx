@@ -3,6 +3,7 @@
 import React from "react";
 import Link from 'next/link';
 import { AccessAlarm, ThreeDRotation } from '@material-ui/icons';
+import { Button } from '@material-ui/core';
 
 interface IProps {}
 interface IState {
@@ -45,7 +46,9 @@ export default class Clock extends React.Component<IProps, IState> {
         <p>{this.state.value}</p>
         <AccessAlarm />
         <ThreeDRotation />
-        <Link href="/">Home</Link>
+        <Link href="/" passHref>
+          <Button variant="contained" color="primary">Home</Button>
+        </Link>
       </div>
     );
   }

@@ -11,6 +11,11 @@ The process of automatically assigning drivers/packages and optimising their rou
 ```bash
 $ git clone https://github.com/jswildcards/logicall.git
 $ cd logicall
+
+# mac user
+$ sh ./build.sh
+
+# windows user
 $ build.sh
 ```
 
