@@ -3,9 +3,13 @@
 import React from "react";
 import Link from 'next/link';
 import { AccessAlarm, ThreeDRotation } from '@material-ui/icons';
-import { Button } from '@material-ui/core';
+import { Button, FormControl, TextField } from '@material-ui/core';
 
-interface IProps {}
+// Redux: use Increment component
+import Increment from '../../containers/increment';
+import User from '../../containers/user';
+
+interface IProps { }
 interface IState {
   time: Date;
   value: string;
@@ -34,18 +38,22 @@ export default class Clock extends React.Component<IProps, IState> {
     this.setState({ time: new Date() });
   }
 
-  handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  handleChange(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
     this.setState({ value: e.target.value });
   }
-  
+
   render() {
     return (
       <div>
-        <h4>The time is now { this.state.time.toLocaleString() }</h4>
-        <input type="text" value={this.state.value} onChange={(e) => this.handleChange(e)} />
+        <h4>The time is now {this.state.time.toLocaleString()}</h4>
+        <FormControl fullWidth>
+          <TextField type="text" value={this.state.value} label="Username" onChange={(e) => this.handleChange(e)} />
+        </FormControl>
         <p>{this.state.value}</p>
         <AccessAlarm />
         <ThreeDRotation />
+        <User />
+        <Increment />
         <Link href="/" passHref>
           <Button variant="contained" color="primary">Home</Button>
         </Link>
