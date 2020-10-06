@@ -43,13 +43,18 @@ export default class Clock extends React.Component<IProps, IState> {
   }
 
   render() {
+    const { time, value } = this.state;
+
     return (
       <div>
-        <h4>The time is now {this.state.time.toLocaleString()}</h4>
+        <h4>
+          The time is now
+          {time.toLocaleString()}
+        </h4>
         <FormControl fullWidth>
-          <TextField type="text" value={this.state.value} label="Username" onChange={(e) => this.handleChange(e)} />
+          <TextField type="text" value={value} label="Username" onChange={(e) => this.handleChange(e)} />
         </FormControl>
-        <p>{this.state.value}</p>
+        <p>{value}</p>
         <AccessAlarm />
         <ThreeDRotation />
         <User />

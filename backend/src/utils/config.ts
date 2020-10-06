@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+
 dotenv.config();
 
 const {
@@ -14,3 +15,5 @@ export const Database = {
   password: MYSQL_PASSWORD,
   database: MYSQL_DATABASE,
 };
+
+export default { Database };

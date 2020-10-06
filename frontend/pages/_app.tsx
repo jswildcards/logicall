@@ -1,4 +1,5 @@
 // import '../styles/globals.css'
+import React from 'react';
 import 'fontsource-roboto'
 
 // Redux: add reducers

@@ -1,4 +1,4 @@
-export interface Page {
+export interface IPage {
   offset: number;
   size: number;
 }

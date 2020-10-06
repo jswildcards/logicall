@@ -22,8 +22,39 @@ CREATE TABLE IF NOT EXISTS `customers` (
   `password` varchar(32) DEFAULT 'password',
   `phone` varchar(24) NULL,
   PRIMARY KEY (`customerId`),
-  UNIQUE KEY `email` (`email`)
+  CONTRAINT `UC_Email` UNIQUE (`email`)
 );
+
+-- TODO: Implement tables `offices`, `lockers` and `lockerGrids`
+
+CREATE TABLE IF NOT EXISTS `offices` (
+  `officeId` int(11) NOT NULL AUTO_INCREMENT,
+  `addressLine1` text NULL,
+  `addresssLine2` text NULL,
+  `latitude` float(10, 7) NULL,
+  `longitude` float(10, 7) NULL,
+  `phone` varchar(24) NULL,
+  PRIMARY KEY (`officeId`)
+);
+
+CREATE TABLE IF NOT EXISTS `lockers` (
+  `lockerId` int(11) NOT NULL AUTO_INCREMENT,
+  `officeId` int(11) NULL,
+  `addressLine1` text NULL,
+  `addressLine2` text NULL,
+  `latitude` float(10, 7) NULL,
+  `longitude` float(10, 7) NULL,
+  `status` text NULL DEFAULT 'Normal',
+  PRIMARY KEY (`lockerId`),
+  CONTRAINT `FK_Office` FOREIGN KEY (`officeId`) REFERENCES `offices`(`officeId`)
+);
+
+-- CREATE TABLE IF NOT EXISTS `lockerGrids` (
+--   `lockerGridId` int(11) NOT NULL AUTO_INCREMENT,
+--   `lockerId` int(11) NOT NULL,
+--   `gridId` int(11) NOT NULL,
+--   PRIMARY KEY (`lockerGridId`)
+-- );
 
 CREATE TABLE IF NOT EXISTS `orders` (
   `orderId` varchar(255) NOT NULL,
@@ -41,31 +72,13 @@ CREATE TABLE IF NOT EXISTS `orderdetails` (
   `productId` int(11) NOT NULL,
   `quantity` float(23, 2) NOT NULL,
   `priceEach` float(23, 2) NOT NULL,
+  `status` varchar(15) NOT NULL,
+  `lockerGridId` int(11) NULL,
   PRIMARY KEY (`orderId`, `productId`),
   CONTRAINT `FK_Order` FOREIGN KEY (`orderId`) REFERENCES `orders`(`orderId`),
-  CONTRAINT `FK_Product` FOREIGN KEY (`productId`) REFERENCES `products`(`productId`)
+  CONTRAINT `FK_Product` FOREIGN KEY (`productId`) REFERENCES `products`(`productId`),
+  CONTRAINT `FK_LockerGrid` FOREIGN KEY (`lockerGridId`) REFERENCES `lockerGrids`(`lockerGridId`)
 );
-
--- TODO: Implement tables `offices` and `lockers`
-
--- CREATE TABLE IF NOT EXISTS `offices` (
---   `officeId` int(11) NOT NULL AUTO_INCREMENT,
---   `addressLine1`,
---   `addresssLine2`,
---   `latitude`,
---   `longitude`,
---   `phone`,
---   PRIMARY KEY (`officeId`)
--- );
-
--- CREATE TABLE IF NOT EXISTS `lockers` (
---   `lockerId`,
---   `addressLine1`,
---   `addressLine2`,
---   `latitude`,
---   `longitude`,
---   `status`,
--- );
 
 CREATE TABLE IF NOT EXISTS `employees` (
   `employeeId` int(11) NOT NULL AUTO_INCREMENT,

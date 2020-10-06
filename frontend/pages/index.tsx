@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
-import React from "react";
+import React from 'react';
 import Link from 'next/link';
 import { AccessAlarm, ThreeDRotation } from '@material-ui/icons';
 import { Button, FormControl, TextField } from '@material-ui/core';
@@ -22,7 +22,7 @@ export default class Home extends React.Component<IProps, IState> {
     super(props);
     this.state = {
       time: new Date(),
-      value: ''
+      value: '',
     };
   }
 
@@ -43,13 +43,19 @@ export default class Home extends React.Component<IProps, IState> {
   }
 
   render() {
+    const { time, value } = this.state;
+
     return (
       <div>
-        <h4>The time is now {this.state.time.toLocaleString()}</h4>
+        <h4>
+          The time is now
+          {' '}
+          {time.toLocaleString()}
+        </h4>
         <FormControl fullWidth>
-          <TextField type="text" value={this.state.value} label="Username" onChange={(e) => this.handleChange(e)} />
+          <TextField type="text" value={value} label="Username" onChange={(e) => this.handleChange(e)} />
         </FormControl>
-        <p>{this.state.value}</p>
+        <p>{value}</p>
         <AccessAlarm />
         <ThreeDRotation />
         <User />

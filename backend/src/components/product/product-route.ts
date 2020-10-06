@@ -1,10 +1,11 @@
-import express from 'express';
-import { getProductById, getProductsByPage } from './product-controller';
+import express from "express";
+import { getProductById, getProductsByPage } from "./product-controller";
+
 const router = express.Router();
 
-const type = 'products';
+const type = "products";
 
-router.get('/', async function(_, res, next) {
+router.get("/", async (_, res, next) => {
   const { offset, size } = res.locals;
   const rows = await getProductsByPage({ offset, size });
 
@@ -17,7 +18,7 @@ router.get('/', async function(_, res, next) {
   next();
 });
 
-router.get('/:id', async function(req, res, next) {
+router.get("/:id", async (req, res, next) => {
   const rows = await getProductById({ id: req.params.id });
   const isSingleObject = true;
 
