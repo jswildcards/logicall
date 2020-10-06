@@ -1,12 +1,12 @@
 import express from 'express';
-import { getProductById, getProductsByPage } from '../controllers/product-controller';
+import { getUserById, getUsersByPage } from './user-controller';
 const router = express.Router();
 
-const type = 'products';
+const type = 'users';
 
 router.get('/', async function(_, res, next) {
   const { offset, size } = res.locals;
-  const rows = await getProductsByPage({ offset, size });
+  const rows = await getUsersByPage({ offset, size });
 
   res.locals = {
     ...res.locals,
@@ -18,7 +18,7 @@ router.get('/', async function(_, res, next) {
 });
 
 router.get('/:id', async function(req, res, next) {
-  const rows = await getProductById({ id: req.params.id });
+  const rows = await getUserById({ id: req.params.id });
   const isSingleObject = true;
 
   res.locals = {

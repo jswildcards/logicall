@@ -1,4 +1,4 @@
-export default interface Page {
+export interface Page {
   offset: number;
   size: number;
 }

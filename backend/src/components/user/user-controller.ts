@@ -1,5 +1,6 @@
-import { User, Page } from '../models';
-import connection from '../modules/db';
+import User from './user';
+import { Page } from '../../utils/interfaces';
+import connection from '../../utils/db';
 
 export async function getUsers() {
   const sql = 'SELECT * FROM users';
