@@ -4,80 +4,31 @@
 ** Reference: https://www.mysqltutorial.org/mysql-sample-database.aspx/
 */
 
-CREATE TABLE IF NOT EXISTS `products` (
-  `productId` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `description` varchar(255) DEFAULT '',
-  `price` float(23, 2) DEFAULT 0.00,
-  `imageUrl` varchar(255) DEFAULT '',
-  PRIMARY KEY (`productId`)
-);
-
 CREATE TABLE IF NOT EXISTS `customers` (
   `customerId` int(11) NOT NULL AUTO_INCREMENT,
   `firstName` varchar(255) NOT NULL,
   `lastName` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `username` varchar(32) NOT NULL,
-  `password` varchar(32) DEFAULT 'password',
+  `password` varchar(255) NOT NULL DEFAULT 'password',
   `phone` varchar(24) NULL,
+  `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`customerId`),
-  CONTRAINT `UC_Email` UNIQUE (`email`)
+  CONSTRAINT `UC_Email` UNIQUE (`email`)
 );
 
--- TODO: Implement tables `offices`, `lockers` and `lockerGrids`
-
-CREATE TABLE IF NOT EXISTS `offices` (
-  `officeId` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `customerAddresses` (
+  `customerAddressId` int(11) NOT NULL AUTO_INCREMENT,
+  `customerId` int(11) NOT NULL,
   `addressLine1` text NULL,
   `addresssLine2` text NULL,
   `latitude` float(10, 7) NULL,
   `longitude` float(10, 7) NULL,
-  `phone` varchar(24) NULL,
-  PRIMARY KEY (`officeId`)
-);
-
-CREATE TABLE IF NOT EXISTS `lockers` (
-  `lockerId` int(11) NOT NULL AUTO_INCREMENT,
-  `officeId` int(11) NULL,
-  `addressLine1` text NULL,
-  `addressLine2` text NULL,
-  `latitude` float(10, 7) NULL,
-  `longitude` float(10, 7) NULL,
-  `status` text NULL DEFAULT 'Normal',
-  PRIMARY KEY (`lockerId`),
-  CONTRAINT `FK_Office` FOREIGN KEY (`officeId`) REFERENCES `offices`(`officeId`)
-);
-
--- CREATE TABLE IF NOT EXISTS `lockerGrids` (
---   `lockerGridId` int(11) NOT NULL AUTO_INCREMENT,
---   `lockerId` int(11) NOT NULL,
---   `gridId` int(11) NOT NULL,
---   PRIMARY KEY (`lockerGridId`)
--- );
-
-CREATE TABLE IF NOT EXISTS `orders` (
-  `orderId` varchar(255) NOT NULL,
-  `customerId` int(11) NOT NULL,
-  `orderDate` date NOT NULL,
-  `shippedDate` date DEFAULT NULL,
-  `status` varchar(15) NOT NULL,
-  `comments` text DEFAULT NULL,
-  PRIMARY KEY (`orderId`),
-  CONTRAINT `FK_Customer` FOREIGN KEY (`customerId`) REFERENCES `customers`(`customerId`)
-);
-
-CREATE TABLE IF NOT EXISTS `orderdetails` (
-  `orderId` varchar(255) NOT NULL,
-  `productId` int(11) NOT NULL,
-  `quantity` float(23, 2) NOT NULL,
-  `priceEach` float(23, 2) NOT NULL,
-  `status` varchar(15) NOT NULL,
-  `lockerGridId` int(11) NULL,
-  PRIMARY KEY (`orderId`, `productId`),
-  CONTRAINT `FK_Order` FOREIGN KEY (`orderId`) REFERENCES `orders`(`orderId`),
-  CONTRAINT `FK_Product` FOREIGN KEY (`productId`) REFERENCES `products`(`productId`),
-  CONTRAINT `FK_LockerGrid` FOREIGN KEY (`lockerGridId`) REFERENCES `lockerGrids`(`lockerGridId`)
+  `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`employeeId`),
+  CONSTRAINT `FK_Customer` FOREIGN KEY (`customerId`) REFERENCES `customers`(`customerId`)
 );
 
 CREATE TABLE IF NOT EXISTS `employees` (
@@ -86,8 +37,31 @@ CREATE TABLE IF NOT EXISTS `employees` (
   `lastName` varchar(255) NOT NULL,
   `email` varchar(255) NULL,
   `username` varchar(255) NULL,
-  `jobTitle` varchar(50) NULL,
-  `officeId` int(11) NULL,
-  PRIMARY KEY (`employeeId`),
-  CONTRAINT `FK_Office` FOREIGN KEY (`officeId`) REFERENCES `offices`(`officeId`)
+  `password` varchar(255) DEFAULT 'password',
+  `phone` varchar(24) NULL,
+  `jobTitle` enum('admin', 'driver') NULL DEFAULT 'driver',
+  `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`employeeId`)
 );
+
+CREATE TABLE IF NOT EXISTS `orders` (
+  `orderId` varchar(255) NOT NULL,
+  `status` text NOT NULL DEFAULT 'created',
+  `sendCustomerId` int(11) NOT NULL,
+  `sendCustomerAddressId` int(11) NOT NULL,
+  `receiveCustomerId` int(11) NOT NULL,
+  `receiveCustomerAddressId` int(11) NOT NULL,
+  `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `signUrl` text NULL,
+  `comments` text NULL,
+  PRIMARY KEY (`orderId`),
+  CONSTRAINT `FK_SendCustomer` FOREIGN KEY (`sendCustomerId`) REFERENCES `customers`(`customerId`),
+  CONSTRAINT `FK_SendCustomerAddress` FOREIGN KEY (`sendCustomerAddressId`) REFERENCES `customerAddresses`(`customerAddressId`),
+  CONSTRAINT `FK_ReceiveCustomer` FOREIGN KEY (`receiveCustomerId`) REFERENCES `customers`(`customerId`),
+  CONSTRAINT `FK_ReceiveCustomerAddress` FOREIGN KEY (`receiveCustomerAddressId`) REFERENCES `customerAddresses`(`customerAddressId`)
+);
+
+-- TODO: Actually should add table `orderTraces` to log the order trend, 
+-- with removing necessary columns in table `orders`
