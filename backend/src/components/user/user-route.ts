@@ -1,11 +1,11 @@
-import express from 'express';
-import { getUserById, getUsersByPage } from './user-controller';
+import express from "express";
+import { getUserById, getUsersByPage } from "./user-controller";
 
 const router = express.Router();
 
-const type = 'users';
+const type = "users";
 
-router.get('/', async (_, res, next) => {
+router.get("/", async (_, res, next) => {
   const { offset, size } = res.locals;
   const rows = await getUsersByPage({ offset, size });
 
@@ -18,7 +18,7 @@ router.get('/', async (_, res, next) => {
   next();
 });
 
-router.get('/:id', async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
   const rows = await getUserById({ id: req.params.id });
   const isSingleObject = true;
 

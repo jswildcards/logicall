@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint . --fix && prettier --write ."
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",

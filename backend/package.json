@@ -24,6 +24,6 @@
   "scripts": {
     "start": "tsc && node .",
     "tsc": "tsc",
-    "lint": "eslint"
+    "lint": "eslint . --fix && prettier --write ."
   }
 }

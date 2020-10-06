@@ -1,13 +1,13 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
-import React from 'react';
-import Link from 'next/link';
-import { AccessAlarm, ThreeDRotation } from '@material-ui/icons';
-import { Button, FormControl, TextField } from '@material-ui/core';
+import React from "react";
+import Link from "next/link";
+import { AccessAlarm, ThreeDRotation } from "@material-ui/icons";
+import { Button, FormControl, TextField } from "@material-ui/core";
 
 // Redux: use Increment component
-import Increment from '../containers/increment';
-import User from '../containers/user';
+import Increment from "../containers/increment";
+import User from "../containers/user";
 
 interface IProps { }
 interface IState {
@@ -22,7 +22,7 @@ export default class Home extends React.Component<IProps, IState> {
     super(props);
     this.state = {
       time: new Date(),
-      value: '',
+      value: "",
     };
   }
 
@@ -53,7 +53,12 @@ export default class Home extends React.Component<IProps, IState> {
           {time.toLocaleString()}
         </h4>
         <FormControl fullWidth>
-          <TextField type="text" value={value} label="Username" onChange={(e) => this.handleChange(e)} />
+          <TextField
+            type="text"
+            value={value}
+            label="Username"
+            onChange={(e) => this.handleChange(e)}
+          />
         </FormControl>
         <p>{value}</p>
         <AccessAlarm />
@@ -61,7 +66,9 @@ export default class Home extends React.Component<IProps, IState> {
         <User />
         <Increment />
         <Link href="/clock" passHref>
-          <Button variant="contained" color="primary">Clock</Button>
+          <Button variant="contained" color="primary">
+            Clock
+          </Button>
         </Link>
       </div>
     );
