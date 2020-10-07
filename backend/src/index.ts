@@ -1,34 +1,15 @@
 import express from "express";
-import productRoute from "./components/product/product-route";
-import userRoute from "./components/user/user-route";
+import customerRoute from "./components/customer/customer-route";
+import customerAddressRoute from "./components/customer-address/customer-address-route";
+import employeeRoute from "./components/employee/employee-route";
+import orderRoute from "./components/order/order-route";
+import orderLogRoute from "./components/order-log/order-log-route";
 
 const router = express.Router();
 const app = express();
 
 const PAGE_NUMBER = 1;
 const PAGE_SIZE = 20;
-
-function jsonApize({
-  rows,
-  type,
-  isSingleObject,
-}: {
-  rows: any[];
-  type: any;
-  isSingleObject: boolean;
-}) {
-  const result = rows.map((attributes: any) => {
-    const { id, ...otherThanId } = attributes;
-
-    return {
-      id,
-      type,
-      attributes: { ...otherThanId },
-    };
-  });
-
-  return isSingleObject ? result[0] : result;
-}
 
 // TODO: implement Authorization method (probably using JWT)
 // EDIT: should be moved to [AUTH SERVICE]
@@ -53,17 +34,12 @@ app.use((req, res, next) => {
   next();
 });
 
-router.use("/products", productRoute);
-router.use("/users", userRoute);
+router.use("/customers", customerRoute);
+router.use("/customer-addresses", customerAddressRoute);
+router.use("/employees", employeeRoute);
+router.use("/orders", orderRoute);
+router.use("/order-logs", orderLogRoute);
 
 app.use("/api", router);
-
-app.use((_, res) => {
-  const { rows, type, isSingleObject } = res.locals;
-
-  res.json({
-    data: jsonApize({ rows, type, isSingleObject }),
-  });
-});
 
 app.listen(3000);
