@@ -9,7 +9,9 @@ The process of automatically assigning drivers/packages and optimising their rou
 ## Usage
 
 ```bash
-$ git clone https://github.com/jswildcards/logicall.git
+$ git clone https://github.com/jswildcards/logicall.git # or
+$ git clone --single-branch --branch development https://github.com/jswildcards/logicall.git
+
 $ cd logicall
 $ cp .env.example .env
 
