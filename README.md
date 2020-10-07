@@ -9,7 +9,8 @@ The process of automatically assigning drivers/packages and optimising their rou
 ## Usage
 
 ```bash
-$ git clone https://github.com/jswildcards/logicall.git # or
+$ git clone https://github.com/jswildcards/logicall.git
+# or if you would like to clone this branch
 $ git clone --single-branch --branch development https://github.com/jswildcards/logicall.git
 
 $ cd logicall
@@ -22,4 +23,4 @@ $ sh ./build.sh
 $ .\build.sh
 ```
 
-When docker build is done, open http://localhost to view the homepage or open http://localhost/api/users to start query some JSON results
+When docker build is done, open http://localhost to view the homepage or open http://localhost/api/customers to start query some JSON results
