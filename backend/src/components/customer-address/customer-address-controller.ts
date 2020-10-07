@@ -1,6 +1,5 @@
 import ICustomerAddress from "./customer-address";
 import connection from "../../utils/db";
-import ICustomer from "../customer/customer";
 
 export async function getCustomerAddresses() {
   const sql = "SELECT * FROM customerAddresses";
@@ -9,7 +8,7 @@ export async function getCustomerAddresses() {
 
 export async function getCustomerAddressesByCustomerId({
   customerId,
-}: ICustomer) {
+}: ICustomerAddress) {
   const sql = "SELECT * FROM customerAddresses WHERE customerId = ?";
   return (await connection.execute(sql, [customerId]))[0] as ICustomerAddress[];
 }

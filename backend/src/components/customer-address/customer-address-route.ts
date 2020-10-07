@@ -1,14 +1,22 @@
 import express from "express";
+import ICustomerAddress from "./customer-address";
 import {
   getCustomerAddresses,
   getCustomerAddressById,
+  getCustomerAddressesByCustomerId,
 } from "./customer-address-controller";
 
 const router = express.Router();
 const type = "customer-address";
 
-router.get("/", async (_, res) => {
-  const customerAddresses = await getCustomerAddresses();
+router.get("/", async (req, res) => {
+  const { customerId } = req.query.filter as ICustomerAddress;
+
+  const customerAddresses = customerId
+    ? await getCustomerAddressesByCustomerId({
+        customerId: customerId.toString(),
+      })
+    : await getCustomerAddresses();
 
   res.json({
     data: customerAddresses.map((customerAddress) => {

@@ -1,3 +1,4 @@
+import Axios from "axios";
 import express from "express";
 import { getCustomers, getCustomerById } from "./customer-controller";
 
@@ -32,6 +33,16 @@ router.get("/:id", async (req, res) => {
       id: customerId,
       attributes,
     },
+  });
+});
+
+router.get("/:id/relationships/customer-addresses", async (req, res) => {
+  res.json({
+    ...(
+      await Axios.get(
+        `/api/customer-addresses?filter[customerId]=${req.params.id}`
+      )
+    ).data,
   });
 });
 
