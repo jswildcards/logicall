@@ -14,6 +14,10 @@ DROP TABLE IF EXISTS `employees`;
 DROP TABLE IF EXISTS `customerAddresses`;
 DROP TABLE IF EXISTS `customers`;
 
+DROP TRIGGER IF EXISTS `updateOrderLogsTrigger`;
+DROP TRIGGER IF EXISTS `insertOrderLogsTrigger`;
+DROP PROCEDURE IF EXISTS `orderLogsProcedure`;
+
 CREATE TABLE IF NOT EXISTS `customers` (
   `customerId`  INT(11) NOT NULL AUTO_INCREMENT,
   `firstName`   VARCHAR(255) NOT NULL,
@@ -103,8 +107,6 @@ CREATE TABLE IF NOT EXISTS `orderLogs` (
 
 DELIMITER //
 
-DROP PROCEDURE IF EXISTS `orderLogsProcedure`//
-
 CREATE PROCEDURE `orderLogsProcedure`
 (IN orderId VARCHAR(255), IN status TEXT, IN comments TEXT)
 BEGIN
@@ -112,16 +114,12 @@ BEGIN
   (orderId, status, comments);
 END//
 
-DROP TRIGGER IF EXISTS `insertOrderLogsTrigger`//
-
 CREATE TRIGGER `insertOrderLogsTrigger`
   AFTER INSERT ON `orders`
   FOR EACH ROW
 BEGIN
   CALL orderLogsProcedure(NEW.orderId, NEW.status, NEW.comments);
 END//
-
-DROP TRIGGER IF EXISTS `updateOrderLogsTrigger`//
 
 CREATE TRIGGER `updateOrderLogsTrigger`
   AFTER UPDATE ON `orders`
