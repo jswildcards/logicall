@@ -1,25 +1,57 @@
-import ICustomer from "./customer";
-import connection from "../../utils/db";
+import Express from "express";
+import { encrypt } from "../../utils/crypto";
+import { paging } from "../../utils/paging";
+import CustomerService from "./customer-service";
 
-export async function getCustomers() {
-  const sql = "SELECT * FROM customers";
-  return (await connection.execute(sql))[0] as ICustomer[];
+const type = "customers";
+
+async function getCustomers(req: Express.Request, res: Express.Response) {
+  const page = paging(req.query?.page);
+  const customers = await CustomerService.getCustomers(page);
+
+  res.json({
+    data: customers.map((customer) => {
+      const { customerId, ...attributes } = customer;
+
+      return {
+        type,
+        id: customerId,
+        attributes,
+        // TODO: relationships to be implemented
+        relationships: null,
+      };
+    }),
+  });
 }
 
-export async function getCustomerById({ customerId }: ICustomer) {
-  const sql = "SELECT * FROM `customers` WHERE `customerId` = ?";
-  return ((await connection.execute(sql, [customerId]))[0] as ICustomer[])?.[0];
+async function getCustomerById(req: Express.Request, res: Express.Response) {
+  const customer = await CustomerService.getCustomerById(req.params.id);
+  const { customerId, ...attributes } = customer;
+
+  res.json({
+    data: {
+      type,
+      id: customerId,
+      attributes,
+    },
+  });
 }
 
-export async function getCustomerByAuth({ username, password }: ICustomer) {
-  const sql = "SELECT * FROM customers WHERE username = ? AND password = ?";
-  return ((
-    await connection.execute(sql, [username, password])
-  )[0] as ICustomer[])?.[0];
+async function createCustomer(req: Express.Request, res: Express.Response) {
+  const customerInput = req.body;
+  customerInput.password = encrypt(customerInput.password ?? "");
+  customerInput.phone = customerInput.phone ?? "";
+  const customer = await CustomerService.createCustomer(customerInput);
+  const { customerId, ...attributes } = customer;
+
+  res.json({
+    data: {
+      type,
+      id: customerId,
+      attributes,
+    },
+  });
 }
 
-export default {
-  getCustomers,
-  getCustomerById,
-  getCustomerByAuth,
-};
+export { getCustomers, getCustomerById, createCustomer };
+export default { getCustomers, getCustomerById, createCustomer };

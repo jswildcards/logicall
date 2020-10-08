@@ -1,22 +1,39 @@
-import connection from "../../utils/db";
-import IOrderLog from "./order-log";
+import Express from "express";
+import { paging } from "../../utils/paging";
+import OrderLogService from "./order-log-service";
 
-export async function getOrderLogs() {
-  const sql = "SELECT * FROM `orderLogs`";
-  return (await connection.execute(sql))[0] as IOrderLog[];
+const type = "orderLogs";
+
+async function getOrderLogs(req: Express.Request, res: Express.Response) {
+  const page = paging(req.query?.page);
+  const orderLogs = await OrderLogService.getOrderLogs(page);
+
+  res.json({
+    data: orderLogs.map((orderLog) => {
+      const { orderLogId, ...attributes } = orderLog;
+
+      return {
+        type,
+        id: orderLogId,
+        attributes,
+        // TODO: relationships to be implemented
+        relationships: null,
+      };
+    }),
+  });
 }
-export async function getOrderLogsByOrderId({ orderId }: IOrderLog) {
-  const sql = "SELECT * FROM `orderLogs` WHERE `orderId` = ?";
-  return (await connection.execute(sql, [orderId]))[0] as IOrderLog[];
+async function getOrderLogById(req: Express.Request, res: Express.Response) {
+  const orderLog = await OrderLogService.getOrderLogById(req.params.id);
+  const { orderLogId, ...attributes } = orderLog;
+
+  res.json({
+    data: {
+      type,
+      id: orderLogId,
+      attributes,
+    },
+  });
 }
 
-export async function getOrderLogById({ orderLogId }: IOrderLog) {
-  const sql = "SELECT * FROM `orderLogs` WHERE `orderLogId` = ?";
-  return ((await connection.execute(sql, [orderLogId]))[0] as IOrderLog[])?.[0];
-}
-
-export default {
-  getOrderLogs,
-  getOrderLogsByOrderId,
-  getOrderLogById,
-};
+export { getOrderLogs, getOrderLogById };
+export default { getOrderLogs, getOrderLogById };

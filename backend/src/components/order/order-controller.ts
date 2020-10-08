@@ -1,31 +1,40 @@
-import connection from "../../utils/db";
-import IOrder from "./order";
+import Express from "express";
+import { paging } from "../../utils/paging";
+import OrderService from "./order-service";
 
-export async function getOrders() {
-  const sql = "SELECT * FROM `orders`";
-  return (await connection.execute(sql))[0] as IOrder[];
+const type = "orders";
+
+async function getOrders(req: Express.Request, res: Express.Response) {
+  const page = paging(req.query?.page);
+  const orders = await OrderService.getOrders(page);
+
+  res.json({
+    data: orders.map((order) => {
+      const { orderId, ...attributes } = order;
+
+      return {
+        type,
+        id: orderId,
+        attributes,
+        // TODO: relationships to be implemented
+        relationships: null,
+      };
+    }),
+  });
 }
 
-export async function getOrdersBySendCustomerId({ sendCustomerId }: IOrder) {
-  const sql = "SELECT * FROM `orders` WHERE `sendCustomerId` = ?";
-  return (await connection.execute(sql, [sendCustomerId]))[0] as IOrder[];
+async function getOrderById(req: Express.Request, res: Express.Response) {
+  const order = await OrderService.getOrderById(req.params.id);
+  const { orderId, ...attributes } = order;
+
+  res.json({
+    data: {
+      type,
+      id: orderId,
+      attributes,
+    },
+  });
 }
 
-export async function getOrdersByReceiveCustomerId({
-  receiveCustomerId,
-}: IOrder) {
-  const sql = "SELECT * FROM `orders` WHERE `receiveCustomerId` = ?";
-  return (await connection.execute(sql, [receiveCustomerId]))[0] as IOrder[];
-}
-
-export async function getOrderById({ orderId }: IOrder) {
-  const sql = "SELECT * FROM `orders` WHERE `orderId` = ?";
-  return ((await connection.execute(sql, [orderId]))[0] as IOrder[])?.[0];
-}
-
-export default {
-  getOrders,
-  getOrdersBySendCustomerId,
-  getOrdersByReceiveCustomerId,
-  getOrderById,
-};
+export { getOrders, getOrderById };
+export default { getOrders, getOrderById };

@@ -1,25 +1,40 @@
-import IEmployee from "./employee";
-import connection from "../../utils/db";
+import Express from "express";
+import { paging } from "../../utils/paging";
+import EmployeeService from "./employee-service";
 
-export async function getEmployees() {
-  const sql = "SELECT * FROM employees";
-  return (await connection.execute(sql))[0] as IEmployee[];
+const type = "employees";
+
+async function getEmployees(req: Express.Request, res: Express.Response) {
+  const page = paging(req.query?.page);
+  const employees = await EmployeeService.getEmployees(page);
+
+  res.json({
+    data: employees.map((employee) => {
+      const { employeeId, ...attributes } = employee;
+
+      return {
+        type,
+        id: employeeId,
+        attributes,
+        // TODO: relationships to be implemented
+        relationships: null,
+      };
+    }),
+  });
 }
 
-export async function getEmployeeById({ employeeId }: IEmployee) {
-  const sql = "SELECT * FROM `employees` WHERE `employeeId` = ?";
-  return ((await connection.execute(sql, [employeeId]))[0] as IEmployee[])?.[0];
+async function getEmployeeById(req: Express.Request, res: Express.Response) {
+  const employee = await EmployeeService.getEmployeeById(req.params.id);
+  const { employeeId, ...attributes } = employee;
+
+  res.json({
+    data: {
+      type,
+      id: employeeId,
+      attributes,
+    },
+  });
 }
 
-export async function getEmployeeByAuth({ username, password }: IEmployee) {
-  const sql = "SELECT * FROM employees WHERE username = ? AND password = ?";
-  return ((
-    await connection.execute(sql, [username, password])
-  )[0] as IEmployee[])?.[0];
-}
-
-export default {
-  getEmployees,
-  getEmployeeById,
-  getEmployeeByAuth,
-};
+export { getEmployees, getEmployeeById };
+export default { getEmployees, getEmployeeById };
