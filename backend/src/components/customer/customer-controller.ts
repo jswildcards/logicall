@@ -26,6 +26,14 @@ async function getCustomers(req: Express.Request, res: Express.Response) {
 
 async function getCustomerById(req: Express.Request, res: Express.Response) {
   const customer = await CustomerService.getCustomerById(req.params.id);
+
+  if (!customer) {
+    res.status(404).json({
+      error: "Required resource was not found.",
+    });
+    return;
+  }
+
   const { customerId, ...attributes } = customer;
 
   res.json({
@@ -44,7 +52,7 @@ async function createCustomer(req: Express.Request, res: Express.Response) {
   const customer = await CustomerService.createCustomer(customerInput);
   const { customerId, ...attributes } = customer;
 
-  res.json({
+  res.status(201).json({
     data: {
       type,
       id: customerId,
