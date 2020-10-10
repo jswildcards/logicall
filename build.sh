@@ -1,4 +1,4 @@
-docker kill node mysql nginx adminer
-docker rm node mysql nginx adminer
-docker rmi -f logicall_node:latest logicall_nginx:latest logicall_mysql:latest
+docker kill backend db webserver frontend
+docker rm backend db webserver frontend
+docker rmi -f logicall_backend:latest logicall_webserver:latest logicall_frontend:latest
 docker-compose -p logicall up -d
