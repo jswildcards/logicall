@@ -1,5 +1,7 @@
 # logicall
 
+This is a logistics system project using Docker, React, React Native, Node.js, MySQL, and NGINX.
+
 ## Project Guidelines
 
 The idea is that your system has three interfaces business/client and driver. The business is probably web, the client is web or mobile, and the driver is mobile app.
