@@ -24,15 +24,21 @@ async function getOrderLogs(req: Express.Request, res: Express.Response) {
 }
 async function getOrderLogById(req: Express.Request, res: Express.Response) {
   const orderLog = await OrderLogService.getOrderLogById(req.params.id);
-  const { orderLogId, ...attributes } = orderLog;
 
-  res.json({
-    data: {
-      type,
-      id: orderLogId,
-      attributes,
-    },
-  });
+  if (orderLog) {
+    const { orderLogId, ...attributes } = orderLog;
+
+    res.json({
+      data: {
+        type,
+        id: orderLogId,
+        attributes,
+      },
+    });
+    return;
+  }
+
+  res.status(404).json({ error: "Requested resources not found." });
 }
 
 export { getOrderLogs, getOrderLogById };

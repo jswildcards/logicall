@@ -1,7 +1,6 @@
 import express from "express";
-import customerRoute from "./components/customer/customer-route";
-import customerAddressRoute from "./components/customer-address/customer-address-route";
-import employeeRoute from "./components/employee/employee-route";
+import addressRoute from "./components/address/address-route";
+import userRoute from "./components/user/user-route";
 import orderRoute from "./components/order/order-route";
 import orderLogRoute from "./components/order-log/order-log-route";
 
@@ -10,9 +9,8 @@ const app = express();
 
 app.use(express.json());
 
-router.use("/customers", customerRoute);
-router.use("/customer-addresses", customerAddressRoute);
-router.use("/employees", employeeRoute);
+router.use("/addresses", addressRoute);
+router.use("/users", userRoute);
 router.use("/orders", orderRoute);
 router.use("/order-logs", orderLogRoute);
 

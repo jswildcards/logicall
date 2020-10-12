@@ -10,62 +10,65 @@ USE `mydb`;
 DROP TABLE IF EXISTS `driverLogs`;
 DROP TABLE IF EXISTS `orderLogs`;
 DROP TABLE IF EXISTS `orders`;
-DROP TABLE IF EXISTS `employees`;
-DROP TABLE IF EXISTS `customerAddresses`;
-DROP TABLE IF EXISTS `customers`;
+DROP TABLE IF EXISTS `addresses`;
+DROP TABLE IF EXISTS `users`;
+-- DROP TABLE IF EXISTS `employees`;
+-- DROP TABLE IF EXISTS `customerAddresses`;
+-- DROP TABLE IF EXISTS `customers`;
 
-DROP TRIGGER IF EXISTS `updateOrderLogsTrigger`;
-DROP TRIGGER IF EXISTS `insertOrderLogsTrigger`;
+DROP TRIGGER IF EXISTS `orderLogsUpdateTrigger`;
+DROP TRIGGER IF EXISTS `orderLogsInsertTrigger`;
 DROP PROCEDURE IF EXISTS `orderLogsProcedure`;
 
-CREATE TABLE IF NOT EXISTS `customers` (
-  `customerId`  INT(11) NOT NULL AUTO_INCREMENT,
-  `firstName`   VARCHAR(255) NOT NULL,
-  `lastName`    VARCHAR(255) NOT NULL,
-  `email`       VARCHAR(255) NOT NULL,
-  `username`    VARCHAR(32) NOT NULL,
-  `password`    VARCHAR(255) NOT NULL,
-  `phone`       VARCHAR(24) NULL,
-  `createdAt`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`customerId`),
-  CONSTRAINT `UC_Email` UNIQUE (`email`)
-);
+-- CREATE TABLE IF NOT EXISTS `customers` (
+--   `customerId`  INT(11) NOT NULL AUTO_INCREMENT,
+--   `firstName`   VARCHAR(255) NOT NULL,
+--   `lastName`    VARCHAR(255) NOT NULL,
+--   `email`       VARCHAR(255) NOT NULL,
+--   `username`    VARCHAR(32) NOT NULL,
+--   `password`    VARCHAR(255) NOT NULL,
+--   `phone`       VARCHAR(24) NULL,
+--   `createdAt`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+--   `updatedAt`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+--   PRIMARY KEY (`customerId`),
+--   CONSTRAINT `UC_Email` UNIQUE (`email`)
+-- );
 
-CREATE TABLE IF NOT EXISTS `customerAddresses` (
-  `customerAddressId` INT(11) NOT NULL AUTO_INCREMENT,
-  `customerId`        INT(11) NOT NULL,
-  `addressLine1`      TEXT NULL,
-  `addresssLine2`     TEXT NULL,
-  `latitude`          FLOAT(10, 7) NULL,
-  `longitude`         FLOAT(10, 7) NULL,
-  `createdAt`         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt`         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`customerAddressId`),
-  CONSTRAINT `FK_Customer` FOREIGN KEY (`customerId`) REFERENCES `customers`(`customerId`)
-);
-
-CREATE TABLE IF NOT EXISTS `employees` (
-  `employeeId`  INT(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `users` (
+  `userId`  INT(11) NOT NULL AUTO_INCREMENT,
   `firstName`   VARCHAR(255) NOT NULL,
   `lastName`    VARCHAR(255) NOT NULL,
   `email`       VARCHAR(255) NULL,
   `phone`       VARCHAR(24) NULL,
-  `jobTitle`    ENUM('admin', 'driver') NULL DEFAULT 'driver',
   `username`    VARCHAR(255) NOT NULL,
   `password`    VARCHAR(255) NOT NULL,
+  `role`        ENUM('customer', 'admin', 'driver') NOT NULL,
   `createdAt`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`employeeId`),
-  CONSTRAINT `UC_Email` UNIQUE (`email`)
+  PRIMARY KEY (`userId`),
+  CONSTRAINT `UC_Email` UNIQUE (`email`),
+  CONSTRAINT `UC_Username` UNIQUE (`username`)
+);
+
+CREATE TABLE IF NOT EXISTS `addresses` (
+  `addressId`         INT(11) NOT NULL AUTO_INCREMENT,
+  `customerId`        INT(11) NOT NULL,
+  `addressLine1`      TEXT NULL,
+  `addressLine2`     TEXT NULL,
+  `latitude`          FLOAT(10, 7) NULL,
+  `longitude`         FLOAT(10, 7) NULL,
+  `createdAt`         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt`         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`addressId`),
+  CONSTRAINT `FK_Customer` FOREIGN KEY (`customerId`) REFERENCES `users`(`userId`)
 );
 
 CREATE TABLE IF NOT EXISTS `orders` (
   `orderId`                   VARCHAR(255) NOT NULL,
-  `sendCustomerId`            INT(11) NOT NULL,
-  `sendCustomerAddressId`     INT(11) NOT NULL,
-  `receiveCustomerId`         INT(11) NOT NULL,
-  `receiveCustomerAddressId`  INT(11) NOT NULL,
+  `senderId`                  INT(11) NOT NULL,
+  `sendAddressId`             INT(11) NOT NULL,
+  `receiverId`                INT(11) NOT NULL,
+  `receiveAddressId`          INT(11) NOT NULL,
   `driverId`                  INT(11) NULL,
   `status`                    TEXT NULL,
   `signUrl`                   TEXT NULL,
@@ -73,11 +76,11 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `createdAt`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`orderId`),
-  CONSTRAINT `FK_SendCustomer` FOREIGN KEY (`sendCustomerId`) REFERENCES `customers`(`customerId`),
-  CONSTRAINT `FK_SendCustomerAddress` FOREIGN KEY (`sendCustomerAddressId`) REFERENCES `customerAddresses`(`customerAddressId`),
-  CONSTRAINT `FK_ReceiveCustomer` FOREIGN KEY (`receiveCustomerId`) REFERENCES `customers`(`customerId`),
-  CONSTRAINT `FK_ReceiveCustomerAddress` FOREIGN KEY (`receiveCustomerAddressId`) REFERENCES `customerAddresses`(`customerAddressId`),
-  CONSTRAINT `FK_OrderDriver` FOREIGN KEY (`driverId`) REFERENCES `employees`(`employeeId`)
+  CONSTRAINT `FK_Sender` FOREIGN KEY (`senderId`) REFERENCES `users`(`userId`),
+  CONSTRAINT `FK_SendAddress` FOREIGN KEY (`sendAddressId`) REFERENCES `addresses`(`addressId`),
+  CONSTRAINT `FK_Receiver` FOREIGN KEY (`receiverId`) REFERENCES `users`(`userId`),
+  CONSTRAINT `FK_ReceiveAddress` FOREIGN KEY (`receiveAddressId`) REFERENCES `addresses`(`addressId`),
+  CONSTRAINT `FK_OrderDriver` FOREIGN KEY (`driverId`) REFERENCES `users`(`userId`)
 );
 
 CREATE TABLE IF NOT EXISTS `orderLogs` (
@@ -114,14 +117,14 @@ BEGIN
   (orderId, status, comments);
 END//
 
-CREATE TRIGGER `insertOrderLogsTrigger`
+CREATE TRIGGER `orderLogsInsertTrigger`
   AFTER INSERT ON `orders`
   FOR EACH ROW
 BEGIN
   CALL orderLogsProcedure(NEW.orderId, NEW.status, NEW.comments);
 END//
 
-CREATE TRIGGER `updateOrderLogsTrigger`
+CREATE TRIGGER `orderLogsUpdateTrigger`
   AFTER UPDATE ON `orders`
   FOR EACH ROW
 BEGIN
@@ -130,18 +133,18 @@ END//
 
 DELIMITER ;
 
-INSERT INTO `employees`(`firstName`, `lastName`, `email`, `jobTitle`, `username`, `password`) VALUES
+INSERT INTO `users`(`firstName`, `lastName`, `email`, `role`, `username`, `password`) VALUES
 ('nimda', 'nim', 'admin@example.com', 'admin', 'admin1', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8');
 
 -- For Testing Order Logs Trigger
--- INSERT INTO `customers`(`firstName`, `lastName`, `email`, `username`, `password`) VALUES
--- ('tin lok', 'law', 'tinloklaw@example.com', 'paniom', '255300238');
+-- INSERT INTO `users`(`firstName`, `lastName`, `email`, `username`, `password`, `role`) VALUES
+-- ('tin lok', 'law', 'tinloklaw@example.com', 'paniom', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'customer');
 
--- INSERT INTO `customerAddresses`(`customerId`) VALUES
--- (1);
+-- INSERT INTO `addresses`(`customerId`) VALUES
+-- (2);
 
 -- INSERT INTO `orders` VALUES
--- ('abc123', 1, 1, 1, 1, NULL, 'created', NULL, 'just created an order', NULL, NULL);
+-- ('abc123', 2, 1, 2, 1, NULL, 'created', NULL, 'just created an order', NULL, NULL);
 
 -- UPDATE `orders` 
 -- SET `status`='delivering', `comments`='order is delivering' 

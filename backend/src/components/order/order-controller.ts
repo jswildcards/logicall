@@ -25,15 +25,21 @@ async function getOrders(req: Express.Request, res: Express.Response) {
 
 async function getOrderById(req: Express.Request, res: Express.Response) {
   const order = await OrderService.getOrderById(req.params.id);
-  const { orderId, ...attributes } = order;
 
-  res.json({
-    data: {
-      type,
-      id: orderId,
-      attributes,
-    },
-  });
+  if (order) {
+    const { orderId, ...attributes } = order;
+
+    res.json({
+      data: {
+        type,
+        id: orderId,
+        attributes,
+      },
+    });
+    return;
+  }
+
+  res.status(404).json({ error: "Requested resources not found." });
 }
 
 export { getOrders, getOrderById };

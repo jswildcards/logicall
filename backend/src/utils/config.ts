@@ -12,10 +12,10 @@ const {
 } = process.env;
 
 export const Database = {
-  host: MYSQL_HOST,
-  user: MYSQL_USER,
-  password: MYSQL_PASSWORD,
-  database: MYSQL_DATABASE,
+  host: MYSQL_HOST ?? "",
+  user: MYSQL_USER ?? "",
+  password: MYSQL_PASSWORD ?? "",
+  database: MYSQL_DATABASE ?? "",
 };
 
 export const Crypto = {
