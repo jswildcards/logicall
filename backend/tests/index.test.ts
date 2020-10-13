@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-undef */
 import request from "supertest";
 import { describe, it, expect } from "@jest/globals";
