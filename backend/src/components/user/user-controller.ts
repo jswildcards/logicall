@@ -42,5 +42,20 @@ async function getUserById(req: Express.Request, res: Express.Response) {
   res.status(404).json({ error: "Requested resources not found." });
 }
 
-export { getUsers, getUserById };
-export default { getUsers, getUserById };
+async function createUser(req: Express.Request, res: Express.Response) {
+  const user = await UserService.createUser(req.body);
+  res.status(201).json(user);
+}
+
+async function deleteUser(req: Express.Request, res: Express.Response) {
+  const user = await UserService.getUserById(req.params.id);
+  if (user) {
+    UserService.deleteUser(user);
+    res.json({ status: "success" });
+    return;
+  }
+  res.status(404).json({ error: "Requested resources not found." });
+}
+
+export { getUsers, getUserById, createUser, deleteUser };
+export default { getUsers, getUserById, createUser, deleteUser };

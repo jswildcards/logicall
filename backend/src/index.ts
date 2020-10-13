@@ -17,3 +17,5 @@ router.use("/order-logs", orderLogRoute);
 app.use("/api", router);
 
 app.listen(3000);
+
+export default app;

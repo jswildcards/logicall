@@ -6,7 +6,7 @@ export interface IPage {
 }
 
 // number = 2, size = 5 => (5, 5) gives row 6 - 10
-export function paging(page: any) {
+function paging(page: any) {
   const number = Number(page?.number) || PageConfig.number;
   const limit = Number(page?.size) || PageConfig.size;
   const offset = limit * (number - 1);
@@ -14,4 +14,5 @@ export function paging(page: any) {
   return { offset, limit };
 }
 
+export { paging };
 export default { paging };

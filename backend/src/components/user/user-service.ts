@@ -1,29 +1,41 @@
 import User from "./user";
 import { IPage } from "../../utils/paging";
 import Address from "../address/address";
+import Order from "../order/order";
 
-export async function getUsers(page: IPage) {
-  // const sql = "SELECT * FROM users LIMIT ?, ?";
-  // return (
-  //   await connection.execute<RowDataPacket[]>(sql, [offset, size])
-  // )[0] as User[];
-
+function getUsers(page: IPage) {
   return User.findAll({
     ...page,
-    include: [{ model: Address, as: "addresses" }],
+    include: [
+      { model: Address, as: "addresses" },
+      { model: Order, as: "sendOrders" },
+      { model: Order, as: "receiveOrders" },
+      { model: Order, as: "deliverOrders" },
+    ],
   });
 }
 
-export async function getUserById(userId: string | number) {
+function getUserById(userId: string | number) {
   return User.findByPk(userId);
 }
 
-export async function getUserByAuth({ username, password }: User) {
+function getUserByAuth({ username, password }: User) {
   return User.findAll({ where: { username, password } });
 }
 
+function createUser(user: User) {
+  return User.create(user);
+}
+
+function deleteUser(user: User) {
+  return user.destroy();
+}
+
+export { getUsers, getUserById, getUserByAuth, createUser, deleteUser };
 export default {
   getUsers,
   getUserById,
   getUserByAuth,
+  createUser,
+  deleteUser,
 };
