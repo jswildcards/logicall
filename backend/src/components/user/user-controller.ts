@@ -49,6 +49,19 @@ async function createUser(req: Express.Request, res: Express.Response) {
   res.status(201).json(user);
 }
 
+// TODO: Test Update User Function
+async function updateUser(req: Express.Request, res: Express.Response) {
+  req.body.password = encrypt(req.body.password);
+  const [updated] = await UserService.updateUser(req.params.id, req.body);
+  if (updated) {
+    const user = await UserService.getUserById(req.params.id);
+    res.json(user);
+    return;
+  }
+
+  res.status(404).json({ error: "Requested resources not found." });
+}
+
 async function deleteUser(req: Express.Request, res: Express.Response) {
   const user = await UserService.getUserById(req.params.id);
   if (user) {
@@ -59,5 +72,5 @@ async function deleteUser(req: Express.Request, res: Express.Response) {
   res.status(404).json({ error: "Requested resources not found." });
 }
 
-export { getUsers, getUserById, createUser, deleteUser };
-export default { getUsers, getUserById, createUser, deleteUser };
+export { createUser, deleteUser, getUserById, getUsers, updateUser };
+export default { getUsers, getUserById, createUser, updateUser, deleteUser };

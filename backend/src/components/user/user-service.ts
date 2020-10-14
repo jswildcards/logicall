@@ -27,15 +27,28 @@ function createUser(user: User) {
   return User.create(user);
 }
 
+// TODO: Test Update User Function
+function updateUser(id: string | number, user: User) {
+  return User.update(user, { where: { id } });
+}
+
 function deleteUser(user: User) {
   return user.destroy();
 }
 
-export { getUsers, getUserById, getUserByAuth, createUser, deleteUser };
+export {
+  createUser,
+  deleteUser,
+  getUserByAuth,
+  getUserById,
+  getUsers,
+  updateUser,
+};
 export default {
   getUsers,
   getUserById,
   getUserByAuth,
   createUser,
+  updateUser,
   deleteUser,
 };
