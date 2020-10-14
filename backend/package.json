@@ -34,6 +34,7 @@
     "start": "tsc && node .",
     "tsc": "tsc",
     "lint": "eslint . --fix && prettier --write .",
+    "lintc": "eslint",
     "test": "jest"
   }
 }

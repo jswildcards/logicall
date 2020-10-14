@@ -45,7 +45,7 @@ async function getAddressById(req: Express.Request, res: Express.Response) {
     return;
   }
 
-  res.status(404).json({ error: "Requested resources not found." });
+  // res.status(404).json({ error: "Requested resources not found." });
 }
 
 export { getAddresses, getAddressById };

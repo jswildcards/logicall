@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const {
-    MYSQL_HOST,
+  MYSQL_HOST,
   MYSQL_DATABASE,
   MYSQL_USER,
   MYSQL_PASSWORD,
