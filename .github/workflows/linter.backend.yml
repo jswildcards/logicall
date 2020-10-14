@@ -51,6 +51,7 @@ jobs:
         uses: github/super-linter@v3
         env:
           VALIDATE_TYPESCRIPT_ES: true
-          TYPESCRIPT_ES_CONFIG_FILE: .eslintrc.backend.json
+          LINTER_RULES_PATH: .github/linters/backend
+          TYPESCRIPT_ES_CONFIG_FILE: .eslintrc.json
           FILTER_REGEX_INCLUDE: .*backend/src/.*
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
