@@ -19,8 +19,8 @@ const Database = {
 };
 
 const Crypto = {
-  algorithm: CRY_ALG,
-  secret: CRY_SECRET,
+  algorithm: CRY_ALG ?? "sha256",
+  secret: CRY_SECRET ?? "secret",
 };
 
 const Page = {
