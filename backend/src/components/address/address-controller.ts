@@ -33,7 +33,7 @@ async function getAddressById(req: Express.Request, res: Express.Response) {
   const address = await AddressService.getAddressById(req.params.id);
 
   if (address) {
-    const { addressId, ...attributes } = address;
+      const { addressId, ...attributes } = address;
 
     res.json({
       data: {
@@ -42,6 +42,7 @@ async function getAddressById(req: Express.Request, res: Express.Response) {
         attributes,
       },
     });
+    return;
   }
 
   // res.status(404).json({ error: "Requested resources not found." });

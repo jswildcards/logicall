@@ -1,4 +1,4 @@
-name: Run Backend ESLint
+name: Autofix Linting
 
 on:
   push:
@@ -8,16 +8,30 @@ on:
 
 jobs:
   build:
-    name: Run Backend ESLint
+    name: Autofix Linting
     runs-on: ubuntu-latest
+
     defaults:
       run:
         working-directory: ./backend
+
     steps:
       - uses: actions/checkout@v2
+
       - name: Use Node.js 12
         uses: actions/setup-node@v1
         with:
-          node-versions: 12
-      - run: yarn install
-      - run: yarn lintc
+          node-versions: "12.x"
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Run Lint Check
+        run: yarn lint
+
+      - name: Commit Autofix
+        uses: EndBug/add-and-commit@v5
+        with:
+          message: "Autofix Linting"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
