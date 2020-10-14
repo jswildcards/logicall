@@ -48,25 +48,5 @@ User.init(
   { tableName: "users", sequelize: connection }
 );
 
-User.hasMany(Address, {
-  foreignKey: "addressId",
-  as: "addresses",
-});
-
-User.hasMany(Order, {
-  foreignKey: "senderId",
-  as: "sendOrders",
-});
-
-User.hasMany(Order, {
-  foreignKey: "receiverId",
-  as: "receiveOrders",
-});
-
-User.hasMany(Order, {
-  foreignKey: "driverId",
-  as: "deliverOrders",
-});
-
 export { User };
 export default User;

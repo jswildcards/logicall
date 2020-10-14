@@ -1,4 +1,5 @@
 import Express from "express";
+import { encrypt } from "../../utils/crypto";
 import { paging } from "../../utils/paging";
 import UserService from "./user-service";
 
@@ -43,6 +44,7 @@ async function getUserById(req: Express.Request, res: Express.Response) {
 }
 
 async function createUser(req: Express.Request, res: Express.Response) {
+  req.body.password = encrypt(req.body.password);
   const user = await UserService.createUser(req.body);
   res.status(201).json(user);
 }

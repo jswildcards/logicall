@@ -16,7 +16,7 @@ async function getAddresses(req: Express.Request, res: Express.Response) {
 
   res.json({
     data: addresses.map((address) => {
-      const { addressId, ...attributes } = address;
+      const { addressId, ...attributes } = address.get();
 
       return {
         type,
@@ -33,7 +33,7 @@ async function getAddressById(req: Express.Request, res: Express.Response) {
   const address = await AddressService.getAddressById(req.params.id);
 
   if (address) {
-    const { addressId, ...attributes } = address;
+    const { addressId, ...attributes } = address.get();
 
     res.json({
       data: {
@@ -42,9 +42,11 @@ async function getAddressById(req: Express.Request, res: Express.Response) {
         attributes,
       },
     });
+
+    return;
   }
 
-  // res.status(404).json({ error: "Requested resources not found." });
+  res.status(404).json({ error: "Requested resources not found." });
 }
 
 export { getAddresses, getAddressById };

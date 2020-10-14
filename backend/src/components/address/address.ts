@@ -28,10 +28,5 @@ Address.init(
   { tableName: "addresses", sequelize: connection }
 );
 
-// `customerId` will be added on CustomerAddress / Source model
-// Address.belongsTo(User, {
-//   foreignKey: "customerId",
-// });
-
 export { Address as CustomerAddress };
 export default Address;

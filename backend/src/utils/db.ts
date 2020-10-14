@@ -5,6 +5,7 @@ const { host, user, password, database } = DatabaseConfig;
 
 const connection = new Sequelize(database, user, password, {
   dialect: "mysql",
+  logging: false,
   host,
 });
 

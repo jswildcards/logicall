@@ -12,7 +12,6 @@
     "sequelize": "^6.3.5"
   },
   "devDependencies": {
-    "@types/bluebird": "^3.5.32",
     "@types/express": "^4.17.8",
     "@types/jest": "^26.0.14",
     "@types/node": "^14.11.1",
@@ -31,9 +30,9 @@
     "typescript": "^4.0.2"
   },
   "scripts": {
-    "start": "tsc && node .",
     "tsc": "tsc",
+    "start": "tsc && node .",
     "lint": "eslint \"src/**/*\" --fix && prettier --write .",
-    "test": "jest"
+    "test": "jest --detectOpenHandles"
   }
 }

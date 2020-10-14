@@ -10,7 +10,7 @@ async function getOrders(req: Express.Request, res: Express.Response) {
 
   res.json({
     data: orders.map((order) => {
-      const { orderId, ...attributes } = order;
+      const { orderId, ...attributes } = order.get();
 
       return {
         type,
@@ -27,7 +27,7 @@ async function getOrderById(req: Express.Request, res: Express.Response) {
   const order = await OrderService.getOrderById(req.params.id);
 
   if (order) {
-    const { orderId, ...attributes } = order;
+    const { orderId, ...attributes } = order.get();
 
     res.json({
       data: {

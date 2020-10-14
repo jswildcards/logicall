@@ -54,10 +54,5 @@ Order.init(
   { tableName: "orders", sequelize: connection }
 );
 
-Order.hasMany(OrderLog, {
-  foreignKey: "orderId",
-  as: "logs",
-});
-
 export { Order };
 export default Order;

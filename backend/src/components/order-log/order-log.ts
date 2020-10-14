@@ -25,9 +25,5 @@ OrderLog.init(
   { tableName: "orderLogs", sequelize: connection }
 );
 
-// OrderLog.belongsTo(Order, {
-//   foreignKey: "orderId",
-// });
-
 export { OrderLog };
 export default OrderLog;
