@@ -20,4 +20,4 @@ jobs:
         with:
           node-versions: 12
       - run: yarn install
-      - uses: eslint/github-action@v0
+      - run: yarn lintc
