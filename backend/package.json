@@ -33,8 +33,8 @@
   "scripts": {
     "start": "tsc && node .",
     "tsc": "tsc",
-    "lint": "eslint . --fix && prettier --write .",
-    "lintc": "eslint",
+    "lint": "eslint src/**/*.ts --fix && prettier --write .",
+    "lintc": "eslint src/**/*.ts",
     "test": "jest"
   }
 }
