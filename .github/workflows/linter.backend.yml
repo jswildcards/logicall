@@ -1,61 +1,27 @@
----
-###########################
-###########################
-## Linter GitHub Actions ##
-###########################
-###########################
-name: Lint Code Base
+name: Lint Backend Code Base
 
-#
-# Documentation:
-# https://help.github.com/en/articles/workflow-syntax-for-github-actions
-#
-
-#############################
-# Start the job on all push #
-#############################
 on:
   push:
     branches-ignore: [master]
-    # Remove the line above to run when pushing to master
   pull_request:
     branches: [master]
 
-###############
-# Set the Job #
-###############
 jobs:
   build:
-    # Name the Job
-    name: Lint Code Base
-    # Set the agent to run on
+    name: Lint Backend Code Base
     runs-on: ubuntu-latest
-
     defaults:
       run:
         working-directory: ./backend
-
-    ##################
-    # Load all steps #
-    ##################
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x]
     steps:
-      ##########################
-      # Checkout the code base #
-      ##########################
-      - name: Checkout Code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
         with:
-          # Full git history is needed to get a proper list of changed files within `super-linter`
-          fetch-depth: 0
-
-      ################################
-      # Run Linter against code base #
-      ################################
-      - name: Lint Code Base
-        uses: github/super-linter@v3
-        env:
-          VALIDATE_TYPESCRIPT_ES: true
-          LINTER_RULES_PATH: ./
-          TYPESCRIPT_ES_CONFIG_FILE: .eslintrc.json
-          FILTER_REGEX_INCLUDE: .*src/.*
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          node-versions: ${{ matrix.node-version }}
+      - run: yarn install
+      - run: yarn lint
+      - run: yarn test
