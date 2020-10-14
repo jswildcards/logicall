@@ -31,6 +31,10 @@ jobs:
     # Set the agent to run on
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: ./backend
+
     ##################
     # Load all steps #
     ##################
@@ -51,7 +55,7 @@ jobs:
         uses: github/super-linter@v3
         env:
           VALIDATE_TYPESCRIPT_ES: true
-          LINTER_RULES_PATH: .github/linters/backend
+          LINTER_RULES_PATH: ./
           TYPESCRIPT_ES_CONFIG_FILE: .eslintrc.json
-          FILTER_REGEX_INCLUDE: .*backend/src/.*
+          FILTER_REGEX_INCLUDE: .*src/.*
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
