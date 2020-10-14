@@ -34,7 +34,7 @@
     "start": "tsc && node .",
     "tsc": "tsc",
     "lint": "eslint src/**/*.ts --fix && prettier --write .",
-    "lintc": "eslint src/**/*.ts",
+    "eslint:github-action": "eslint src/",
     "test": "jest"
   }
 }

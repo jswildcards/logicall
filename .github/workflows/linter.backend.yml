@@ -1,4 +1,4 @@
-name: Lint Backend Code Base
+name: Run Backend ESLint
 
 on:
   push:
@@ -8,19 +8,16 @@ on:
 
 jobs:
   build:
-    name: Lint Backend Code Base
+    name: Run Backend ESLint
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./backend
-    strategy:
-      matrix:
-        node-version: [12.x]
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 12
         uses: actions/setup-node@v1
         with:
-          node-versions: ${{ matrix.node-version }}
+          node-versions: 12
       - run: yarn install
-      - run: yarn lintc
+      - uses: eslint/github-action@v0
