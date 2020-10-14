@@ -35,7 +35,7 @@ DROP PROCEDURE IF EXISTS `orderLogsProcedure`;
 -- );
 
 CREATE TABLE IF NOT EXISTS `users` (
-  `userId`  INT(11) NOT NULL AUTO_INCREMENT,
+  `userId`      INT(11) NOT NULL AUTO_INCREMENT,
   `firstName`   VARCHAR(255) NOT NULL,
   `lastName`    VARCHAR(255) NOT NULL,
   `email`       VARCHAR(255) NULL,
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `addresses` (
   `addressId`         INT(11) NOT NULL AUTO_INCREMENT,
   `customerId`        INT(11) NOT NULL,
   `addressLine1`      TEXT NULL,
-  `addressLine2`     TEXT NULL,
+  `addressLine2`      TEXT NULL,
   `latitude`          FLOAT(10, 7) NULL,
   `longitude`         FLOAT(10, 7) NULL,
   `createdAt`         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
