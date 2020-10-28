@@ -27,7 +27,7 @@ OrderLog.init(
     sequelize: connection,
     paranoid: true,
     timestamps: true,
-  },
+  }
 );
 
 export { OrderLog };

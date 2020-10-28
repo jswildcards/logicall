@@ -30,7 +30,7 @@ Address.init(
     sequelize: connection,
     paranoid: true,
     timestamps: true,
-  },
+  }
 );
 
 export { Address as CustomerAddress };

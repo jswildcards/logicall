@@ -97,7 +97,8 @@ describe("Get Single User with User ID", () => {
 
 describe("Create User", () => {
   it("response with json", async () => {
-    const id = Math.random().toString(36).split(".")[1] +
+    const id =
+      Math.random().toString(36).split(".")[1] +
       new Date().valueOf().toString(36);
     const user = {
       firstName: "tin lok",
