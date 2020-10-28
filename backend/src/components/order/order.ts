@@ -1,12 +1,12 @@
 import {
-  Model,
   Association,
   DataTypes,
-  HasManyGetAssociationsMixin,
   HasManyAddAssociationMixin,
-  HasManyHasAssociationMixin,
   HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin,
+  HasManyGetAssociationsMixin,
+  HasManyHasAssociationMixin,
+  Model,
 } from "sequelize";
 import connection from "../../utils/db";
 import OrderLog from "../order-log/order-log";
@@ -51,7 +51,12 @@ Order.init(
     signUrl: { type: new DataTypes.TEXT(), allowNull: true },
     comments: { type: new DataTypes.TEXT(), allowNull: true },
   },
-  { tableName: "orders", sequelize: connection }
+  {
+    tableName: "orders",
+    sequelize: connection,
+    paranoid: true,
+    timestamps: true,
+  },
 );
 
 export { Order };

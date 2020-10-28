@@ -1,76 +1,33 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-
 import React from "react";
-import Link from "next/link";
-import { AccessAlarm, ThreeDRotation } from "@material-ui/icons";
-import { Button, FormControl, TextField } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import { Grid, CardMedia, } from "@material-ui/core";
+import User from "../components/User";
 
-// Redux: use Increment component
-import Increment from "../containers/increment";
-import User from "../containers/user";
+const useStyles = makeStyles({
+  root: {
+    height: "100vh",
+  },
+  padding: {
+    padding: 20,
+  },
+});
 
-interface IProps { }
-interface IState {
-  time: Date;
-  value: string;
-}
+export default function Home() {
+  const classes = useStyles();
 
-export default class Home extends React.Component<IProps, IState> {
-  timeID: NodeJS.Timeout;
-
-  constructor(props: Readonly<IProps>) {
-    super(props);
-    this.state = {
-      time: new Date(),
-      value: "",
-    };
-  }
-
-  componentDidMount() {
-    this.timeID = setInterval(() => this.tick(), 1000);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timeID);
-  }
-
-  tick() {
-    this.setState({ time: new Date() });
-  }
-
-  handleChange(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
-    this.setState({ value: e.target.value });
-  }
-
-  render() {
-    const { time, value } = this.state;
-
-    return (
-      <div>
-        <h4>
-          The time is now
-          {' '}
-          {time.toLocaleString()}
-        </h4>
-        <FormControl fullWidth>
-          <TextField
-            type="text"
-            value={value}
-            label="Username"
-            onChange={(e) => this.handleChange(e)}
-          />
-        </FormControl>
-        <p>{value}</p>
-        <AccessAlarm />
-        <ThreeDRotation />
+  return (
+    <Grid container className={classes.root}>
+      <Grid item xs={8} className={classes.root}>
+        <CardMedia
+          component="img"
+          alt=""
+          image="/logistics.svg"
+          className={classes.root}
+        />
+      </Grid>
+      <Grid item xs={4}>
         <User />
-        <Increment />
-        <Link href="/clock" passHref>
-          <Button variant="contained" color="primary">
-            Clock
-          </Button>
-        </Link>
-      </div>
-    );
-  }
+      </Grid>
+    </Grid>
+  );
 }

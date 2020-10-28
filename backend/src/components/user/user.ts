@@ -1,4 +1,4 @@
-import { Model, Association, DataTypes } from "sequelize";
+import { Association, DataTypes, Model } from "sequelize";
 import connection from "../../utils/db";
 import Address from "../address/address";
 import Order from "../order/order";
@@ -45,7 +45,12 @@ User.init(
       allowNull: false,
     },
   },
-  { tableName: "users", sequelize: connection }
+  {
+    tableName: "users",
+    sequelize: connection,
+    paranoid: true,
+    timestamps: true,
+  },
 );
 
 export { User };

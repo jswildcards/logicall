@@ -1,6 +1,6 @@
 import request from "supertest";
 import mysql from "mysql2/node_modules/iconv-lite";
-import { describe, it, expect } from "@jest/globals";
+import { describe, expect, it } from "@jest/globals";
 import app from "../src/app";
 
 mysql.encodingExists("foo");
@@ -90,7 +90,47 @@ describe("Get Single User with User ID", () => {
 //             expect(response.body.data).toBeTruthy();
 //             expect(response.body.error).toBeFalsy();
 //           })
-//       )
+//       ),
 //     );
 //   });
 // });
+
+describe("Create User", () => {
+  it("response with json", async () => {
+    const id = Math.random().toString(36).split(".")[1] +
+      new Date().valueOf().toString(36);
+    const user = {
+      firstName: "tin lok",
+      lastName: "law",
+      email: `${id}@example.com`,
+      username: id,
+      password: "password",
+      phone: "21345678",
+      role: "customer",
+    };
+
+    await request(app)
+      .post("/api/users")
+      .send(user)
+      .set("Accept", "application/json")
+      .expect("Content-Type", /json/)
+      .expect(201)
+      .then((response) => {
+        expect(response.body.data).toBeTruthy();
+        expect(response.body.error).toBeFalsy();
+      });
+  });
+});
+
+describe("Delete User", () => {
+  it("have deletedAt attributes", async () => {
+    await request(app)
+      .delete("/api/users/23")
+      .set("Accept", "application/json")
+      .expect("Content-Type", /json/)
+      .expect(200)
+      .then((response) => {
+        expect(response.body.status).toBe("success");
+      });
+  });
+});

@@ -1,4 +1,4 @@
-import { Model, DataTypes } from "sequelize";
+import { DataTypes, Model } from "sequelize";
 // import User from "../user/user";
 import connection from "../../utils/db";
 
@@ -25,7 +25,12 @@ Address.init(
     latitude: { type: new DataTypes.FLOAT(10, 7), allowNull: true },
     longitude: { type: new DataTypes.FLOAT(10, 7), allowNull: true },
   },
-  { tableName: "addresses", sequelize: connection }
+  {
+    tableName: "addresses",
+    sequelize: connection,
+    paranoid: true,
+    timestamps: true,
+  },
 );
 
 export { Address as CustomerAddress };

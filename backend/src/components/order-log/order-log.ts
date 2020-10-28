@@ -1,4 +1,4 @@
-import { Model, DataTypes } from "sequelize";
+import { DataTypes, Model } from "sequelize";
 import connection from "../../utils/db";
 // import Order from "../order/order";
 
@@ -22,7 +22,12 @@ OrderLog.init(
     status: { type: new DataTypes.TEXT(), allowNull: true },
     comments: { type: new DataTypes.TEXT(), allowNull: true },
   },
-  { tableName: "orderLogs", sequelize: connection }
+  {
+    tableName: "orderLogs",
+    sequelize: connection,
+    paranoid: true,
+    timestamps: true,
+  },
 );
 
 export { OrderLog };

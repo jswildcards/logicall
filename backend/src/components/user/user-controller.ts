@@ -46,12 +46,22 @@ async function getUserById(req: Express.Request, res: Express.Response) {
 async function createUser(req: Express.Request, res: Express.Response) {
   req.body.password = encrypt(req.body.password);
   const user = await UserService.createUser(req.body);
-  res.status(201).json(user);
+  const { userId, ...attributes } = user.get();
+
+  res.status(201).json({
+    data: {
+      type,
+      id: userId,
+      attributes,
+    },
+  });
 }
 
 // TODO: Test Update User Function
 async function updateUser(req: Express.Request, res: Express.Response) {
-  req.body.password = encrypt(req.body.password);
+  if (req.body?.password) {
+    req.body.password = encrypt(req.body.password);
+  }
   const [updated] = await UserService.updateUser(req.params.id, req.body);
   if (updated) {
     const user = await UserService.getUserById(req.params.id);
