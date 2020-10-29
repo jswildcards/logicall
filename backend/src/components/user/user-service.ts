@@ -19,7 +19,7 @@ function getUserById(userId: string | number) {
 }
 
 function getUserByAuth({ username, password }: User) {
-  return User.findAll({ where: { username, password }, include });
+  return User.findOne({ where: { username, password }, include });
 }
 
 function createUser(user: User) {

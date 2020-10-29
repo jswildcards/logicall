@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Grid, CardMedia, } from "@material-ui/core";
-import User from "../components/User";
+import { Grid, Hidden } from "@material-ui/core";
+import SignInForm from "../containers/sign-in";
 
 const useStyles = makeStyles({
   root: {
@@ -10,23 +10,38 @@ const useStyles = makeStyles({
   padding: {
     padding: 20,
   },
+  image: {
+    maxWidth: "100%",
+    maxHeight: "100%"
+  },
+  back: {
+    background: "#7e89fd"
+  },
+  front: {
+    background: "white"
+  }
 });
 
 export default function Home() {
   const classes = useStyles();
 
   return (
-    <Grid container className={classes.root}>
-      <Grid item xs={8} className={classes.root}>
-        <CardMedia
+    <Grid container direction="row" className={`${classes.root} ${classes.back}`}>
+      <Hidden smDown>
+        <Grid item container md={8} justify="center" alignItems="center">
+          {/* <CardMedia
           component="img"
           alt=""
-          image="/logistics.svg"
+          image="/logicall-banner.png"
           className={classes.root}
-        />
-      </Grid>
-      <Grid item xs={4}>
-        <User />
+        /> */}
+          {/* <Box display={{ xs: 'none', md: 'block' }}> */}
+          <img className={classes.image} src="/logicall-banner.png" alt="" />
+          {/* </Box> */}
+        </Grid>
+      </Hidden>
+      <Grid className={classes.front} item xs={12} md={4}>
+        <SignInForm />
       </Grid>
     </Grid>
   );

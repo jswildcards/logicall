@@ -20,6 +20,7 @@ COPY --from=build-stage /app/.next/ ./.next/
 COPY --from=build-stage /app/node_modules/ ./node_modules/
 COPY --from=build-stage /app/package.json ./
 COPY --from=build-stage /app/yarn.lock ./
+COPY --from=build-stage /app/public/ ./public/
 
 EXPOSE 3000
 CMD ["yarn", "start"]

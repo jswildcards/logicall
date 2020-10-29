@@ -82,5 +82,37 @@ async function deleteUser(req: Express.Request, res: Express.Response) {
   res.status(404).json({ error: "Requested resources not found." });
 }
 
-export { createUser, deleteUser, getUserById, getUsers, updateUser };
-export default { getUsers, getUserById, createUser, updateUser, deleteUser };
+async function signInUser(req: Express.Request, res: Express.Response) {
+  req.body.password = encrypt(req.body.password);
+  const user = await UserService.getUserByAuth(req.body);
+  if (user) {
+    const { userId, ...attributes } = user.get();
+
+    res.json({
+      data: {
+        type,
+        id: userId,
+        attributes,
+      },
+    });
+    return;
+  }
+  res.status(404).json({ error: "Requested resources not found." });
+}
+
+export {
+  createUser,
+  deleteUser,
+  getUserById,
+  getUsers,
+  signInUser,
+  updateUser,
+};
+export default {
+  getUsers,
+  getUserById,
+  createUser,
+  updateUser,
+  deleteUser,
+  signInUser,
+};

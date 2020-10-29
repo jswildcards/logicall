@@ -11,6 +11,7 @@ class Address extends Model {
   public longitude?: string | number;
   public readonly createdAt?: Date;
   public readonly updatedAt?: Date;
+  public readonly deletedAt!: Date;
 }
 
 Address.init(
@@ -30,7 +31,7 @@ Address.init(
     sequelize: connection,
     paranoid: true,
     timestamps: true,
-  }
+  },
 );
 
 export { Address as CustomerAddress };

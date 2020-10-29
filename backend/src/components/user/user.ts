@@ -14,6 +14,7 @@ class User extends Model {
   public role!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+  public readonly deletedAt!: Date;
 
   public readonly addresses?: Address[];
   public readonly sendOrders?: Order[];
@@ -50,7 +51,7 @@ User.init(
     sequelize: connection,
     paranoid: true,
     timestamps: true,
-  }
+  },
 );
 
 export { User };

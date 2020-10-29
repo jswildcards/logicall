@@ -138,7 +138,7 @@ END//
 DELIMITER ;
 
 INSERT INTO `users`(`firstName`, `lastName`, `email`, `role`, `username`, `password`) VALUES
-('nimda', 'nim', 'admin@example.com', 'admin', 'admin1', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8');
+('nimda', 'nim', 'admin@example.com', 'admin', 'admin1', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3');
 
 -- For Testing Order Logs Trigger
 -- INSERT INTO `users`(`firstName`, `lastName`, `email`, `username`, `password`, `role`) VALUES

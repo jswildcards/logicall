@@ -9,6 +9,7 @@ class OrderLog extends Model {
   public comments?: string;
   public readonly createdAt?: Date;
   public readonly updatedAt?: Date;
+  public readonly deletedAt!: Date;
 }
 
 OrderLog.init(
@@ -27,7 +28,7 @@ OrderLog.init(
     sequelize: connection,
     paranoid: true,
     timestamps: true,
-  }
+  },
 );
 
 export { OrderLog };
