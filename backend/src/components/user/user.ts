@@ -51,7 +51,7 @@ User.init(
     sequelize: connection,
     paranoid: true,
     timestamps: true,
-  },
+  }
 );
 
 export { User };
