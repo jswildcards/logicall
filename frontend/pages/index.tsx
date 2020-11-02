@@ -1,48 +1,38 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { Grid, Hidden } from "@material-ui/core";
-import SignInForm from "../containers/sign-in";
+import { AppBar, Button, IconButton, Toolbar, Typography } from '@material-ui/core';
+import { Menu } from '@material-ui/icons';
+import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
+import SignInDetection from '../containers/sign-in-detection';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
-    height: "100vh",
+    flexGrow: 1,
   },
-  padding: {
-    padding: 20,
+  menuButton: {
+    marginRight: theme.spacing(2),
   },
-  image: {
-    maxWidth: "100%",
-    maxHeight: "100%"
+  title: {
+    flexGrow: 1,
   },
-  back: {
-    background: "#7e89fd"
-  },
-  front: {
-    background: "white"
-  }
-});
+}));
 
 export default function Home() {
   const classes = useStyles();
 
   return (
-    <Grid container direction="row" className={`${classes.root} ${classes.back}`}>
-      <Hidden smDown>
-        <Grid item container md={8} justify="center" alignItems="center">
-          {/* <CardMedia
-          component="img"
-          alt=""
-          image="/logicall-banner.png"
-          className={classes.root}
-        /> */}
-          {/* <Box display={{ xs: 'none', md: 'block' }}> */}
-          <img className={classes.image} src="/logicall-banner.png" alt="" />
-          {/* </Box> */}
-        </Grid>
-      </Hidden>
-      <Grid className={classes.front} item xs={12} md={4}>
-        <SignInForm />
-      </Grid>
-    </Grid>
-  );
+    <div className={classes.root}>
+      <SignInDetection />
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+            <Menu />
+          </IconButton>
+          <Typography variant="h6" className={classes.title}>
+            News
+          </Typography>
+          <Button color="inherit">Login</Button>
+        </Toolbar>
+      </AppBar>
+    </div>
+  )
 }

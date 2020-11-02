@@ -8,13 +8,13 @@ import {
   InputLabel,
   FormControl,
   Button,
-  CircularProgress
+  CircularProgress, Snackbar, SnackbarContent
 } from "@material-ui/core";
 import {
   AccountBox,
   Lock,
   Visibility,
-  VisibilityOff,
+  VisibilityOff, Close
 } from "@material-ui/icons";
 
 const useStyles = makeStyles({
@@ -28,18 +28,22 @@ const useStyles = makeStyles({
     marginTop: -12,
     marginLeft: -12,
   },
+  snackbar: {
+    background: "#f44336"
+  }
 });
 
-export default function SignInForm({ user, setUser }) {
-  const [isVisible, setVisible] = useState(false);
+export default function SignInForm({ setUser }) {
+  const [isPasswordVisible, setPasswordVisibility] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [open, setOpen] = React.useState(false);
 
   const classes = useStyles();
 
   const handleClickShowPassword = () => {
-    setVisible(!isVisible);
+    setPasswordVisibility(!isPasswordVisible);
   };
 
   const signIn = async () => {
@@ -51,13 +55,15 @@ export default function SignInForm({ user, setUser }) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ username, password }),
-    }).then((res) => res.json());
-
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    }).then((res) => res.json()).catch(() => { setOpen(true); setLoading(false) });
 
     setUser(userFetched);
     setLoading(false);
   }
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleMouseDownPassword = handleClickShowPassword;
 
@@ -98,12 +104,12 @@ export default function SignInForm({ user, setUser }) {
                   onClick={handleClickShowPassword}
                   onMouseDown={handleMouseDownPassword}
                 >
-                  {isVisible ? <Visibility /> : <VisibilityOff />}
+                  {isPasswordVisible ? <Visibility /> : <VisibilityOff />}
                 </IconButton>
               </InputAdornment>
             )}
             value={password}
-            type={isVisible ? "text" : "password"}
+            type={isPasswordVisible ? "text" : "password"}
             onChange={(e) => setPassword(e.target.value)}
           />
         </FormControl>
@@ -119,8 +125,28 @@ export default function SignInForm({ user, setUser }) {
           Sign In
         </Button>
         {isLoading && <CircularProgress size={24} className={classes.buttonProgress} />}
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          open={open}
+          autoHideDuration={6000}
+          onClose={handleClose}
+        >
+          <SnackbarContent
+            classes={{ root: classes.snackbar }}
+            message="Login Failed. Please Try Again."
+            action={(
+              <>
+                <IconButton size="small" color="inherit" onClick={handleClose}>
+                  <Close fontSize="small" />
+                </IconButton>
+              </>
+            )}
+          />
+        </Snackbar>
       </div>
-      {JSON.stringify(user)}
     </Box>
   )
 }
