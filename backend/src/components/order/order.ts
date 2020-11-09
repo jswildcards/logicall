@@ -57,7 +57,7 @@ Order.init(
     sequelize: connection,
     paranoid: true,
     timestamps: true,
-  },
+  }
 );
 
 export { Order };
