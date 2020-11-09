@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { connect } from "react-redux";
 import {
   Box,
   Input,
@@ -16,6 +17,7 @@ import {
   Visibility,
   VisibilityOff, Close
 } from "@material-ui/icons";
+import { setUser as setUserAction } from "../actions";
 
 const useStyles = makeStyles({
   wrapper: {
@@ -33,7 +35,7 @@ const useStyles = makeStyles({
   }
 });
 
-export default function SignInForm({ setUser }) {
+function SignInForm({ setUser }) {
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
@@ -65,10 +67,8 @@ export default function SignInForm({ setUser }) {
     setOpen(false);
   };
 
-  const handleMouseDownPassword = handleClickShowPassword;
-
   return (
-    <Box p="3rem">
+    <Box p={4}>
       <Box pb="1rem">
         <FormControl fullWidth>
           <InputLabel htmlFor="username">Username</InputLabel>
@@ -102,7 +102,7 @@ export default function SignInForm({ setUser }) {
                 <IconButton
                   aria-label="toggle password visibility"
                   onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
+                  onMouseDown={handleClickShowPassword}
                 >
                   {isPasswordVisible ? <Visibility /> : <VisibilityOff />}
                 </IconButton>
@@ -150,3 +150,13 @@ export default function SignInForm({ setUser }) {
     </Box>
   )
 }
+
+const mapStateTpProps = (state) => ({
+  user: state.user,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  setUser: (user) => dispatch(setUserAction(user)),
+});
+
+export default connect(mapStateTpProps, mapDispatchToProps)(SignInForm);

@@ -10,7 +10,6 @@ import rootReducers from "../reducers";
 const store = createStore(rootReducers);
 
 function MyApp({ Component, pageProps }) {
-
   return (
     <div>
       <style jsx global>

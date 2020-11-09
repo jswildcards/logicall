@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Hidden } from "@material-ui/core";
-import SignInForm from "../containers/sign-in-form";
+import SignInForm from "../components/sign-in-form";
 
 const useStyles = makeStyles({
   root: {
@@ -28,11 +28,10 @@ export default function SignIn() {
   return (
     <Grid
       container
-      direction="row"
       className={`${classes.root} ${classes.back}`}
     >
-      <Hidden smDown>
-        <Grid item container md={8} justify="center" alignItems="center">
+      <Hidden xsDown>
+        <Grid item container sm={6} md={8} justify="center" alignItems="center">
           {/* <CardMedia
           component="img"
           alt=""
@@ -44,7 +43,7 @@ export default function SignIn() {
           {/* </Box> */}
         </Grid>
       </Hidden>
-      <Grid className={classes.front} item xs={12} md={4}>
+      <Grid className={classes.front} item xs={12} sm={6} md={4}>
         <SignInForm />
       </Grid>
     </Grid>
