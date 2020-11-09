@@ -36,9 +36,9 @@ DROP PROCEDURE IF EXISTS `orderLogsProcedure`;
 
 CREATE TABLE IF NOT EXISTS `users` (
   `userId`    INT(11) NOT NULL AUTO_INCREMENT,
-  `firstName` VARCHAR(255) NOT NULL,
-  `lastName`  VARCHAR(255) NOT NULL,
-  `email`     VARCHAR(255) NULL,
+  `firstName` VARCHAR(255) NULL,
+  `lastName`  VARCHAR(255) NULL,
+  `email`     VARCHAR(255) NOT NULL,
   `phone`     VARCHAR(24) NULL,
   `username`  VARCHAR(255) NOT NULL,
   `password`  VARCHAR(255) NOT NULL,

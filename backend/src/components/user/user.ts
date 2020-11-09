@@ -4,17 +4,17 @@ import Address from "../address/address";
 import Order from "../order/order";
 
 class User extends Model {
-  public userId!: string | number;
-  public firstName!: string;
-  public lastName!: string;
-  public email!: string;
-  public username!: string;
-  public password!: string;
-  public phone!: string;
-  public role!: string;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-  public readonly deletedAt!: Date;
+  public userId?: string | number;
+  public firstName?: string;
+  public lastName?: string;
+  public email?: string;
+  public username?: string;
+  public password?: string;
+  public phone?: string;
+  public role?: string;
+  public readonly createdAt?: Date;
+  public readonly updatedAt?: Date;
+  public readonly deletedAt?: Date;
 
   public readonly addresses?: Address[];
   public readonly sendOrders?: Order[];
@@ -35,11 +35,11 @@ User.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    firstName: { type: new DataTypes.STRING(255), allowNull: false },
-    lastName: { type: new DataTypes.STRING(255), allowNull: false },
-    email: { type: new DataTypes.STRING(255), allowNull: false },
-    username: { type: new DataTypes.STRING(32), allowNull: false },
-    password: { type: new DataTypes.STRING(255), allowNull: false },
+    firstName: { type: new DataTypes.STRING(255), allowNull: true },
+    lastName: { type: new DataTypes.STRING(255), allowNull: true },
+    email: { type: new DataTypes.STRING(255), allowNull: true },
+    username: { type: new DataTypes.STRING(32), allowNull: true },
+    password: { type: new DataTypes.STRING(255), allowNull: true },
     phone: { type: new DataTypes.STRING(255), allowNull: true },
     role: {
       type: new DataTypes.ENUM("customer", "admin", "driver"),
@@ -51,7 +51,7 @@ User.init(
     sequelize: connection,
     paranoid: true,
     timestamps: true,
-  }
+  },
 );
 
 export { User };

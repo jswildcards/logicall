@@ -9,7 +9,7 @@ class OrderLog extends Model {
   public comments?: string;
   public readonly createdAt?: Date;
   public readonly updatedAt?: Date;
-  public readonly deletedAt!: Date;
+  public readonly deletedAt?: Date;
 }
 
 OrderLog.init(
@@ -19,7 +19,7 @@ OrderLog.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    orderId: { type: new DataTypes.STRING(255), allowNull: false },
+    orderId: { type: new DataTypes.STRING(255), allowNull: true },
     status: { type: new DataTypes.TEXT(), allowNull: true },
     comments: { type: new DataTypes.TEXT(), allowNull: true },
   },
@@ -28,7 +28,7 @@ OrderLog.init(
     sequelize: connection,
     paranoid: true,
     timestamps: true,
-  }
+  },
 );
 
 export { OrderLog };

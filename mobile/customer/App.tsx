@@ -1,21 +1,39 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+// app/index.js
 
-export default function App() {
+import React from 'react';
+import { Router, Scene } from 'react-native-router-flux';
+
+import HomePage from './pages/home';
+import SignInPage from './pages/sign-in';
+import SignUpPage from './pages/sign-up';
+
+const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Router>
+      <Scene key="root">
+        <Scene
+          key="signIn"
+          component={SignInPage}
+          title="Sign In"
+          hideNavBar
+        />
+        <Scene
+          key="signUp"
+          component={SignUpPage}
+          title="Sign Up"
+          hideNavBar
+        />
+        <Scene key="tabbar" tabs hideNavBar>
+          <Scene
+            key="home"
+            component={HomePage}
+            title="home"
+            hideNavBar
+          />
+        </Scene>
+      </Scene>
+    </Router>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
