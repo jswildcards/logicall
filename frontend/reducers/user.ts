@@ -1,10 +1,14 @@
-export default function user(state = { name: "", password: "" }, action) {
+export default function user(
+  state = {},
+  action,
+) {
   switch (action.type) {
-    case "user/sign-in":
+    case "user/set-user": {
       return {
         ...state,
-        ...action.payload,
+        user: action.payload,
       };
+    }
     default:
       return state;
   }
