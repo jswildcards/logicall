@@ -1,76 +1,76 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { AppBar, Grid, Button, CircularProgress, IconButton, Toolbar, Typography, Box } from '@material-ui/core';
+import { Menu } from '@material-ui/icons';
+import { makeStyles } from '@material-ui/core/styles';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from "next/router";
+import { connect } from "react-redux";
+// import SignInDetection from '../containers/sign-in-detection';
 
-import React from "react";
-import Link from "next/link";
-import { AccessAlarm, ThreeDRotation } from "@material-ui/icons";
-import { Button, FormControl, TextField } from "@material-ui/core";
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  loading: {
+    height: "100vh",
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+}));
 
-// Redux: use Increment component
-import Increment from "../containers/increment";
-import User from "../containers/user";
+function Home({ user }) {
+  const classes = useStyles();
+  const router = useRouter();
+  const [isSignedIn, setSignedIn] = useState(true);
+  const [isLoading] = useState(true);
 
-interface IProps { }
-interface IState {
-  time: Date;
-  value: string;
-}
+  useEffect(() => {
+    if (!user || !Object.keys(user).length) {
+      setSignedIn(false);
+      router.push("sign-in");
+    }
+  })
 
-export default class Home extends React.Component<IProps, IState> {
-  timeID: NodeJS.Timeout;
+  return (
+    <div className={classes.root}>
+      {!isSignedIn && (
+        <Grid container direction="column" className={classes.loading} justify="center" alignItems="center">
+          <CircularProgress />
+          <Box my={1}>
+            <Typography>We are redirecting you to sign in page.</Typography>
+          </Box>
+        </Grid>
+      )}
+      {isSignedIn && isLoading && (
+        <Grid container direction="column" className={classes.loading} justify="center" alignItems="center">
+          <CircularProgress />
+          <Box my={1}>
+            <Typography>Loading data...</Typography>
+          </Box>
+        </Grid>
+      )}
+      {isSignedIn && !isLoading && (
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+              <Menu />
+            </IconButton>
+            <Typography variant="h6" className={classes.title}>
+              News
+            </Typography>
+            <Button color="inherit">Login</Button>
+          </Toolbar>
+        </AppBar>
+      )}
+    </div>
+  )
+};
 
-  constructor(props: Readonly<IProps>) {
-    super(props);
-    this.state = {
-      time: new Date(),
-      value: "",
-    };
-  }
+const mapStateTpProps = (state) => ({
+  user: state.user,
+});
 
-  componentDidMount() {
-    this.timeID = setInterval(() => this.tick(), 1000);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timeID);
-  }
-
-  tick() {
-    this.setState({ time: new Date() });
-  }
-
-  handleChange(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
-    this.setState({ value: e.target.value });
-  }
-
-  render() {
-    const { time, value } = this.state;
-
-    return (
-      <div>
-        <h4>
-          The time is now
-          {' '}
-          {time.toLocaleString()}
-        </h4>
-        <FormControl fullWidth>
-          <TextField
-            type="text"
-            value={value}
-            label="Username"
-            onChange={(e) => this.handleChange(e)}
-          />
-        </FormControl>
-        <p>{value}</p>
-        <AccessAlarm />
-        <ThreeDRotation />
-        <User />
-        <Increment />
-        <Link href="/clock" passHref>
-          <Button variant="contained" color="primary">
-            Clock
-          </Button>
-        </Link>
-      </div>
-    );
-  }
-}
+export default connect(mapStateTpProps)(Home);

@@ -11,9 +11,18 @@ const store = createStore(rootReducers);
 
 function MyApp({ Component, pageProps }) {
   return (
-    <Provider store={store}>
-      <Component {...pageProps} />
-    </Provider>
+    <div>
+      <style jsx global>
+        {`
+          body {
+            margin: 0;
+          }
+        `}
+      </style>
+      <Provider store={store}>
+        <Component {...pageProps} />
+      </Provider>
+    </div>
   );
 }
 

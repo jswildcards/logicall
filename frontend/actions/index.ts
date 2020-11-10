@@ -1,11 +1,8 @@
-// Redux: defines actions will be dispatched
-export const increment = {
-  type: "counter/increment",
-};
-
-export const signIn = (user) => {
+export const setUser = (user) => {
   return {
-    type: "user/sign-in",
+    type: "user/set-user",
     payload: { ...user },
   };
 };
+
+export default { setUser };

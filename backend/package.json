@@ -6,25 +6,37 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.20.0",
+    "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "mysql2": "^2.2.3"
+    "jsonwebtoken": "^8.5.1",
+    "mysql2": "^2.2.3",
+    "sequelize": "^6.3.5"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.2",
     "@types/express": "^4.17.8",
+    "@types/jest": "^26.0.14",
+    "@types/jsonwebtoken": "^8.5.0",
     "@types/node": "^14.11.1",
+    "@types/supertest": "^2.0.10",
+    "@types/validator": "^13.1.0",
     "@typescript-eslint/eslint-plugin": "^4.4.0",
     "@typescript-eslint/parser": "^4.4.0",
     "eslint": "^7.10.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-config-prettier": "^6.12.0",
     "eslint-plugin-import": "^2.22.1",
+    "jest": "^26.5.3",
     "prettier": "^2.1.2",
+    "supertest": "^5.0.0",
+    "ts-jest": "^26.4.1",
     "typescript": "^4.0.2"
   },
   "scripts": {
-    "start": "tsc && node .",
     "tsc": "tsc",
-    "lint": "eslint . --fix && prettier --write ."
+    "start": "tsc && node .",
+    "lint": "eslint \"src/**/*\" --fix && prettier --write .",
+    "test": "jest --detectOpenHandles"
   }
 }
