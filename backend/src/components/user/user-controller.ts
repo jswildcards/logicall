@@ -11,7 +11,7 @@ async function getUsers(req: Express.Request, res: Express.Response) {
   const users = await UserService.getUsers(page);
 
   const token = req.cookies[CookieConfig.token];
-  const payload = await jwt.verify(token) as Record<string, any>;
+  const payload = (await jwt.verify(token)) as Record<string, any>;
 
   if ((payload?.role ?? "") !== "admin") {
     Unauthorized(res);
@@ -74,11 +74,9 @@ async function signInUser(req: Express.Request, res: Express.Response) {
     return;
   }
 
-  res.cookie(
-    CookieConfig.token,
-    await jwt.assign(user.get()),
-    { httpOnly: true },
-  );
+  res.cookie(CookieConfig.token, await jwt.assign(user.get()), {
+    httpOnly: true,
+  });
 
   SignInSuccess(res);
 }
