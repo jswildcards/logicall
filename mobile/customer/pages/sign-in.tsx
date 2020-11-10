@@ -1,16 +1,17 @@
 // app/ScarletScreen.js
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   // Button,
   StatusBar,
   StyleSheet,
   // Text,
   // TextInput,
-  View
-} from 'react-native';
-import { Button, Icon, Input, Text } from 'react-native-elements';
-import { Actions } from 'react-native-router-flux'; // New code
+  View,
+} from "react-native";
+import { Button, Icon, Input, Text } from "react-native-elements";
+import { Actions } from "react-native-router-flux"; // New code
+import server from "../util/server";
 
 const styles = StyleSheet.create({
   root: {
@@ -27,10 +28,10 @@ const styles = StyleSheet.create({
     color: "rgba(0, 0, 0, 0.54)",
     textDecorationStyle: "solid",
     textDecorationLine: "underline",
-    textDecorationColor: "rgba(0, 0, 0, 0.54)"
+    textDecorationColor: "rgba(0, 0, 0, 0.54)",
   },
   buttonRed: {
-    padding: 0
+    padding: 0,
   },
   divider: {
     marginVertical: 16,
@@ -41,8 +42,8 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "flex-start",
     paddingHorizontal: 10,
-    paddingVertical: 16
-  }
+    paddingVertical: 16,
+  },
 });
 
 function SignInPage() {
@@ -52,16 +53,47 @@ function SignInPage() {
 
   const navigate = (page: string) => Actions.replace(page);
 
+  const signIn = async () => {
+    await server.signIn({ username, password });
+    Actions.home();
+  };
+
   return (
     <View style={styles.root}>
       <StatusBar />
       <View>
-        <Input label="Username" placeholder="BettyBar" leftIcon={{ type: 'material-community', name: 'account' }} value={username} onChangeText={(value) => setUsername(value)} />
-        <Input label="Password" placeholder="•••••••••" leftIcon={{ type: 'material-community', name: 'lock' }} rightIcon={<Icon type="material-community" name={isPasswordVisible ? "eye" : "eye-off"} onPress={() => setPasswordVisible(!isPasswordVisible)} />} value={password} secureTextEntry={!isPasswordVisible} onChangeText={(value) => setPassword(value)} />
-        <Button buttonStyle={styles.button} title="Sign In" onPress={() => navigate("home")} />
+        <Input
+          label="Username"
+          placeholder="BettyBar"
+          leftIcon={{ type: "material-community", name: "account" }}
+          value={username}
+          onChangeText={(value) => setUsername(value)}
+        />
+        <Input
+          label="Password"
+          placeholder="•••••••••"
+          leftIcon={{ type: "material-community", name: "lock" }}
+          rightIcon={(
+            <Icon
+              type="material-community"
+              name={isPasswordVisible ? "eye" : "eye-off"}
+              onPress={() => setPasswordVisible(!isPasswordVisible)}
+            />
+          )}
+          value={password}
+          secureTextEntry={!isPasswordVisible}
+          onChangeText={(value) => setPassword(value)}
+        />
+        <Button buttonStyle={styles.button} title="Sign In" onPress={signIn} />
         <View style={styles.containerSignUp}>
           <Text>New to Here? </Text>
-          <Button onPress={() => navigate("signUp")} buttonStyle={styles.buttonRed} titleStyle={styles.title} type="clear" title="Sign Up" />
+          <Button
+            onPress={() => navigate("signUp")}
+            buttonStyle={styles.buttonRed}
+            titleStyle={styles.title}
+            type="clear"
+            title="Sign Up"
+          />
           <Text>.</Text>
         </View>
       </View>

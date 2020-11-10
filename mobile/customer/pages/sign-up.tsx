@@ -1,16 +1,17 @@
 // app/ScarletScreen.js
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   // Button,
   StatusBar,
   StyleSheet,
   // Text,
   // TextInput,
-  View
-} from 'react-native';
-import { Button, Icon, Input, Text } from 'react-native-elements';
-import { Actions } from 'react-native-router-flux'; // New code
+  View,
+} from "react-native";
+import { Button, Icon, Input, Text } from "react-native-elements";
+import { Actions } from "react-native-router-flux"; // New code
+import server from "../util/server";
 
 const styles = StyleSheet.create({
   root: {
@@ -27,10 +28,10 @@ const styles = StyleSheet.create({
     color: "rgba(0, 0, 0, 0.54)",
     textDecorationStyle: "solid",
     textDecorationLine: "underline",
-    textDecorationColor: "rgba(0, 0, 0, 0.54)"
+    textDecorationColor: "rgba(0, 0, 0, 0.54)",
   },
   buttonRed: {
-    padding: 0
+    padding: 0,
   },
   divider: {
     marginVertical: 16,
@@ -41,8 +42,8 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "flex-start",
     paddingHorizontal: 10,
-    paddingVertical: 16
-  }
+    paddingVertical: 16,
+  },
 });
 
 function SignUpPage() {
@@ -59,35 +60,73 @@ function SignUpPage() {
 
   const signUp = async () => {
     setLoading(true);
-
-    await fetch("http://192.168.56.1/api/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        username,
-        password,
-        email,
-        role
-      })
-    });
-
+    await server.signUp({ username, password, email, role });
     Actions.home();
-  }
+  };
 
   return (
     <View style={styles.root}>
       <StatusBar />
       <View>
-        <Input label="Email" placeholder="bettybar@example.com" leftIcon={{ type: 'material-community', name: 'email' }} value={email} onChangeText={(value) => setEmail(value)} />
-        <Input label="Username" placeholder="BettyBar" leftIcon={{ type: 'material-community', name: 'account' }} value={username} onChangeText={(value) => setUsername(value)} />
-        <Input label="Password" placeholder="•••••••••" leftIcon={{ type: 'material-community', name: 'lock' }} rightIcon={<Icon type="material-community" name={isPasswordVisible ? "eye" : "eye-off"} onPress={() => setPasswordVisible(!isPasswordVisible)} />} value={password} secureTextEntry={!isPasswordVisible} onChangeText={(value) => setPassword(value)} />
-        <Input label="Confirm Password" placeholder="•••••••••" leftIcon={{ type: 'material-community', name: 'lock-question' }} rightIcon={<Icon type="material-community" name={isConfirmPasswordVisible ? "eye" : "eye-off"} onPress={() => setConfirmPasswordVisible(!isPasswordVisible)} />} value={confirmPassword} secureTextEntry={!isPasswordVisible} onChangeText={(value) => setConfirmPassword(value)} />
-        <Button loading={isLoading} buttonStyle={styles.button} title="Sign Up" onPress={signUp} />
+        <Input
+          label="Email"
+          placeholder="bettybar@example.com"
+          leftIcon={{ type: "material-community", name: "email" }}
+          value={email}
+          onChangeText={(value) => setEmail(value)}
+        />
+        <Input
+          label="Username"
+          placeholder="BettyBar"
+          leftIcon={{ type: "material-community", name: "account" }}
+          value={username}
+          onChangeText={(value) => setUsername(value)}
+        />
+        <Input
+          label="Password"
+          placeholder="•••••••••"
+          leftIcon={{ type: "material-community", name: "lock" }}
+          rightIcon={(
+            <Icon
+              type="material-community"
+              name={isPasswordVisible ? "eye" : "eye-off"}
+              onPress={() => setPasswordVisible(!isPasswordVisible)}
+            />
+          )}
+          value={password}
+          secureTextEntry={!isPasswordVisible}
+          onChangeText={(value) => setPassword(value)}
+        />
+        <Input
+          label="Confirm Password"
+          placeholder="•••••••••"
+          leftIcon={{ type: "material-community", name: "lock-question" }}
+          rightIcon={(
+            <Icon
+              type="material-community"
+              name={isConfirmPasswordVisible ? "eye" : "eye-off"}
+              onPress={() => setConfirmPasswordVisible(!isPasswordVisible)}
+            />
+          )}
+          value={confirmPassword}
+          secureTextEntry={!isPasswordVisible}
+          onChangeText={(value) => setConfirmPassword(value)}
+        />
+        <Button
+          loading={isLoading}
+          buttonStyle={styles.button}
+          title="Sign Up"
+          onPress={signUp}
+        />
         <View style={styles.containerSignUp}>
           <Text>Already have an account? </Text>
-          <Button onPress={() => navigate("signIn")} buttonStyle={styles.buttonRed} titleStyle={styles.title} type="clear" title="Sign In" />
+          <Button
+            onPress={() => navigate("signIn")}
+            buttonStyle={styles.buttonRed}
+            titleStyle={styles.title}
+            type="clear"
+            title="Sign In"
+          />
           <Text>.</Text>
         </View>
       </View>

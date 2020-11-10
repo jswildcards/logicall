@@ -31,6 +31,7 @@
     ],
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": "warn",
+    "no-undef": "off",
     "react/jsx-filename-extension": [
       2,
       { "extensions": [".js", ".jsx", ".ts", ".tsx"] }

@@ -1,60 +1,41 @@
 import Express from "express";
 import { encrypt } from "../../utils/crypto";
 import { paging } from "../../utils/paging";
+import jwt from "../../utils/token";
 import UserService from "./user-service";
-
-const type = "users";
+import { Cookie as CookieConfig } from "../../utils/config";
+import { NotFound, SignInSuccess, Unauthorized } from "../../utils/httpStatus";
 
 async function getUsers(req: Express.Request, res: Express.Response) {
   const page = paging(req.query?.page);
   const users = await UserService.getUsers(page);
 
-  res.json({
-    data: users.map((user) => {
-      const { userId, ...attributes } = user.get();
+  const token = req.cookies[CookieConfig.token];
+  const payload = await jwt.verify(token) as Record<string, any>;
 
-      return {
-        type,
-        id: userId,
-        attributes,
-        // TODO: relationships to be implemented
-        relationships: null,
-      };
-    }),
-  });
+  if ((payload?.role ?? "") !== "admin") {
+    Unauthorized(res);
+    return;
+  }
+
+  res.json(users);
 }
 
 async function getUserById(req: Express.Request, res: Express.Response) {
   const user = await UserService.getUserById(req.params.id);
 
-  if (user) {
-    const { userId, ...attributes } = user.get();
-
-    res.json({
-      data: {
-        type,
-        id: userId,
-        attributes,
-      },
-    });
+  if (!user) {
+    NotFound(res);
     return;
   }
 
-  res.status(404).json({ error: "Requested resources not found." });
+  res.json(user.get());
 }
 
 async function createUser(req: Express.Request, res: Express.Response) {
   req.body.password = encrypt(req.body.password);
   const user = await UserService.createUser(req.body);
-  const { userId, ...attributes } = user.get();
-
-  res.status(201).json({
-    data: {
-      type,
-      id: userId,
-      attributes,
-    },
-  });
+  res.status(201).json(user);
 }
 
 // TODO: Test Update User Function
@@ -63,41 +44,43 @@ async function updateUser(req: Express.Request, res: Express.Response) {
     req.body.password = encrypt(req.body.password);
   }
   const [updated] = await UserService.updateUser(req.params.id, req.body);
-  if (updated) {
-    const user = await UserService.getUserById(req.params.id);
-    res.json(user);
+  if (!updated) {
+    NotFound(res);
     return;
   }
 
-  res.status(404).json({ error: "Requested resources not found." });
+  const user = await UserService.getUserById(req.params.id);
+  res.json(user);
 }
 
 async function deleteUser(req: Express.Request, res: Express.Response) {
   const user = await UserService.getUserById(req.params.id);
-  if (user) {
-    UserService.deleteUser(user);
-    res.json({ status: "success" });
+
+  if (!user) {
+    NotFound(res);
     return;
   }
-  res.status(404).json({ error: "Requested resources not found." });
+
+  UserService.deleteUser(user);
+  res.json({ status: "success" });
 }
 
 async function signInUser(req: Express.Request, res: Express.Response) {
   req.body.password = encrypt(req.body.password);
   const user = await UserService.getUserByAuth(req.body);
-  if (user) {
-    const { userId, ...attributes } = user.get();
 
-    res.json({
-      data: {
-        type,
-        id: userId,
-        attributes,
-      },
-    });
+  if (!user) {
+    NotFound(res);
     return;
   }
-  res.status(404).json({ error: "Requested resources not found." });
+
+  res.cookie(
+    CookieConfig.token,
+    await jwt.assign(user.get()),
+    { httpOnly: true },
+  );
+
+  SignInSuccess(res);
 }
 
 export {

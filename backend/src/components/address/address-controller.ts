@@ -2,8 +2,7 @@ import Express from "express";
 import AddressService from "./address-service";
 // import Address from "./address";
 import { paging } from "../../utils/paging";
-
-const type = "customer-address";
+import { NotFound } from "../../utils/httpStatus";
 
 async function getAddresses(req: Express.Request, res: Express.Response) {
   const page = paging(req.query?.page);
@@ -14,40 +13,19 @@ async function getAddresses(req: Express.Request, res: Express.Response) {
     //   ? await AddressService.getAddressesByCustomerId(customerId, page):
     await AddressService.getAddresses(page);
 
-  res.json({
-    data: addresses.map((address) => {
-      const { addressId, ...attributes } = address.get();
-
-      return {
-        type,
-        id: addressId,
-        attributes,
-        // TODO: relationships to be implemented
-        relationships: null,
-      };
-    }),
-  });
+  res.json(addresses);
 }
 
 async function getAddressById(req: Express.Request, res: Express.Response) {
   const address = await AddressService.getAddressById(req.params.id);
 
-  if (address) {
-    const { addressId, ...attributes } = address.get();
-
-    res.json({
-      data: {
-        type,
-        id: addressId,
-        attributes,
-      },
-    });
-
+  if (!address) {
+    NotFound(res);
     return;
   }
 
-  res.status(404).json({ error: "Requested resources not found." });
+  res.json(address);
 }
 
-export { getAddresses, getAddressById };
+export { getAddressById, getAddresses };
 export default { getAddresses, getAddressById };

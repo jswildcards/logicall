@@ -9,6 +9,8 @@ const {
   MYSQL_PASSWORD,
   CRY_ALG,
   CRY_SECRET,
+  JWT_ALG,
+  JWT_SECRET,
 } = process.env;
 
 const Database = {
@@ -23,10 +25,19 @@ const Crypto = {
   secret: CRY_SECRET ?? "secret",
 };
 
+const Jwt = {
+  algorithm: JWT_ALG ?? "HS256",
+  secret: JWT_SECRET ?? "secret",
+};
+
 const Page = {
   number: 1,
   size: 20,
 };
 
-export { Database, Crypto, Page };
-export default { Database, Crypto, Page };
+const Cookie = {
+  token: "LOGICALL_JWT",
+};
+
+export { Cookie, Crypto, Database, Jwt, Page };
+export default { Database, Crypto, Page, Jwt, Cookie };
