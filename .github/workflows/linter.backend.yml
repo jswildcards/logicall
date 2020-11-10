@@ -2,9 +2,9 @@ name: Autofix Linting
 
 on:
   push:
-    branches-ignore: [master]
+    branches-ignore: [main]
   pull_request:
-    branches: [master]
+    branches: [main]
 
 jobs:
   build:

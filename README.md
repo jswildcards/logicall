@@ -18,15 +18,17 @@ The process of automatically assigning drivers/packages and optimising their rou
 
   - [x] Database
     - [x] SQL Script
-  - [ ] Backend (RESTful API)
+  - [x] Backend (RESTful API)
     - [x] Database Model
-    - [ ] Controllers
-    - [ ] Routes
+    - [x] Controllers
+    - [x] Routes
   - [ ] Frontend (Admin Web App)
-    - [ ] Sign In Page
+    - [x] Sign In Page
     - [ ] Delivery Management Page
     - [ ] Driver Monitor Page
   - [ ] Mobile (Customer)
+    - [x] Sign In Page
+    - [x] Sign Up Page
   - [ ] Mobile (Driver)
 
 - [ ] Testing
@@ -46,9 +48,6 @@ The process of automatically assigning drivers/packages and optimising their rou
 
 ```bash
 $ git clone https://github.com/jswildcards/logicall.git
-# or clone this branch
-$ git clone --single-branch -b development https://github.com/jswildcards/logicall.git
-
 $ cd logicall
 $ cp .env.example .env
 ```
