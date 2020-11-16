@@ -1,14 +1,11 @@
-version: '3.8'
+version: "3.8"
 
 services:
-
   db:
-    image: "mysql:5.7.31"
     container_name: db
     env_file: .env
-    volumes: 
-      - ./db/volumes/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
-    command: ["mysqld"]
+    build:
+      context: ./db
     expose:
       - 3306
 
@@ -17,7 +14,7 @@ services:
     build:
       context: ./backend
     env_file: .env
-    expose: 
+    expose:
       - 3000
 
   frontend:

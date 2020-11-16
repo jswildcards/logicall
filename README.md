@@ -18,10 +18,10 @@ The process of automatically assigning drivers/packages and optimising their rou
 
   - [x] Database
     - [x] SQL Script
-  - [x] Backend (RESTful API)
+  - [ ] Backend (~~RESTful API~~ GraphQL)
     - [x] Database Model
-    - [x] Controllers
-    - [x] Routes
+    - [ ] Controllers
+    - [ ] Routes
   - [ ] Frontend (Admin Web App)
     - [x] Sign In Page
     - [ ] Delivery Management Page
@@ -48,7 +48,7 @@ The process of automatically assigning drivers/packages and optimising their rou
 
 ```bash
 $ git clone https://github.com/jswildcards/logicall.git
-$ cd logicall
+$ cd logicall/dockerized
 $ cp .env.example .env
 ```
 
@@ -56,40 +56,32 @@ $ cp .env.example .env
 
 #### Production Build
 
-##### Mac Terminal
-
 ```bash
+# For macOS
 $ sh ./build.sh
-```
-
-##### Windows Powershell
-
-```bash
+# For Windows Powershell
 $ .\build.sh
 ```
 
-When docker build is done, open http://localhost to view the homepage or open http://localhost/api/users to start query some JSON results.
+When docker build is done, open http://localhost to view the homepage.
 
 #### Development Build
 
 The development build is mainly for the process when backend or frontend is not completely developed and provide a database connection to backend for testing.
 
-##### Mac Terminal
-
 ```bash
+# For macOS
 $ sh ./build.dev.sh
-$ cd backend
-$ yarn
-$ yarn start
-```
-
-##### Windows Powershell
-
-```bash
+# For Windows Powershell
 $ .\build.dev.sh
+
 $ cd backend
 $ yarn
 $ yarn start
 ```
 
-After backend server is started, go to http://localhost:3000/api/users to start query some JSON results.
+After backend server is started, the API is ready for query.
+
+#### Mobile
+
+Please refer to [Expo documentation](https://docs.expo.io/workflow/expo-cli/).

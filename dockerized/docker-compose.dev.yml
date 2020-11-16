@@ -1,19 +1,16 @@
-version: '3.8'
+version: "3.8"
 
 services:
-
   db:
-    image: "mysql:5.7.31"
     container_name: some-db
     env_file: .env
-    volumes: 
-      - ./db/volumes/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
-    command: ["mysqld"]
+    build:
+      context: ./db
     ports:
       - 3306:3306
 
   adminer:
     image: "adminer:4.7.7"
     container_name: some-adminer
-    ports: 
+    ports:
       - 3307:8080
