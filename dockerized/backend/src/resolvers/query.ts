@@ -3,11 +3,7 @@ import { UserWhereUniqueInput } from "@prisma/client";
 // import jwt from "../utils/token";
 import { Context } from "../utils/types";
 
-export async function users(
-  _parent: any,
-  _args: any,
-  { prisma }: Context,
-) {
+export async function users(_parent: any, _args: any, { prisma }: Context) {
   // const token = request.cookies[CookieConfig.token];
   // const payload = await jwt.verify(token) as User;
 
@@ -22,7 +18,7 @@ export async function users(
 export async function user(
   _parent: any,
   { userId }: UserWhereUniqueInput,
-  { prisma }: Context,
+  { prisma }: Context
 ) {
   // const token = request.cookies[CookieConfig.token];
   // const payload = await jwt.verify(token) as User;

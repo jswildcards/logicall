@@ -8,7 +8,7 @@ import resolvers from "./resolvers/root";
 
 const typeDefs = fs.readFileSync(
   path.join(__dirname, "../schema.graphql"),
-  "utf8",
+  "utf8"
 );
 
 const server = new GraphQLServer({
