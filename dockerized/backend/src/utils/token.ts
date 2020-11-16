@@ -12,7 +12,7 @@ export function assign(payload: string | object) {
       (err, encoded) => {
         if (err) reject(err);
         resolve(encoded);
-      }
+      },
     );
   });
 }
@@ -26,7 +26,7 @@ export function verify(token: string) {
       (err, result) => {
         if (err) reject(err);
         resolve(result);
-      }
+      },
     )
   );
 }

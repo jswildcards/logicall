@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Address {
+  addressId                             Int       @id @default(autoincrement())
+  customerId                            Int
+  addressLine1                          String?
+  addressLine2                          String?
+  latitude                              Float?
+  longitude                             Float?
+  createdAt                             DateTime  @default(now())
+  updatedAt                             DateTime  @default(now())
+  deletedAt                             DateTime?
+  User                                  User      @relation(fields: [customerId], references: [userId])
+  Order_AddressToOrder_receiveAddressId Order[]   @relation("AddressToOrder_receiveAddressId")
+  Order_AddressToOrder_sendAddressId    Order[]   @relation("AddressToOrder_sendAddressId")
+
+  @@index([customerId], name: "FK_Customer")
+}
+
+model Order {
+  orderId                                 String     @id
+  senderId                                Int
+  sendAddressId                           Int
+  receiverId                              Int
+  receiveAddressId                        Int
+  driverId                                Int?
+  status                                  String?
+  signUrl                                 String?
+  comments                                String?
+  createdAt                               DateTime   @default(now())
+  updatedAt                               DateTime   @default(now())
+  deletedAt                               DateTime?
+  User_Order_driverIdToUser               User?      @relation("Order_driverIdToUser", fields: [driverId], references: [userId])
+  Address_AddressToOrder_receiveAddressId Address    @relation("AddressToOrder_receiveAddressId", fields: [receiveAddressId], references: [addressId])
+  User_Order_receiverIdToUser             User       @relation("Order_receiverIdToUser", fields: [receiverId], references: [userId])
+  Address_AddressToOrder_sendAddressId    Address    @relation("AddressToOrder_sendAddressId", fields: [sendAddressId], references: [addressId])
+  User_Order_senderIdToUser               User       @relation("Order_senderIdToUser", fields: [senderId], references: [userId])
+  OrderLog                                OrderLog[]
+
+  @@index([driverId], name: "FK_OrderDriver")
+  @@index([receiveAddressId], name: "FK_ReceiveAddress")
+  @@index([receiverId], name: "FK_Receiver")
+  @@index([sendAddressId], name: "FK_SendAddress")
+  @@index([senderId], name: "FK_Sender")
+}
+
+model OrderLog {
+  orderLogId Int       @id @default(autoincrement())
+  orderId    String
+  status     String?
+  comments   String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now())
+  deletedAt  DateTime?
+  Order      Order     @relation(fields: [orderId], references: [orderId])
+
+  @@index([orderId], name: "FK_Order")
+}
+
+model User {
+  userId                       Int       @id @default(autoincrement())
+  firstName                    String?
+  lastName                     String?
+  email                        String    @unique
+  phone                        String?
+  username                     String    @unique
+  password                     String
+  role                         User_role
+  createdAt                    DateTime  @default(now())
+  updatedAt                    DateTime  @default(now())
+  deletedAt                    DateTime?
+  Address                      Address[]
+  Order_Order_driverIdToUser   Order[]   @relation("Order_driverIdToUser")
+  Order_Order_receiverIdToUser Order[]   @relation("Order_receiverIdToUser")
+  Order_Order_senderIdToUser   Order[]   @relation("Order_senderIdToUser")
+}
+
+enum User_role {
+  customer
+  admin
+  driver
+}
