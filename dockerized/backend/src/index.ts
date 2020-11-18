@@ -8,7 +8,7 @@ import resolvers from "./resolvers/root";
 
 const typeDefs = fs.readFileSync(
   path.join(__dirname, "../schema.graphql"),
-  "utf8",
+  "utf8"
 );
 
 const server = new GraphQLServer({
@@ -24,7 +24,6 @@ const server = new GraphQLServer({
 });
 
 server.express.use(cookieParser());
-server.start(
-  { endpoint: "/graphql" },
-  ({ endpoint }) => console.log(`Server is running on ${endpoint}`),
+server.start({ endpoint: "/graphql" }, ({ endpoint }) =>
+  console.log(`Server is running on ${endpoint}`)
 );
