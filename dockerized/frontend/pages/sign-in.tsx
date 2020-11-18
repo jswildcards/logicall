@@ -1,51 +1,56 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { Grid, Hidden } from "@material-ui/core";
+import styled from "styled-components";
+import { Grid, Hidden, Box } from "@material-ui/core";
 import SignInForm from "../components/sign-in-form";
 
-const useStyles = makeStyles({
-  root: {
-    height: "100vh",
-  },
-  padding: {
-    padding: 20,
-  },
-  image: {
-    maxWidth: "100%",
-    maxHeight: "100%",
-  },
-  back: {
-    background: "#7e89fd",
-  },
-  front: {
-    background: "white",
-  },
-});
+const Root = styled(Grid)({
+  height: "100vh",
+  background: "#7e89fd",
+})
+
+const Image = styled("img")({
+  maxWidth: "100%",
+  maxHeight: "100%",
+})
+
+const Front = styled(Grid)({
+  background: "white",
+})
+
+const SignInRoot = styled(Box)({
+  padding: "2rem"
+})
 
 export default function SignIn() {
-  const classes = useStyles();
+  // const router = useRouter();
+  // useEffect(() => {
+  //   if (user && Object.keys(user).length) {
+  //     router.push("/");
+  //   }
+  // })
 
   return (
-    <Grid
-      container
-      className={`${classes.root} ${classes.back}`}
-    >
-      <Hidden xsDown>
-        <Grid item container sm={6} md={8} justify="center" alignItems="center">
-          {/* <CardMedia
+    <div>
+      <Root container>
+        <Hidden xsDown>
+          <Grid item container sm={6} md={8} justify="center" alignItems="center">
+            {/* <CardMedia
           component="img"
           alt=""
           image="/logicall-banner.png"
           className={classes.root}
         /> */}
-          {/* <Box display={{ xs: 'none', md: 'block' }}> */}
-          <img className={classes.image} src="/logicall-banner.png" alt="" />
-          {/* </Box> */}
-        </Grid>
-      </Hidden>
-      <Grid className={classes.front} item xs={12} sm={6} md={4}>
-        <SignInForm />
-      </Grid>
-    </Grid>
+            {/* <Box display={{ xs: 'none', md: 'block' }}> */}
+            <Image src="/logicall-banner.png" alt="" />
+            {/* </Box> */}
+          </Grid>
+        </Hidden>
+        <Front item xs={12} sm={6} md={4}>
+          <SignInRoot>
+            <SignInForm />
+          </SignInRoot>
+        </Front>
+      </Root>
+    </div>
   );
 }

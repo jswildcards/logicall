@@ -8,7 +8,7 @@ import { Context } from "../utils/types";
 export async function signUp(
   _: any,
   { input }: { input: User },
-  { prisma }: Context
+  { prisma }: Context,
 ) {
   const data = { ...input, password: encrypt(input.password) };
   return prisma.user.create({ data });
@@ -17,7 +17,7 @@ export async function signUp(
 export async function signIn(
   _: any,
   { input }: { input: User },
-  { response, prisma }: Context
+  { response, prisma }: Context,
 ) {
   const encryptedPassword = encrypt(input.password);
   const user = await prisma.user.findOne({
@@ -34,4 +34,13 @@ export async function signIn(
   throw new Error("Your username or password is wrong. Please try again.");
 }
 
-export default { signUp, signIn };
+export async function signOut(_parent: any, _args: any, { response }: Context) {
+  // response.cookie(CookieConfig.token, null, {
+  //   httpOnly: true,
+  //   expires: new Date(),
+  // });
+  response.clearCookie(CookieConfig.token);
+  return "Logout Success";
+}
+
+export default { signUp, signIn, signOut };

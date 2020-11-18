@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { connect } from "react-redux";
+import styled from "styled-components";
+import { Mutation } from "react-apollo";
+import gql from "graphql-tag";
+import { useRouter } from "next/router";
 import {
   Box,
   Input,
@@ -9,66 +11,85 @@ import {
   InputLabel,
   FormControl,
   Button,
-  CircularProgress, Snackbar, SnackbarContent
+  CircularProgress,
+  Snackbar,
+  SnackbarContent,
 } from "@material-ui/core";
 import {
   AccountBox,
   Lock,
   Visibility,
-  VisibilityOff, Close
+  VisibilityOff,
+  Close,
 } from "@material-ui/icons";
-import { setUser as setUserAction } from "../actions";
+// import { setUser as setUserAction } from "../actions";
 
-const useStyles = makeStyles({
-  wrapper: {
-    position: 'relative',
-  },
-  buttonProgress: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: -12,
-    marginLeft: -12,
-  },
-  snackbar: {
-    background: "#f44336"
-  }
+const Wrapper = styled("div")({
+  position: "relative",
 });
 
-function SignInForm({ setUser }) {
+const ButtonProgress = styled(CircularProgress)({
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  marginTop: -12,
+  marginLeft: -12,
+})
+
+const BarContent = styled(SnackbarContent)({
+  background: "#f44336",
+})
+
+const SIGN_IN_MUTATION = gql`
+  mutation SignIn($input: SignInInput) {
+    signIn(input: $input) {
+      userId
+      firstName
+      lastName
+      email
+      role
+      username
+      createdAt
+      updatedAt
+      deletedAt
+    }
+  }
+`;
+
+export default function SignInForm() {
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [open, setOpen] = React.useState(false);
-
-  const classes = useStyles();
+  const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   const handleClickShowPassword = () => {
     setPasswordVisibility(!isPasswordVisible);
   };
 
-  const signIn = async () => {
-    setLoading(true);
+  const signIn = () => {
+    // setLoading(true);
 
-    const userFetched = await fetch("/api/users/sign-in", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    }).then((res) => res.json()).catch(() => { setOpen(true); setLoading(false) });
+    // const userFetched = await fetch("/api/users/sign-in", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ username, password }),
+    // }).then((res) => res.json()).catch(() => { setOpen(true); setLoading(false) });
 
-    setUser(userFetched);
-    setLoading(false);
-  }
+    // setUser({ ...user });
+    router.replace("/");
+    // setLoading(false);
+  };
 
   const handleClose = () => {
     setOpen(false);
   };
 
   return (
-    <Box p={4}>
+    <div>
       <Box pb="1rem">
         <FormControl fullWidth>
           <InputLabel htmlFor="username">Username</InputLabel>
@@ -114,28 +135,40 @@ function SignInForm({ setUser }) {
           />
         </FormControl>
       </Box>
-      <div className={classes.wrapper}>
-        <Button
-          variant="contained"
-          fullWidth
-          color="primary"
-          disabled={isLoading}
-          onClick={signIn}
+      <Wrapper>
+        <Mutation
+          mutation={SIGN_IN_MUTATION}
+          onCompleted={signIn}
+          variables={{ input: { username, password } }}
         >
-          Sign In
-        </Button>
-        {isLoading && <CircularProgress size={24} className={classes.buttonProgress} />}
+          {(mutation) => (
+            <Button
+              variant="contained"
+              fullWidth
+              color="primary"
+              disabled={isLoading}
+              onClick={() => {
+                setLoading(true);
+                return mutation();
+              }}
+            >
+              Sign In
+            </Button>
+          )}
+        </Mutation>
+        {isLoading && (
+          <ButtonProgress size={24} />
+        )}
         <Snackbar
           anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
+            vertical: "bottom",
+            horizontal: "left",
           }}
           open={open}
           autoHideDuration={6000}
           onClose={handleClose}
         >
-          <SnackbarContent
-            classes={{ root: classes.snackbar }}
+          <BarContent
             message="Login Failed. Please Try Again."
             action={(
               <>
@@ -146,17 +179,7 @@ function SignInForm({ setUser }) {
             )}
           />
         </Snackbar>
-      </div>
-    </Box>
-  )
+      </Wrapper>
+    </div>
+  );
 }
-
-const mapStateTpProps = (state) => ({
-  user: state.user,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  setUser: (user) => dispatch(setUserAction(user)),
-});
-
-export default connect(mapStateTpProps, mapDispatchToProps)(SignInForm);

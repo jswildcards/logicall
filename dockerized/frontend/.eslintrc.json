@@ -34,6 +34,7 @@
     "react/prop-types": "off",
     "react/jsx-props-no-spreading": "off",
     "no-undef": "off",
+    "import/no-extraneous-dependencies": "off",
     "@typescript-eslint/no-use-before-define": "warn",
     "react/jsx-filename-extension": [
       2,
