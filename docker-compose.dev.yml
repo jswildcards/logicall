@@ -3,7 +3,7 @@ version: '3.8'
 services:
 
   db:
-    image: "mysql:5.7.31"
+    image: "mysql:5.7.32"
     container_name: some-db
     env_file: .env
     volumes: 
