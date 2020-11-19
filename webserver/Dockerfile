@@ -1,4 +1,4 @@
-FROM nginx:1.19.2-alpine
+FROM nginx:1.19.4-alpine
 
 LABEL maintainer="js.wildcards@gmail.com"
 
