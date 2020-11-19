@@ -1,5 +1,5 @@
 # build stage
-FROM node:12.18.4-alpine as build-stage
+FROM node:12.19.1-alpine as build-stage
 
 LABEL maintainer="js.wildcards@gmail.com"
 
@@ -12,7 +12,7 @@ COPY . ./
 RUN yarn build && npm prune --production
 
 # production stage
-FROM node:12.18.4-alpine as production-stage
+FROM node:12.19.1-alpine as production-stage
 
 WORKDIR /usr/src/app
 
