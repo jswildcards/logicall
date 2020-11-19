@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+import { styled } from "@material-ui/core/styles";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import { useRouter } from "next/router";

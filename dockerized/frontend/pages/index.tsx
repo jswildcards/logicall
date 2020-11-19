@@ -9,7 +9,7 @@ import {
   Box,
 } from "@material-ui/core";
 import { Menu } from "@material-ui/icons";
-import styled from "styled-components";
+import { styled } from "@material-ui/core/styles";
 import React, { useEffect } from "react";
 import { useQuery, Mutation } from "react-apollo";
 import gql from "graphql-tag";

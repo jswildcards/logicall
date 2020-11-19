@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import { styled } from "@material-ui/core/styles";
 import { Grid, Hidden, Box } from "@material-ui/core";
 import SignInForm from "../components/sign-in-form";
 
