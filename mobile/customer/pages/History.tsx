@@ -15,7 +15,6 @@ import {
   View,
 } from "native-base";
 import { useQuery } from "react-apollo";
-import { Actions } from "react-native-router-flux";
 import EmptyIcon from "../components/icons/EmptyIcon";
 import schema from "../utils/schema";
 
@@ -42,7 +41,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const HomePage = () => {
+const HistoryPage = () => {
   const { loading, error, data } = useQuery(schema.query.me);
 
   if (loading) {
@@ -76,10 +75,7 @@ const HomePage = () => {
               </H1>
               <H3 style={styles.header}>Do you want to create an order now?</H3>
               <View styles={styles.body}>
-                <Button
-                  onPress={() => Actions.createOrder()}
-                  style={styles.header}
-                >
+                <Button style={styles.header}>
                   <Text>Create Order</Text>
                 </Button>
               </View>
@@ -97,4 +93,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default HistoryPage;

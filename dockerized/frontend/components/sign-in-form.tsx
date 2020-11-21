@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { styled } from "@material-ui/core/styles";
 import { Mutation } from "react-apollo";
-import gql from "graphql-tag";
 import { useRouter } from "next/router";
 import {
   Box,
@@ -22,6 +21,7 @@ import {
   VisibilityOff,
   Close,
 } from "@material-ui/icons";
+import schema from "../utils/schema";
 // import { setUser as setUserAction } from "../actions";
 
 const Wrapper = styled("div")({
@@ -34,27 +34,11 @@ const ButtonProgress = styled(CircularProgress)({
   left: "50%",
   marginTop: -12,
   marginLeft: -12,
-})
+});
 
 const BarContent = styled(SnackbarContent)({
   background: "#f44336",
-})
-
-const SIGN_IN_MUTATION = gql`
-  mutation SignIn($input: SignInInput) {
-    signIn(input: $input) {
-      userId
-      firstName
-      lastName
-      email
-      role
-      username
-      createdAt
-      updatedAt
-      deletedAt
-    }
-  }
-`;
+});
 
 export default function SignInForm() {
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
@@ -96,11 +80,11 @@ export default function SignInForm() {
           <Input
             fullWidth
             disabled={isLoading}
-            startAdornment={(
+            startAdornment={
               <InputAdornment position="start">
                 <AccountBox />
               </InputAdornment>
-            )}
+            }
             id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -113,12 +97,12 @@ export default function SignInForm() {
           <Input
             id="password"
             disabled={isLoading}
-            startAdornment={(
+            startAdornment={
               <InputAdornment position="start">
                 <Lock />
               </InputAdornment>
-            )}
-            endAdornment={(
+            }
+            endAdornment={
               <InputAdornment position="end">
                 <IconButton
                   aria-label="toggle password visibility"
@@ -128,7 +112,7 @@ export default function SignInForm() {
                   {isPasswordVisible ? <Visibility /> : <VisibilityOff />}
                 </IconButton>
               </InputAdornment>
-            )}
+            }
             value={password}
             type={isPasswordVisible ? "text" : "password"}
             onChange={(e) => setPassword(e.target.value)}
@@ -137,7 +121,7 @@ export default function SignInForm() {
       </Box>
       <Wrapper>
         <Mutation
-          mutation={SIGN_IN_MUTATION}
+          mutation={schema.mutation.signIn}
           onCompleted={signIn}
           variables={{ input: { username, password } }}
         >
@@ -156,9 +140,7 @@ export default function SignInForm() {
             </Button>
           )}
         </Mutation>
-        {isLoading && (
-          <ButtonProgress size={24} />
-        )}
+        {isLoading && <ButtonProgress size={24} />}
         <Snackbar
           anchorOrigin={{
             vertical: "bottom",
@@ -170,13 +152,11 @@ export default function SignInForm() {
         >
           <BarContent
             message="Login Failed. Please Try Again."
-            action={(
-              <>
-                <IconButton size="small" color="inherit" onClick={handleClose}>
-                  <Close fontSize="small" />
-                </IconButton>
-              </>
-            )}
+            action={
+              <IconButton size="small" color="inherit" onClick={handleClose}>
+                <Close fontSize="small" />
+              </IconButton>
+            }
           />
         </Snackbar>
       </Wrapper>

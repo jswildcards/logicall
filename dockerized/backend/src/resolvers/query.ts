@@ -18,7 +18,7 @@ export async function users(_parent: any, _args: any, { prisma }: Context) {
 export async function user(
   _parent: any,
   { userId }: UserWhereUniqueInput,
-  { prisma }: Context
+  { prisma }: Context,
 ) {
   // const token = request.cookies[CookieConfig.token];
   // const payload = await jwt.verify(token) as User;
@@ -34,7 +34,7 @@ export async function user(
 export async function me(
   _parent: any,
   _args: any,
-  { prisma, request, response }: Context
+  { prisma, request, response }: Context,
 ) {
   const token = request.cookies[CookieConfig.token];
 
@@ -50,7 +50,12 @@ export async function me(
     throw new Error("Unathorized");
   }
 
-  return prisma.user.findOne({ where: { userId: payload.userId } });
+  return prisma.user.findOne(
+    {
+      where: { userId: payload.userId },
+      include: { receiveOrders: true, sendOrders: true, deliverOrders: true },
+    },
+  );
 }
 
 export default { users, user, me };

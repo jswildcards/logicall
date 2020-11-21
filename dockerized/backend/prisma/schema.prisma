@@ -77,9 +77,9 @@ model User {
   updatedAt                    DateTime  @default(now())
   deletedAt                    DateTime?
   Address                      Address[]
-  Order_Order_driverIdToUser   Order[]   @relation("Order_driverIdToUser")
-  Order_Order_receiverIdToUser Order[]   @relation("Order_receiverIdToUser")
-  Order_Order_senderIdToUser   Order[]   @relation("Order_senderIdToUser")
+  deliverOrders                Order[]   @relation("Order_driverIdToUser")
+  receiveOrders                Order[]   @relation("Order_receiverIdToUser")
+  sendOrders                   Order[]   @relation("Order_senderIdToUser")
 }
 
 enum User_role {

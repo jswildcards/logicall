@@ -20,6 +20,13 @@ type User {
   createdAt: String
   updatedAt: String
   deletedAt: String
+  receiveOrders: [Order]
+  sendOrders: [Order]
+  deliverOrders: [Order]
+}
+
+type Order {
+  orderId: ID!
 }
 
 input SignUpInput {

@@ -8,8 +8,26 @@ import resolvers from "./resolvers/root";
 
 const typeDefs = fs.readFileSync(
   path.join(__dirname, "../schema.graphql"),
-  "utf8"
+  "utf8",
 );
+
+const prisma = new PrismaClient();
+
+// // TODO: test delete record
+// prisma.$use((params, next) => {
+//   const findMethods = ["findOne", "findMany", "findFirst"];
+
+//   if (params.action === "delete") {
+//     params.action = "update";
+//     params.args.data = { deletedAt: new Date() };
+//   }
+
+//   if (findMethods.includes(params.action)) {
+//     params.args.where = { ...params.args.where, deletedAt: null };
+//   }
+
+//   return next(params);
+// });
 
 const server = new GraphQLServer({
   typeDefs,
@@ -18,12 +36,13 @@ const server = new GraphQLServer({
     return {
       request,
       response,
-      prisma: new PrismaClient(),
+      prisma,
     };
   },
 });
 
 server.express.use(cookieParser());
-server.start({ endpoint: "/graphql" }, ({ endpoint }) =>
-  console.log(`Server is running on ${endpoint}`)
+server.start(
+  { endpoint: "/graphql" },
+  ({ endpoint }) => console.log(`Server is running on ${endpoint}`),
 );
