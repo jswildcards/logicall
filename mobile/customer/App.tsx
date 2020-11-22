@@ -1,13 +1,9 @@
-// app/index.js
+/* eslint-disable global-require */
 
 import React, { useEffect } from "react";
 import { Router, Scene } from "react-native-router-flux";
 import { ApolloProvider } from "react-apollo";
-import { ApolloClient } from "apollo-client";
-import { createHttpLink } from "apollo-link-http";
-import { InMemoryCache } from "apollo-cache-inmemory";
 
-import Constants from "expo-constants";
 import * as Font from "expo-font";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -15,26 +11,17 @@ import { Ionicons } from "@expo/vector-icons";
 import { StyleProvider } from "native-base";
 import { StyleSheet } from "react-native";
 import getTheme from "./native-base-theme/components";
-import material from "./native-base-theme/variables/material";
+import platform from "./native-base-theme/variables/platform";
 
-import HomePage from "./pages/Home";
+import HomePage from "./pages/home/Home";
 import ProfilePage from "./pages/Profile";
 import SignInPage from "./pages/SignIn";
 import SignUpPage from "./pages/SignUp";
-import CreateOrderPage from "./pages/CreateOrder";
+import CreateOrder1SelectReceiverPage from "./pages/home/create-order/1-SelectReceiver";
 import HistoryPage from "./pages/History";
-
 import Tab from "./components/Tab";
 
-const httpLink = createHttpLink(
-  { uri: `http://${Constants.manifest.extra.host || "192.168.56.1"}/graphql` }
-  // { uri, credentials: 'include' }
-);
-
-const client = new ApolloClient({
-  link: httpLink,
-  cache: new InMemoryCache(),
-});
+import { client } from "./utils/schema";
 
 const styles = StyleSheet.create({
   tabs: {
@@ -42,7 +29,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const App = () => {
+function App() {
   useEffect(() => {
     Font.loadAsync({
       Roboto: require("native-base/Fonts/Roboto.ttf"),
@@ -53,7 +40,7 @@ const App = () => {
 
   return (
     <ApolloProvider client={client}>
-      <StyleProvider style={getTheme(material)}>
+      <StyleProvider style={getTheme(platform)}>
         <Router>
           <Scene key="root">
             <Scene
@@ -66,12 +53,13 @@ const App = () => {
               key="signUp"
               component={SignUpPage}
               title="Sign Up"
-              hideNavBar
+              // hideNavBar
             />
             <Scene
-              key="createOrder"
-              component={CreateOrderPage}
-              title="Create Order"
+              key="createOrder1SelectReceiver"
+              component={CreateOrder1SelectReceiverPage}
+              title="Create Order - Select Receiver"
+              hideNavBar
               clone
             />
             <Scene
@@ -81,22 +69,22 @@ const App = () => {
               tabBarStyle={styles.tabs}
               showLabel={false}
             >
+              {/* <Scene
+                key="history"
+                icon={Tab}
+                iconName="time"
+                iosIconName="ios-time"
+                component={HistoryPage}
+                title="History"
+                hideNavBar
+              /> */}
               <Scene
                 key="home"
                 icon={Tab}
                 iconName="home"
                 iosIconName="ios-home"
                 component={HomePage}
-                title="home"
-                hideNavBar
-              />
-              <Scene
-                key="history"
-                icon={Tab}
-                iconName="time"
-                iosIconName="ios-time"
-                component={HistoryPage}
-                title="clock"
+                title="Home"
                 hideNavBar
               />
               <Scene
@@ -105,7 +93,7 @@ const App = () => {
                 iconName="person"
                 iosIconName="ios-person"
                 component={ProfilePage}
-                title="profile"
+                title="Profile"
                 hideNavBar
               />
             </Scene>
@@ -114,6 +102,6 @@ const App = () => {
       </StyleProvider>
     </ApolloProvider>
   );
-};
+}
 
 export default App;

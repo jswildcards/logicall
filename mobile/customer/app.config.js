@@ -4,8 +4,8 @@ const { EXPO_ENV, EXPO_DEV_HOST, EXPO_PROD_HOST } = process.env;
 const host = EXPO_ENV === "development" ? EXPO_DEV_HOST : "localhost";
 
 export default {
-  name: "customer",
-  slug: "customer",
+  name: "LogiCall",
+  slug: "logicall",
   version: "1.0.0",
   orientation: "portrait",
   icon: "./assets/icon.png",

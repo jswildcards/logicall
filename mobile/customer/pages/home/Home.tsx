@@ -1,5 +1,3 @@
-// app/ScarletScreen.js
-
 import React from "react";
 import { StatusBar, StyleSheet } from "react-native";
 import {
@@ -16,8 +14,8 @@ import {
 } from "native-base";
 import { useQuery } from "react-apollo";
 import { Actions } from "react-native-router-flux";
-import EmptyIcon from "../components/icons/EmptyIcon";
-import schema from "../utils/schema";
+import EmptyIcon from "../../components/icons/EmptyIcon";
+import schema from "../../utils/schema";
 
 const styles = StyleSheet.create({
   col: {
@@ -42,7 +40,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const HomePage = () => {
+function Page() {
   const { loading, error, data } = useQuery(schema.query.me);
 
   if (loading) {
@@ -77,7 +75,7 @@ const HomePage = () => {
               <H3 style={styles.header}>Do you want to create an order now?</H3>
               <View styles={styles.body}>
                 <Button
-                  onPress={() => Actions.createOrder()}
+                  onPress={() => Actions.createOrder1SelectReceiver()}
                   style={styles.header}
                 >
                   <Text>Create Order</Text>
@@ -95,6 +93,6 @@ const HomePage = () => {
       <Text>Not Implemented Yet</Text>
     </Container>
   );
-};
+}
 
-export default HomePage;
+export default Page;

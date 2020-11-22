@@ -8,37 +8,37 @@ import { Context } from "../utils/types";
 export async function signUp(
   _: any,
   { input }: { input: User },
-  { prisma }: Context
+  { prisma, response }: Context,
 ) {
   const data = { ...input, password: encrypt(input.password) };
-  return prisma.user.create({ data });
+  const user = await prisma.user.create({ data });
+  response.cookie(CookieConfig.token, await token.assign(user), {
+    httpOnly: true,
+  });
+  return user;
 }
 
 export async function signIn(
   _: any,
   { input }: { input: User },
-  { response, prisma }: Context
+  { response, prisma }: Context,
 ) {
   const encryptedPassword = encrypt(input.password);
   const user = await prisma.user.findOne({
     where: { username: input.username },
   });
 
-  if (user?.password === encryptedPassword) {
+  if (user?.password === encryptedPassword && user?.role === input.role) {
     response.cookie(CookieConfig.token, await token.assign(user), {
       httpOnly: true,
     });
     return user;
   }
 
-  throw new Error("Your username or password is wrong. Please try again.");
+  throw new Error("Your username/password is wrong. Please try again.");
 }
 
 export async function signOut(_parent: any, _args: any, { response }: Context) {
-  // response.cookie(CookieConfig.token, null, {
-  //   httpOnly: true,
-  //   expires: new Date(),
-  // });
   response.clearCookie(CookieConfig.token);
   return "Logout Success";
 }

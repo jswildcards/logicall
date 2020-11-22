@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const HistoryPage = () => {
+function Page() {
   const { loading, error, data } = useQuery(schema.query.me);
 
   if (loading) {
@@ -91,6 +91,6 @@ const HistoryPage = () => {
       <Text>Not Implemented Yet</Text>
     </Container>
   );
-};
+}
 
-export default HistoryPage;
+export default Page;

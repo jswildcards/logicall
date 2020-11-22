@@ -41,4 +41,5 @@ input SignUpInput {
 input SignInInput {
   username: String!
   password: String!
+  role: String!
 }

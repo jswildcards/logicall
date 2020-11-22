@@ -3,7 +3,7 @@
 import React from "react";
 import { Mutation, useQuery } from "react-apollo";
 import { Actions } from "react-native-router-flux";
-import { StatusBar } from "react-native";
+import { StatusBar, useWindowDimensions } from "react-native";
 import {
   Container,
   Content,
@@ -15,9 +15,11 @@ import {
   Text,
   Button,
 } from "native-base";
-import schema from "../utils/schema";
+import schema, { client } from "../utils/schema";
 
-const HomePage = () => {
+import { bp } from "../styles";
+
+function Page() {
   const { loading, error, data } = useQuery(schema.query.me);
 
   if (loading) {
@@ -41,7 +43,7 @@ const HomePage = () => {
   const { userId, firstName, lastName, username } = data.me;
 
   return (
-    <Container>
+    <Container style={bp(useWindowDimensions()).root}>
       <StatusBar />
       <Content>
         <List>
@@ -62,10 +64,13 @@ const HomePage = () => {
 
         <Mutation
           mutation={schema.mutation.signOut}
-          onCompleted={() => Actions.replace("signIn")}
+          onCompleted={() => {
+            client.cache.reset();
+            Actions.replace("signIn");
+          }}
         >
           {(mutation) => (
-            <Button onPress={mutation} danger>
+            <Button block onPress={mutation} danger>
               <Text>Sign Out</Text>
             </Button>
           )}
@@ -73,6 +78,6 @@ const HomePage = () => {
       </Content>
     </Container>
   );
-};
+}
 
-export default HomePage;
+export default Page;
