@@ -8,6 +8,8 @@ import { ApolloClient } from "apollo-client";
 import { createHttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
 
+import Head from "next/head";
+
 // const uri = "http://localhost:4000";
 
 // Redux: add reducers
@@ -37,6 +39,9 @@ function MyApp({ Component, pageProps }) {
           }
         `}
       </style>
+      <Head>
+        <title>LogiCall</title>
+      </Head>
       <ApolloProvider client={client}>
         {/* <Provider store={store}> */}
         <Component {...pageProps} />
