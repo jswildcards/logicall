@@ -8,7 +8,7 @@ import { Context } from "../utils/types";
 export async function signUp(
   _: any,
   { input }: { input: User },
-  { prisma, response }: Context,
+  { prisma, response }: Context
 ) {
   const data = { ...input, password: encrypt(input.password) };
   const user = await prisma.user.create({ data });
@@ -21,7 +21,7 @@ export async function signUp(
 export async function signIn(
   _: any,
   { input }: { input: User },
-  { response, prisma }: Context,
+  { response, prisma }: Context
 ) {
   const encryptedPassword = encrypt(input.password);
   const user = await prisma.user.findOne({
