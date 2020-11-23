@@ -10,7 +10,7 @@
     "svg": "react-native-expo-svg"
   },
   "dependencies": {
-    "@react-native-community/masked-view": "0.1.10",
+    "@react-native-community/masked-view": "^0.1.10",
     "apollo-boost": "^0.4.9",
     "dotenv": "^8.2.0",
     "eslint-config-prettier": "^6.15.0",
@@ -31,6 +31,7 @@
     "react-native-router-flux": "^4.2.0",
     "react-native-safe-area-context": "~3.0.7",
     "react-native-screens": "~2.9.0",
+    "react-native-skeleton-placeholder": "^3.0.1",
     "react-native-svg": "^12.1.0",
     "react-native-web": "~0.11.7"
   },

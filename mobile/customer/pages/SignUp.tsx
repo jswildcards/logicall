@@ -14,6 +14,9 @@ import {
   Text,
   Col,
   Grid,
+  Header,
+  Left,
+  Body, Title, Right
 } from "native-base";
 import { ApolloError } from "apollo-boost";
 import schema from "../utils/schema";
@@ -33,9 +36,21 @@ function Page() {
   const [isPasswordVisible, setPasswordVisible] = useState([false, false]);
 
   return (
-    <Container style={bp(useWindowDimensions()).root}>
+    <Container>
       <StatusBar />
-      <Content>
+      <Header>
+        <Left>
+          <Button onPress={() => Actions.pop()} transparent>
+            <Icon ios="ios-arrow-back" name="arrow-back" />
+            {/* <Text>Sign In</Text> */}
+          </Button>
+        </Left>
+        <Body>
+          <Title>Sign Up</Title>
+        </Body>
+        <Right />
+      </Header>
+      <Content style={bp(useWindowDimensions()).root}>
         <Form>
           <Grid>
             <Col>
@@ -111,8 +126,7 @@ function Page() {
             mutation={schema.mutation.signUp}
             onCompleted={() => Actions.home()}
             onError={(err: ApolloError) =>
-              setError(err.message.replace("GraphQL error: ", ""))
-            }
+              setError(err.message.replace("GraphQL error: ", ""))}
             variables={{ input: { ...user } }}
           >
             {(mutation) => (

@@ -11,6 +11,7 @@ USE `mydb`;
 DROP TABLE IF EXISTS `OrderLog`;
 DROP TABLE IF EXISTS `Order`;
 DROP TABLE IF EXISTS `Address`;
+DROP TABLE IF EXISTS `Friend`;
 DROP TABLE IF EXISTS `User`;
 -- DROP TABLE IF EXISTS `employees`;
 -- DROP TABLE IF EXISTS `customerAddresses`;
@@ -51,6 +52,19 @@ CREATE TABLE IF NOT EXISTS `User` (
   CONSTRAINT `UC_Username` UNIQUE (`username`)
 );
 
+CREATE TABLE IF NOT EXISTS `Friend` (
+  `friendId`    INT(11) NOT NULL AUTO_INCREMENT,
+  `senderId`    INT(11) NOT NULL,
+  `receiverId`  INT(11) NOT NULL,
+  `createdAt`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `deletedAt`   TIMESTAMP NULL,
+  PRIMARY KEY(`friendId`),
+  CONSTRAINT `UC_Friend_Sender_Receiver` UNIQUE (`senderId`, `receiverId`),
+  CONSTRAINT `FK_Friend_Sender` FOREIGN KEY (`senderId`) REFERENCES `User`(`userId`),
+  CONSTRAINT `FK_Friend_Receiver` FOREIGN KEY (`receiverId`) REFERENCES `User`(`userId`)
+);
+
 CREATE TABLE IF NOT EXISTS `Address` (
   `addressId`     INT(11) NOT NULL AUTO_INCREMENT,
   `customerId`    INT(11) NOT NULL,
@@ -62,7 +76,7 @@ CREATE TABLE IF NOT EXISTS `Address` (
   `updatedAt`     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deletedAt`     TIMESTAMP NULL,
   PRIMARY KEY (`addressId`),
-  CONSTRAINT `FK_Customer` FOREIGN KEY (`customerId`) REFERENCES `User`(`userId`)
+  CONSTRAINT `FK_Address_Customer` FOREIGN KEY (`customerId`) REFERENCES `User`(`userId`)
 );
 
 CREATE TABLE IF NOT EXISTS `Order` (
@@ -73,17 +87,17 @@ CREATE TABLE IF NOT EXISTS `Order` (
   `receiveAddressId`  INT(11) NOT NULL,
   `driverId`          INT(11) NULL,
   `status`            TEXT NULL,
-  `signUrl`           TEXT NULL,
+  `qrcode`           TEXT NULL,
   `comments`          TEXT NULL,
   `createdAt`         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt`         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deletedAt`         TIMESTAMP NULL,
   PRIMARY KEY (`orderId`),
-  CONSTRAINT `FK_Sender` FOREIGN KEY (`senderId`) REFERENCES `User`(`userId`),
-  CONSTRAINT `FK_SendAddress` FOREIGN KEY (`sendAddressId`) REFERENCES `Address`(`addressId`),
-  CONSTRAINT `FK_Receiver` FOREIGN KEY (`receiverId`) REFERENCES `User`(`userId`),
-  CONSTRAINT `FK_ReceiveAddress` FOREIGN KEY (`receiveAddressId`) REFERENCES `Address`(`addressId`),
-  CONSTRAINT `FK_OrderDriver` FOREIGN KEY (`driverId`) REFERENCES `User`(`userId`)
+  CONSTRAINT `FK_Order_Sender` FOREIGN KEY (`senderId`) REFERENCES `User`(`userId`),
+  CONSTRAINT `FK_Order_SendAddress` FOREIGN KEY (`sendAddressId`) REFERENCES `Address`(`addressId`),
+  CONSTRAINT `FK_Order_Receiver` FOREIGN KEY (`receiverId`) REFERENCES `User`(`userId`),
+  CONSTRAINT `FK_Order_ReceiveAddress` FOREIGN KEY (`receiveAddressId`) REFERENCES `Address`(`addressId`),
+  CONSTRAINT `FK_Order_OrderDriver` FOREIGN KEY (`driverId`) REFERENCES `User`(`userId`)
 );
 
 CREATE TABLE IF NOT EXISTS `OrderLog` (
@@ -95,7 +109,7 @@ CREATE TABLE IF NOT EXISTS `OrderLog` (
   `updatedAt`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deletedAt`   TIMESTAMP NULL,
   PRIMARY KEY (`orderLogId`),
-  CONSTRAINT `FK_Order` FOREIGN KEY (`orderId`) REFERENCES `Order`(`orderId`)
+  CONSTRAINT `FK_OrderLog_Order` FOREIGN KEY (`orderId`) REFERENCES `Order`(`orderId`)
 );
 
 -- TODO: need to determine the level of importance of table `driverLogs`

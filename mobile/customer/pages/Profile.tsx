@@ -4,6 +4,7 @@ import React from "react";
 import { Mutation, useQuery } from "react-apollo";
 import { Actions } from "react-native-router-flux";
 import { StatusBar, useWindowDimensions } from "react-native";
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import {
   Container,
   Content,
@@ -14,10 +15,12 @@ import {
   Thumbnail,
   Text,
   Button,
+  View
 } from "native-base";
 import schema, { client } from "../utils/schema";
 
 import { bp } from "../styles";
+import Placeholder from "../components/Placeholder";
 
 function Page() {
   const { loading, error, data } = useQuery(schema.query.me);
@@ -26,7 +29,7 @@ function Page() {
     return (
       <Container>
         <StatusBar />
-        <Text>loading</Text>
+        <Placeholder />
       </Container>
     );
   }

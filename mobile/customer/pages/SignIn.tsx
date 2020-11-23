@@ -13,11 +13,12 @@ import {
   Button,
   Text,
   View,
+  Thumbnail, Toast
 } from "native-base";
 import { ApolloError } from "apollo-boost";
 import schema from "../utils/schema";
 import { bp } from "../styles";
-import BoxIcon from "../components/icons/BoxIcon";
+import logo from "../assets/icon.png";
 
 const styles = StyleSheet.create({
   buttonSignUp: {
@@ -27,7 +28,7 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
   },
   textSignUp: {
-    marginVertical: 14,
+    marginTop: 14,
   },
   containerSignUp: {
     display: "flex",
@@ -58,7 +59,12 @@ function Page() {
     <Container style={bp(useWindowDimensions()).root}>
       <StatusBar />
       <Content>
-        <BoxIcon style={styles.iconCenter} height="50%" />
+        <Thumbnail
+          square
+          large
+          style={styles.iconCenter}
+          source={logo}
+        />
         <Form>
           <Item floatingLabel last>
             <Icon ios="ios-person" name="person" />
@@ -82,19 +88,21 @@ function Page() {
               onPress={() => setPasswordVisible(!isPasswordVisible)}
             />
           </Item>
-          <Button danger transparent>
+          {/* <Button danger transparent>
             <Text>{error}</Text>
-          </Button>
+          </Button> */}
           <Mutation
             mutation={schema.mutation.signIn}
             onCompleted={signInCallBack}
-            onError={(err: ApolloError) =>
-              setError(err.message.replace("GraphQL error: ", ""))
-            }
+            onError={(err: ApolloError) => {
+              const msg = err.message.replace("GraphQL error: ", "");
+              setError(msg);
+              Toast.show({ text: msg, buttonText: "OK", type: "danger", duration: 6000 })
+            }}
             variables={{ input: { ...user } }}
           >
             {(mutation) => (
-              <Button block onPress={mutation}>
+              <Button style={styles.textSignUp} block onPress={mutation}>
                 <Text>Sign In</Text>
               </Button>
             )}

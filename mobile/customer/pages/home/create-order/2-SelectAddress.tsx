@@ -31,7 +31,6 @@ import { Actions, Reducer } from "react-native-router-flux";
 import EmptyIcon from "../../../components/icons/EmptyIcon";
 import schema from "../../../utils/schema";
 import { bp } from "../../../styles";
-import Placeholder from "../../../components/Placeholder";
 
 const styles = StyleSheet.create({
   col: {
@@ -78,8 +77,33 @@ const styles = StyleSheet.create({
 
 function Page() {
   // const [receiver, setReceiver] = useState("");
-
-  const { loading, data } = useQuery(schema.query.me)
+  const [data] = useState([
+    { value: 'Albania', key: 'AL' },
+    { value: 'Canada', key: 'CA' },
+    { value: 'Benin', key: 'BJ' },
+    { value: 'Guinea', key: 'GN' },
+    { value: 'Ethiopia', key: 'ET' },
+    { value: 'Azerbaijan', key: 'AZ' },
+    { value: 'Bermuda', key: 'BM' },
+    { value: 'Greece', key: 'GR' },
+    { value: 'Hong Kong', key: 'HK' },
+    { value: 'Hungary', key: 'HU' },
+    { value: 'India', key: 'IN' },
+    { value: 'Ireland', key: 'IE' },
+    { value: 'Dominica', key: 'DM' },
+    { value: 'Jamaica', key: 'JM' },
+    { value: 'Mexico', key: 'MX' },
+    { value: 'Lithuania', key: 'LT' },
+    { value: 'Luxembourg', key: 'LU' },
+    { value: 'New Zealand', key: 'NZ' },
+    { value: 'Portugal', key: 'PT' },
+    { value: 'Japan', key: 'JP' },
+    { value: 'France', key: 'FR' },
+    { value: 'Egypt', key: 'EG' },
+    { value: 'Finland', key: 'FI' },
+    { value: 'China', key: 'CN' },
+    { value: 'Denmark', key: 'DK' }
+  ])
 
   const makeList = (receiver = "") => {
     return data.filter(item => item.value.toLowerCase().includes(receiver.toLowerCase())).sort((a, b) => a.value > b.value ? 1 : -1).reduce((prev, cur) => {
@@ -124,29 +148,25 @@ function Page() {
       </Header>
       {/* <View style={}> */}
 
-      {loading && <Placeholder />}
-
-      {!loading && (
-        <SectionList
-          style={{ ...styles.header, ...bp(useWindowDimensions()).root }}
-          ListHeaderComponent={(
-            <>
-              <H3 style={styles.bold}>First, Select a receiver...</H3>
-              <Item floatingLabel last>
-                <Input
-                  placeholder="search receivers..."
-                  // value={receiver}
-                  onChangeText={(receiver) => { renderList(receiver); }}
-                />
-              </Item>
-            </>
-          )}
-          sections={listItem}
-          renderItem={({ item }) => <Text style={styles.item}>{item.value}</Text>}
-          renderSectionHeader={({ section }) => <Text style={styles.sectionHeader}>{section.title}</Text>}
-          keyExtractor={(item) => item.key}
-        />
-      )}
+      <SectionList
+        style={{ ...styles.header, ...bp(useWindowDimensions()).root }}
+        ListHeaderComponent={(
+          <>
+            <H3 style={styles.bold}>First, Select a receiver...</H3>
+            <Item floatingLabel last>
+              <Input
+                placeholder="search receivers..."
+                // value={receiver}
+                onChangeText={(receiver) => { renderList(receiver); }}
+              />
+            </Item>
+          </>
+        )}
+        sections={listItem}
+        renderItem={({ item }) => <Text style={styles.item}>{item.value}</Text>}
+        renderSectionHeader={({ section }) => <Text style={styles.sectionHeader}>{section.title}</Text>}
+        keyExtractor={(item) => item.key}
+      />
       {/* </View> */}
     </Container>
   );

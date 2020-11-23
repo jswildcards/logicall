@@ -1,6 +1,6 @@
 /* eslint-disable global-require */
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Router, Scene } from "react-native-router-flux";
 import { ApolloProvider } from "react-apollo";
 
@@ -8,8 +8,10 @@ import * as Font from "expo-font";
 
 import { Ionicons } from "@expo/vector-icons";
 
-import { StyleProvider } from "native-base";
+import { StyleProvider, View, Text, Root } from "native-base";
 import { StyleSheet } from "react-native";
+import Roboto from "native-base/Fonts/Roboto.ttf";
+import RobotoMedium from "native-base/Fonts/Roboto_medium.ttf";
 import getTheme from "./native-base-theme/components";
 import platform from "./native-base-theme/variables/platform";
 
@@ -30,46 +32,58 @@ const styles = StyleSheet.create({
 });
 
 function App() {
+  const [isLoading, setLoading] = useState(true)
+
   useEffect(() => {
     Font.loadAsync({
-      Roboto: require("native-base/Fonts/Roboto.ttf"),
-      Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+      Roboto,
+      Roboto_medium: RobotoMedium,
       ...Ionicons.font,
-    });
+    }).then(() => setLoading(false));
   });
 
+  if (isLoading) {
+    return (
+      <View>
+        <Text>Loading</Text>
+      </View>
+    )
+  }
+
   return (
-    <ApolloProvider client={client}>
-      <StyleProvider style={getTheme(platform)}>
-        <Router>
-          <Scene key="root">
-            <Scene
-              key="signIn"
-              component={SignInPage}
-              title="Sign In"
-              hideNavBar
-            />
-            <Scene
-              key="signUp"
-              component={SignUpPage}
-              title="Sign Up"
-              // hideNavBar
-            />
-            <Scene
-              key="createOrder1SelectReceiver"
-              component={CreateOrder1SelectReceiverPage}
-              title="Create Order - Select Receiver"
-              hideNavBar
-              clone
-            />
-            <Scene
-              key="tabbar"
-              tabs
-              hideNavBar
-              tabBarStyle={styles.tabs}
-              showLabel={false}
-            >
-              {/* <Scene
+    <Root>
+
+      <ApolloProvider client={client}>
+        <StyleProvider style={getTheme(platform)}>
+          <Router>
+            <Scene key="root">
+              <Scene
+                key="signIn"
+                component={SignInPage}
+                title="Sign In"
+                hideNavBar
+              />
+              <Scene
+                key="signUp"
+                component={SignUpPage}
+                title="Sign Up"
+                hideNavBar
+              />
+              <Scene
+                key="createOrder1SelectReceiver"
+                component={CreateOrder1SelectReceiverPage}
+                title="Create Order - Select Receiver"
+                hideNavBar
+                clone
+              />
+              <Scene
+                key="tabbar"
+                tabs
+                hideNavBar
+                tabBarStyle={styles.tabs}
+                showLabel={false}
+              >
+                {/* <Scene
                 key="history"
                 icon={Tab}
                 iconName="time"
@@ -78,29 +92,30 @@ function App() {
                 title="History"
                 hideNavBar
               /> */}
-              <Scene
-                key="home"
-                icon={Tab}
-                iconName="home"
-                iosIconName="ios-home"
-                component={HomePage}
-                title="Home"
-                hideNavBar
-              />
-              <Scene
-                key="profile"
-                icon={Tab}
-                iconName="person"
-                iosIconName="ios-person"
-                component={ProfilePage}
-                title="Profile"
-                hideNavBar
-              />
+                <Scene
+                  key="home"
+                  icon={Tab}
+                  iconName="home"
+                  iosIconName="ios-home"
+                  component={HomePage}
+                  title="Home"
+                  hideNavBar
+                />
+                <Scene
+                  key="profile"
+                  icon={Tab}
+                  iconName="person"
+                  iosIconName="ios-person"
+                  component={ProfilePage}
+                  title="Profile"
+                  hideNavBar
+                />
+              </Scene>
             </Scene>
-          </Scene>
-        </Router>
-      </StyleProvider>
-    </ApolloProvider>
+          </Router>
+        </StyleProvider>
+      </ApolloProvider>
+    </Root>
   );
 }
 

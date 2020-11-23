@@ -8,25 +8,63 @@ type Mutation {
   signUp(input: SignUpInput): User!
   signIn(input: SignInInput): User!
   signOut: String
+
+  addFriend(userId: Int!): User
 }
 
 type User {
-  userId: ID!
-  firstName: String!
-  lastName: String!
-  email: String!
-  username: String!
-  role: String!
-  createdAt: String
-  updatedAt: String
-  deletedAt: String
+  userId: ID
+  firstName: String
+  lastName: String
+  email: String
+  username: String
+  role: String
   receiveOrders: [Order]
   sendOrders: [Order]
   deliverOrders: [Order]
+  followings: [User]
+  addresses: [Address]
+  createdAt: String
+  updatedAt: String
+  deletedAt: String
 }
 
 type Order {
   orderId: ID!
+  sender: User
+  senderAddress: Address
+  receiver: User
+  receiverAddress: Address
+  driver: User
+  status: String
+  qrcode: String
+  comments: String
+  logs: [OrderLog]
+  createdAt: String
+  updatedAt: String
+  deletedAt: String
+}
+
+type Address {
+  addressId: ID!
+  customer: User
+  addressLine1: String
+  addressLine2: String
+  latitude: Float
+  longitude: Float
+  createdAt: String
+  updatedAt: String
+  deletedAt: String
+}
+
+type OrderLog {
+  orderLogId: ID!
+  order: Order
+  status: String
+  comments: String
+  createdAt: String
+  updatedAt: String
+  deletedAt: String
 }
 
 input SignUpInput {

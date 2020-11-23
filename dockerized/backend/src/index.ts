@@ -2,13 +2,15 @@ import { GraphQLServer } from "graphql-yoga";
 import fs from "fs";
 import path from "path";
 import cookieParser from "cookie-parser";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
 import { Context } from "graphql-yoga/dist/types";
 import resolvers from "./resolvers/root";
+import { Cookie as CookieConfig } from "./utils/config";
+import jwt from "./utils/token";
 
 const typeDefs = fs.readFileSync(
   path.join(__dirname, "../schema.graphql"),
-  "utf8"
+  "utf8",
 );
 
 const prisma = new PrismaClient();
@@ -32,16 +34,24 @@ const prisma = new PrismaClient();
 const server = new GraphQLServer({
   typeDefs,
   resolvers,
-  context: ({ request, response }: Context) => {
+  context: async ({ request, response }: Context) => {
+    let auth: User | null = null;
+    const token = request.cookies[CookieConfig.token];
+    if (token) {
+      auth = (await jwt.verify(token)) as User;
+    }
+
     return {
       request,
       response,
       prisma,
+      auth,
     };
   },
 });
 
 server.express.use(cookieParser());
-server.start({ endpoint: "/graphql" }, ({ endpoint }) =>
-  console.log(`Server is running on ${endpoint}`)
+server.start(
+  { endpoint: "/graphql" },
+  ({ endpoint }) => console.log(`Server is running on ${endpoint}`),
 );
