@@ -44,16 +44,26 @@ const styles = StyleSheet.create({
 
 function Page() {
   const [user, setUser] = useState({
-    username: "paniom",
-    password: "Aa255300238",
+    username: "sadduck219",
+    password: "password",
     role: "customer",
   });
   const [isPasswordVisible, setPasswordVisible] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const signInCallBack = () => {
+    setLoading(false)
+    setError("")
     Actions.home();
   };
+
+  const signInErrorHandler = (err: ApolloError) => {
+    setLoading(false)
+    const msg = err.message.replace("GraphQL error: ", "");
+    setError(msg);
+    Toast.show({ text: msg, buttonText: "OK", type: "danger", duration: 6000 })
+  }
 
   return (
     <Container style={bp(useWindowDimensions()).root}>
@@ -71,6 +81,7 @@ function Page() {
             <Label>Username</Label>
             <Input
               value={user.username}
+              disabled={isLoading}
               onChangeText={(username) => setUser({ ...user, username })}
             />
           </Item>
@@ -79,6 +90,7 @@ function Page() {
             <Label>Password</Label>
             <Input
               value={user.password}
+              disabled={isLoading}
               secureTextEntry={!isPasswordVisible}
               onChangeText={(password) => setUser({ ...user, password })}
             />
@@ -94,15 +106,11 @@ function Page() {
           <Mutation
             mutation={schema.mutation.signIn}
             onCompleted={signInCallBack}
-            onError={(err: ApolloError) => {
-              const msg = err.message.replace("GraphQL error: ", "");
-              setError(msg);
-              Toast.show({ text: msg, buttonText: "OK", type: "danger", duration: 6000 })
-            }}
+            onError={signInErrorHandler}
             variables={{ input: { ...user } }}
           >
             {(mutation) => (
-              <Button style={styles.textSignUp} block onPress={mutation}>
+              <Button style={styles.textSignUp} disabled={isLoading} block onPress={() => { setLoading(true); return mutation() }}>
                 <Text>Sign In</Text>
               </Button>
             )}

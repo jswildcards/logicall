@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   header: {
-    marginTop: 12,
+    marginTop: 8,
     color: "#536DFE",
   },
   bold: {
@@ -69,10 +69,10 @@ function Page() {
           <Col contentContainerStyle={styles.col}>
             <Row style={styles.row}>
               <EmptyIcon height="30%" />
-              <H1 style={{ ...styles.header, ...styles.bold }}>
+              <H3 style={{ ...styles.header, ...styles.bold }}>
                 No Orders Here!
-              </H1>
-              <H3 style={styles.header}>Do you want to create an order now?</H3>
+              </H3>
+              <Text style={styles.header}>Do you want to create an order now?</Text>
               <View styles={styles.body}>
                 <Button
                   onPress={() => Actions.createOrder1SelectReceiver()}

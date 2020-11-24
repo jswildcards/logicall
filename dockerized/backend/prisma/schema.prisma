@@ -65,37 +65,37 @@ model OrderLog {
 }
 
 model User {
-  userId        Int       @id @default(autoincrement())
-  firstName     String?
-  lastName      String?
-  email         String    @unique
-  phone         String?
-  username      String    @unique
-  password      String
-  role          User_role
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @default(now())
-  deletedAt     DateTime?
-  addresses     Address[]
-  followers     Friend[]  @relation("Friend_receiverIdToUser")
-  following     Friend[]  @relation("Friend_senderIdToUser")
-  deliverOrders Order[]   @relation("Order_driverIdToUser")
-  sendOrders    Order[]   @relation("Order_receiverIdToUser")
-  receiveOrders Order[]   @relation("Order_senderIdToUser")
+  userId                         Int       @id @default(autoincrement())
+  firstName                      String?
+  lastName                       String?
+  email                          String    @unique
+  phone                          String?
+  username                       String    @unique
+  password                       String
+  role                           User_role
+  createdAt                      DateTime  @default(now())
+  updatedAt                      DateTime  @default(now())
+  deletedAt                      DateTime?
+  addresses                      Address[]
+  followers                      Follow[]  @relation("Follow_followeeIdToUser")
+  followees                      Follow[]  @relation("Follow_followerIdToUser")
+  deliverOrders                  Order[]   @relation("Order_driverIdToUser")
+  sendOrders                     Order[]   @relation("Order_receiverIdToUser")
+  receiveOrders                  Order[]   @relation("Order_senderIdToUser")
 }
 
-model Friend {
-  friendId   Int       @id @default(autoincrement())
-  senderId   Int
-  receiverId Int
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @default(now())
-  deletedAt  DateTime?
-  receiver   User      @relation("Friend_receiverIdToUser", fields: [receiverId], references: [userId])
-  sender     User      @relation("Friend_senderIdToUser", fields: [senderId], references: [userId])
+model Follow {
+  followId                     Int       @id @default(autoincrement())
+  followerId                   Int
+  followeeId                   Int
+  createdAt                    DateTime  @default(now())
+  updatedAt                    DateTime  @default(now())
+  deletedAt                    DateTime?
+  followee                     User      @relation("Follow_followeeIdToUser", fields: [followeeId], references: [userId])
+  follower                     User      @relation("Follow_followerIdToUser", fields: [followerId], references: [userId])
 
-  @@unique([senderId, receiverId], name: "UC_Friend_Sender_Receiver")
-  @@index([receiverId], name: "FK_Friend_Receiver")
+  @@unique([followerId, followeeId], name: "UC_Friend_Follower_Followee")
+  @@index([followeeId], name: "FK_Friend_Followee")
 }
 
 enum User_role {

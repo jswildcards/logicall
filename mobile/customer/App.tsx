@@ -20,7 +20,7 @@ import ProfilePage from "./pages/Profile";
 import SignInPage from "./pages/SignIn";
 import SignUpPage from "./pages/SignUp";
 import CreateOrder1SelectReceiverPage from "./pages/home/create-order/1-SelectReceiver";
-import HistoryPage from "./pages/History";
+import PeoplePage from "./pages/People";
 import Tab from "./components/Tab";
 
 import { client } from "./utils/schema";
@@ -83,15 +83,15 @@ function App() {
                 tabBarStyle={styles.tabs}
                 showLabel={false}
               >
-                {/* <Scene
-                key="history"
-                icon={Tab}
-                iconName="time"
-                iosIconName="ios-time"
-                component={HistoryPage}
-                title="History"
-                hideNavBar
-              /> */}
+                <Scene
+                  key="people"
+                  icon={Tab}
+                  iconName="people"
+                  iosIconName="ios-people"
+                  component={PeoplePage}
+                  title="People"
+                  hideNavBar
+                />
                 <Scene
                   key="home"
                   icon={Tab}

@@ -3,8 +3,7 @@
 import React from "react";
 import { Mutation, useQuery } from "react-apollo";
 import { Actions } from "react-native-router-flux";
-import { StatusBar, useWindowDimensions } from "react-native";
-import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import { StatusBar, useWindowDimensions, Image, TouchableOpacity } from "react-native";
 import {
   Container,
   Content,
@@ -15,10 +14,11 @@ import {
   Thumbnail,
   Text,
   Button,
-  View
+  View,
+  CardItem, Grid, Row, Col, H3
 } from "native-base";
 import schema, { client } from "../utils/schema";
-
+import banner from '../assets/logicall-banner.png'
 import { bp } from "../styles";
 import Placeholder from "../components/Placeholder";
 
@@ -43,14 +43,18 @@ function Page() {
     );
   }
 
-  const { userId, firstName, lastName, username } = data.me;
+  const { userId, firstName, lastName, username, followers, followees } = data.me;
 
   return (
-    <Container style={bp(useWindowDimensions()).root}>
+    <Container>
       <StatusBar />
       <Content>
+        <CardItem cardBody style={{ backgroundColor: "#7e89fd" }}>
+          <Image source={banner} style={{ height: 200, flex: 1 }} />
+        </CardItem>
+
         <List>
-          <ListItem noBorder avatar>
+          <ListItem avatar>
             <Left>
               <Thumbnail
                 source={{
@@ -65,19 +69,21 @@ function Page() {
           </ListItem>
         </List>
 
-        <Mutation
-          mutation={schema.mutation.signOut}
-          onCompleted={() => {
-            client.cache.reset();
-            Actions.replace("signIn");
-          }}
-        >
-          {(mutation) => (
-            <Button block onPress={mutation} danger>
-              <Text>Sign Out</Text>
-            </Button>
-          )}
-        </Mutation>
+        <View style={{ ...bp(useWindowDimensions()).root, paddingTop: 12 }}>
+          <Mutation
+            mutation={schema.mutation.signOut}
+            onCompleted={() => {
+              client.cache.reset();
+              Actions.replace("signIn");
+            }}
+          >
+            {(mutation) => (
+              <Button block onPress={mutation} danger>
+                <Text>Sign Out</Text>
+              </Button>
+            )}
+          </Mutation>
+        </View>
       </Content>
     </Container>
   );

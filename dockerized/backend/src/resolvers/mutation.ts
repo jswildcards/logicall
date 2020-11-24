@@ -7,7 +7,7 @@ import { Context } from "../utils/types";
 export async function signUp(
   _: any,
   { input }: { input: User },
-  { prisma, response }: Context
+  { prisma, response }: Context,
 ) {
   const data = { ...input, password: encrypt(input.password) };
   const user = await prisma.user.create({ data });
@@ -20,7 +20,7 @@ export async function signUp(
 export async function signIn(
   _: any,
   { input }: { input: User },
-  { response, prisma }: Context
+  { response, prisma }: Context,
 ) {
   const encryptedPassword = encrypt(input.password);
   const user = await prisma.user.findOne({
@@ -45,46 +45,31 @@ export async function signOut(_parent: any, _args: any, { response }: Context) {
 export async function addFriend(
   _parent: any,
   { userId }: UserWhereUniqueInput,
-  { auth, prisma, response }: Context
+  { auth, prisma, response }: Context,
 ) {
   if (!auth?.userId) {
     response.status(401);
     throw new Error("Unathorized");
   }
 
-  await prisma.friend.create({
+  await prisma.follow.create({
     data: {
-      sender: { connect: { userId: auth.userId } },
-      receiver: { connect: { userId } },
+      follower: { connect: { userId: auth.userId } },
+      followee: { connect: { userId } },
     },
   });
 
-  const user = await prisma.user.findOne({
+  const result = await prisma.user.findOne({
     where: { userId: auth.userId },
     include: {
       receiveOrders: true,
       sendOrders: true,
       deliverOrders: true,
-      following: true,
+      followees: {
+        include: { followee: true },
+      },
     },
   });
-
-  const result = {
-    ...user,
-    followings: user!.following.map(async (friend) => {
-      const following = await prisma.user.findOne({
-        where: { userId: friend.receiverId },
-        include: {
-          receiveOrders: true,
-          sendOrders: true,
-          deliverOrders: true,
-          following: true,
-        },
-      });
-
-      return following;
-    }),
-  };
 
   return result;
 }

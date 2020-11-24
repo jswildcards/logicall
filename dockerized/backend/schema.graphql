@@ -1,6 +1,6 @@
 type Query {
   me: User
-  users: [User]
+  users(search: String!): [User]
   user(userId: Int!): User
 }
 
@@ -22,11 +22,17 @@ type User {
   receiveOrders: [Order]
   sendOrders: [Order]
   deliverOrders: [Order]
-  followings: [User]
+  followees: [Follow]
+  followers: [Follow]
   addresses: [Address]
   createdAt: String
   updatedAt: String
   deletedAt: String
+}
+
+type Follow {
+  followee: User!
+  follower: User!
 }
 
 type Order {

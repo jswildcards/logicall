@@ -80,19 +80,21 @@ function Page() {
   // const [receiver, setReceiver] = useState("");
 
   const { loading, data } = useQuery(schema.query.me)
+  const { followees } = data.me;
 
   const makeList = (receiver = "") => {
-    return data.filter(item => item.value.toLowerCase().includes(receiver.toLowerCase())).sort((a, b) => a.value > b.value ? 1 : -1).reduce((prev, cur) => {
-      const section = prev.find(item => item.title === cur.value[0])
+    return followees.filter(item => item.followee.username.toLowerCase().includes(receiver.toLowerCase())).sort((a, b) => a.value > b.value ? 1 : -1).reduce((prev, cur) => {
+      const { followee } = cur
+      const section = prev.find(item => item.title === followee.username[0])
 
       if (section) {
-        section.data.push(cur)
+        section.data.push(followee)
         return prev
       }
 
       return [
         ...prev,
-        { title: cur.value[0], data: [cur] }
+        { title: followee.username[0], data: [followee] }
       ]
     }, [])
   }
@@ -142,9 +144,9 @@ function Page() {
             </>
           )}
           sections={listItem}
-          renderItem={({ item }) => <Text style={styles.item}>{item.value}</Text>}
+          renderItem={({ item }) => <Text style={styles.item}>{item.username}</Text>}
           renderSectionHeader={({ section }) => <Text style={styles.sectionHeader}>{section.title}</Text>}
-          keyExtractor={(item) => item.key}
+          keyExtractor={(item) => item.userId}
         />
       )}
       {/* </View> */}

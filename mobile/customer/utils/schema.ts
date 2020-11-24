@@ -16,7 +16,7 @@ export const client = new ApolloClient({
 
 export const schema = {
   query: {
-    me: gql`query {
+    me: gql`{
       me {
         userId
         firstName
@@ -24,17 +24,41 @@ export const schema = {
         email
         role
         username
-        receiveOrders {
-          orderId
+        followers {
+          follower {
+            userId
+            firstName
+            lastName
+            email
+            role
+            username
+          }
         }
-        sendOrders {
-          orderId
+        followees {
+          followee {
+            userId
+            firstName
+            lastName
+            email
+            role
+            username
+          }
         }
+      }
+    }`,
+    users: gql`query($search: String!) {
+      users(search: $search) {
+        userId
+        firstName
+        lastName
+        email
+        role
+        username
       }
     }`,
   },
   mutation: {
-    signIn: gql`mutation SignIn($input: SignInInput) {
+    signIn: gql`mutation($input: SignInInput) {
       signIn(input: $input) {
         userId
         firstName
@@ -44,7 +68,7 @@ export const schema = {
         username
       }
     }`,
-    signUp: gql`mutation SignUp($input: SignUpInput) {
+    signUp: gql`mutation($input: SignUpInput) {
       signUp(input: $input) {
         userId
         firstName
@@ -54,7 +78,7 @@ export const schema = {
         username
       }
     }`,
-    signOut: gql`mutation SignOut {
+    signOut: gql`mutation {
       signOut
     }`,
   },
