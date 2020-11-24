@@ -23,7 +23,7 @@ export async function me(
     throw new Error("Unathorized");
   }
 
-  const user = await prisma.user.findOne({
+  const data = await prisma.user.findOne({
     where: { userId: auth.userId },
     include: {
       receiveOrders: true,
@@ -34,8 +34,8 @@ export async function me(
   });
 
   const result = {
-    ...user,
-    followings: user!.following.map(async (friend) => {
+    ...data,
+    followings: data!.following.map(async (friend) => {
       const following = await prisma.user.findOne({
         where: { userId: friend.receiverId },
         include: {
