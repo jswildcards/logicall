@@ -8,7 +8,7 @@ export async function users(_parent: any, _args: any, { prisma }: Context) {
 export async function user(
   _parent: any,
   { userId }: UserWhereUniqueInput,
-  { prisma }: Context,
+  { prisma }: Context
 ) {
   return prisma.user.findOne({ where: { userId } });
 }
@@ -16,7 +16,7 @@ export async function user(
 export async function me(
   _parent: any,
   _args: any,
-  { auth, prisma, response }: Context,
+  { auth, prisma, response }: Context
 ) {
   if (!auth?.userId) {
     response.status(401);
