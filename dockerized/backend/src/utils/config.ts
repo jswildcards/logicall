@@ -2,12 +2,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const {
-  CRY_ALG,
-  CRY_SECRET,
-  JWT_ALG,
-  JWT_SECRET,
-} = process.env;
+const { CRY_ALG, CRY_SECRET, JWT_ALG, JWT_SECRET } = process.env;
 
 const Crypto = {
   algorithm: CRY_ALG ?? "sha256",
