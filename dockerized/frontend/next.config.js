@@ -1,5 +1,5 @@
 module.exports = {
   env: {
-    SERVER_HOST: 'https://logicall.herokuapp.com',
+    SERVER_HOST: "https://logicall.herokuapp.com",
   },
-}
+};
