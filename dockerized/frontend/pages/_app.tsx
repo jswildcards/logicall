@@ -18,7 +18,7 @@ import Head from "next/head";
 // import rootReducers from "../reducers";
 
 const httpLink = createHttpLink(
-  { uri: `${process.env.SERVER_HOST ?? ""}/graphql` }
+  { uri: `${process.env.SERVER_HOST ?? ""}/graphql`, credentials: "include" }
   // { uri, credentials: 'include' }
 );
 
