@@ -1,7 +1,7 @@
 import "dotenv/config";
 
-const { EXPO_ENV, EXPO_DEV_HOST, EXPO_PROD_HOST } = process.env;
-const host = EXPO_ENV === "development" ? EXPO_DEV_HOST : "localhost";
+const { EXPO_ENV, EXPO_DEV_HOST, EXPO_HOST } = process.env;
+const host = EXPO_ENV === "development" ? EXPO_DEV_HOST : EXPO_HOST;
 
 export default {
   name: "LogiCall",

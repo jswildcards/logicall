@@ -5,7 +5,7 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import Constants from "expo-constants";
 
 const httpLink = createHttpLink(
-  { uri: `http://${Constants.manifest.extra.host || "192.168.56.1"}/graphql` },
+  { uri: `${Constants.manifest.extra.host}/graphql` },
   // { uri, credentials: 'include' }
 );
 
