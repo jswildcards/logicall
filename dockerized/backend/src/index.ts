@@ -54,6 +54,6 @@ const server = new GraphQLServer({
 
 server.express.use(cookieParser());
 server.start(
-  { endpoint: "/graphql", port, cors: { credentials: true } },
+  { endpoint: "/graphql", port, cors: { origin: true, credentials: true } },
   ({ endpoint }) => console.log(`Server is running on ${endpoint}`),
 );
