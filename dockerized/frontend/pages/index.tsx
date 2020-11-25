@@ -67,7 +67,7 @@ export default function Home() {
   }
 
   if (error) {
-    router.replace("sign-in");
+    router.replace("/sign-in");
 
     return (
       <Loading
