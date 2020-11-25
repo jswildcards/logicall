@@ -2,7 +2,7 @@ import gql from "graphql-tag";
 
 export const graphql = {
   query: {
-    me: gql`query {
+    me: gql`{
       me {
         userId
         firstName
@@ -10,13 +10,41 @@ export const graphql = {
         email
         role
         username
-        receiveOrder
-        sendOrder
+        followers {
+          follower {
+            userId
+            firstName
+            lastName
+            email
+            role
+            username
+          }
+        }
+        followees {
+          followee {
+            userId
+            firstName
+            lastName
+            email
+            role
+            username
+          }
+        }
+      }
+    }`,
+    users: gql`query($search: String!) {
+      users(search: $search) {
+        userId
+        firstName
+        lastName
+        email
+        role
+        username
       }
     }`,
   },
   mutation: {
-    signIn: gql`mutation SignIn($input: SignInInput) {
+    signIn: gql`mutation($input: SignInInput) {
       signIn(input: $input) {
         userId
         firstName
@@ -26,8 +54,8 @@ export const graphql = {
         username
       }
     }`,
-    signUp: gql`mutation SignIn($input: SignInInput) {
-      signIn(input: $input) {
+    signUp: gql`mutation($input: SignUpInput) {
+      signUp(input: $input) {
         userId
         firstName
         lastName
@@ -36,7 +64,7 @@ export const graphql = {
         username
       }
     }`,
-    signOut: gql`mutation SignOut {
+    signOut: gql`mutation {
       signOut
     }`,
   },
