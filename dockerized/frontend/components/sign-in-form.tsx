@@ -43,8 +43,7 @@ const BarContent = styled(SnackbarContent)({
 export default function SignInForm() {
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [user, setUser] = useState({ username: "", password: "", role: "admin" })
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
@@ -80,14 +79,14 @@ export default function SignInForm() {
           <Input
             fullWidth
             disabled={isLoading}
-            startAdornment={
+            startAdornment={(
               <InputAdornment position="start">
                 <AccountBox />
               </InputAdornment>
-            }
+            )}
             id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={user.username}
+            onChange={(e) => setUser({ ...user, username: e.target.value })}
           />
         </FormControl>
       </Box>
@@ -97,12 +96,12 @@ export default function SignInForm() {
           <Input
             id="password"
             disabled={isLoading}
-            startAdornment={
+            startAdornment={(
               <InputAdornment position="start">
                 <Lock />
               </InputAdornment>
-            }
-            endAdornment={
+            )}
+            endAdornment={(
               <InputAdornment position="end">
                 <IconButton
                   aria-label="toggle password visibility"
@@ -112,10 +111,10 @@ export default function SignInForm() {
                   {isPasswordVisible ? <Visibility /> : <VisibilityOff />}
                 </IconButton>
               </InputAdornment>
-            }
-            value={password}
+            )}
+            value={user.password}
             type={isPasswordVisible ? "text" : "password"}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => setUser({ ...user, password: e.target.value })}
           />
         </FormControl>
       </Box>
@@ -123,7 +122,7 @@ export default function SignInForm() {
         <Mutation
           mutation={schema.mutation.signIn}
           onCompleted={signIn}
-          variables={{ input: { username, password } }}
+          variables={{ input: { ...user } }}
         >
           {(mutation) => (
             <Button
@@ -152,11 +151,11 @@ export default function SignInForm() {
         >
           <BarContent
             message="Login Failed. Please Try Again."
-            action={
+            action={(
               <IconButton size="small" color="inherit" onClick={handleClose}>
                 <Close fontSize="small" />
               </IconButton>
-            }
+            )}
           />
         </Snackbar>
       </Wrapper>
