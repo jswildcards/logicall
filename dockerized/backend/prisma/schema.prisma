@@ -3,15 +3,15 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model Address {
   addressId    Int       @id @default(autoincrement())
   customerId   Int
-  addressLine1 String?
-  addressLine2 String?
+  address      String?
+  district     String?
   latitude     Float?
   longitude    Float?
   createdAt    DateTime  @default(now())
@@ -20,8 +20,6 @@ model Address {
   User         User      @relation(fields: [customerId], references: [userId])
   receiveOrder Order[]   @relation("AddressToOrder_receiveAddressId")
   sendOrder    Order[]   @relation("AddressToOrder_sendAddressId")
-
-  @@index([customerId], name: "FK_Address_Customer")
 }
 
 model Order {
@@ -43,12 +41,6 @@ model Order {
   senderAddress    Address    @relation("AddressToOrder_sendAddressId", fields: [sendAddressId], references: [addressId])
   sender           User       @relation("Order_senderIdToUser", fields: [senderId], references: [userId])
   logs             OrderLog[]
-
-  @@index([driverId], name: "FK_Order_OrderDriver")
-  @@index([receiveAddressId], name: "FK_Order_ReceiveAddress")
-  @@index([receiverId], name: "FK_Order_Receiver")
-  @@index([sendAddressId], name: "FK_Order_SendAddress")
-  @@index([senderId], name: "FK_Order_Sender")
 }
 
 model OrderLog {
@@ -60,45 +52,40 @@ model OrderLog {
   updatedAt  DateTime  @default(now())
   deletedAt  DateTime?
   order      Order     @relation(fields: [orderId], references: [orderId])
-
-  @@index([orderId], name: "FK_OrderLog_Order")
 }
 
 model User {
-  userId                         Int       @id @default(autoincrement())
-  firstName                      String?
-  lastName                       String?
-  email                          String    @unique
-  phone                          String?
-  username                       String    @unique
-  password                       String
-  role                           User_role
-  createdAt                      DateTime  @default(now())
-  updatedAt                      DateTime  @default(now())
-  deletedAt                      DateTime?
-  addresses                      Address[]
-  followers                      Follow[]  @relation("Follow_followeeIdToUser")
-  followees                      Follow[]  @relation("Follow_followerIdToUser")
-  deliverOrders                  Order[]   @relation("Order_driverIdToUser")
-  sendOrders                     Order[]   @relation("Order_receiverIdToUser")
-  receiveOrders                  Order[]   @relation("Order_senderIdToUser")
+  userId        Int       @id @default(autoincrement())
+  firstName     String?
+  lastName      String?
+  email         String    @unique
+  phone         String?
+  username      String    @unique
+  password      String
+  role          role
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now())
+  deletedAt     DateTime?
+  addresses     Address[]
+  followers     Follow[]  @relation("Follow_followeeIdToUser")
+  followees     Follow[]  @relation("Follow_followerIdToUser")
+  deliverOrders Order[]   @relation("Order_driverIdToUser")
+  receiveOrders Order[]   @relation("Order_receiverIdToUser")
+  sendOrders    Order[]   @relation("Order_senderIdToUser")
 }
 
 model Follow {
-  followId                     Int       @id @default(autoincrement())
-  followerId                   Int
-  followeeId                   Int
-  createdAt                    DateTime  @default(now())
-  updatedAt                    DateTime  @default(now())
-  deletedAt                    DateTime?
-  followee                     User      @relation("Follow_followeeIdToUser", fields: [followeeId], references: [userId])
-  follower                     User      @relation("Follow_followerIdToUser", fields: [followerId], references: [userId])
-
-  @@unique([followerId, followeeId], name: "UC_Friend_Follower_Followee")
-  @@index([followeeId], name: "FK_Friend_Followee")
+  followId   Int       @id @default(autoincrement())
+  followerId Int
+  followeeId Int
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now())
+  deletedAt  DateTime?
+  followee   User      @relation("Follow_followeeIdToUser", fields: [followeeId], references: [userId])
+  follower   User      @relation("Follow_followerIdToUser", fields: [followerId], references: [userId])
 }
 
-enum User_role {
+enum role {
   customer
   admin
   driver

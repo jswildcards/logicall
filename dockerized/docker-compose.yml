@@ -4,10 +4,11 @@ services:
   db:
     container_name: db
     env_file: .env
-    build:
-      context: ./db
+    image: postgres:13.1-alpine
+    volumes:
+      - ./db/volumes/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
     expose:
-      - 3306
+      - 5432
 
   backend:
     container_name: backend
