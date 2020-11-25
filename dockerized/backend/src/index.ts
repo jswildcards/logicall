@@ -12,7 +12,7 @@ const port = process?.env?.PORT ?? 4000;
 
 const typeDefs = fs.readFileSync(
   path.join(__dirname, "../schema.graphql"),
-  "utf8",
+  "utf8"
 );
 
 const prisma = new PrismaClient();
@@ -53,7 +53,6 @@ const server = new GraphQLServer({
 });
 
 server.express.use(cookieParser());
-server.start(
-  { endpoint: "/graphql", port },
-  ({ endpoint }) => console.log(`Server is running on ${endpoint}`),
+server.start({ endpoint: "/graphql", port }, ({ endpoint }) =>
+  console.log(`Server is running on ${endpoint}`)
 );
