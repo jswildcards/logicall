@@ -1,7 +1,6 @@
 // import '../styles/globals.css'
 import React from "react";
 import "fontsource-roboto";
-import "dotenv/config";
 
 // GraphQL
 import { ApolloProvider } from "react-apollo";
@@ -19,7 +18,7 @@ import Head from "next/head";
 // import rootReducers from "../reducers";
 
 const httpLink = createHttpLink(
-  { uri: `${process.env.SERVER_HOST}/graphql` }
+  { uri: `${process.env.SERVER_HOST ?? ""}/graphql` }
   // { uri, credentials: 'include' }
 );
 
