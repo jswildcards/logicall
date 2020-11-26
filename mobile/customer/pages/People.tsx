@@ -223,13 +223,8 @@ function ConditionRender(props) {
       </Grid>
       <List>
         {
-          followees.map(followee => (
-            <ListItem key={followee.followee.userId}>
-              <Body>
-                <Text>{followee.followee.firstName}</Text>
-                <Text>{followee.followee.username}</Text>
-              </Body>
-            </ListItem>
+          followees.map(({ followee }) => (
+            <AvatarItem {...followee} />
           ))
         }
       </List>
