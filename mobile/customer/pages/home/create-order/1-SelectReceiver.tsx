@@ -1,7 +1,12 @@
 // app/ScarletScreen.js
 
 import React, { useEffect, useState } from "react";
-import { StatusBar, StyleSheet, useWindowDimensions, SectionList } from "react-native";
+import {
+  StatusBar,
+  StyleSheet,
+  useWindowDimensions,
+  SectionList,
+} from "react-native";
 import {
   Container,
   Grid,
@@ -32,6 +37,7 @@ import EmptyIcon from "../../../components/icons/EmptyIcon";
 import schema from "../../../utils/schema";
 import { bp } from "../../../styles";
 import Placeholder from "../../../components/Placeholder";
+import AvatarItem from "../../../components/AvatarItem";
 
 const styles = StyleSheet.create({
   col: {
@@ -58,7 +64,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingTop: 22
+    paddingTop: 22,
   },
   sectionHeader: {
     paddingTop: 2,
@@ -66,8 +72,8 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     paddingBottom: 2,
     fontSize: 14,
-    fontWeight: 'bold',
-    backgroundColor: 'rgba(247,247,247,1.0)',
+    fontWeight: "bold",
+    backgroundColor: "rgba(247,247,247,1.0)",
   },
   item: {
     padding: 10,
@@ -79,27 +85,30 @@ const styles = StyleSheet.create({
 function Page() {
   // const [receiver, setReceiver] = useState("");
 
-  const { loading, data } = useQuery(schema.query.me)
+  const { loading, data } = useQuery(schema.query.me);
   const { followees } = data.me;
 
   const makeList = (receiver = "") => {
-    return followees.filter(item => item.followee.username.toLowerCase().includes(receiver.toLowerCase())).sort((a, b) => a.value > b.value ? 1 : -1).reduce((prev, cur) => {
-      const { followee } = cur
-      const section = prev.find(item => item.title === followee.username[0])
+    return followees.map(({ followee }) => followee)
+      .filter(({ username }) =>
+        username.toLowerCase().includes(receiver.toLowerCase())
+      )
+      .sort((a, b) => (a.username > b.username ? 1 : -1))
+      .reduce((prev, cur) => {
+        const section = prev.find(
+          (item) => item.title === cur.username[0]
+        );
 
-      if (section) {
-        section.data.push(followee)
-        return prev
-      }
+        if (section) {
+          section.data.push(cur);
+          return prev;
+        }
 
-      return [
-        ...prev,
-        { title: followee.username[0], data: [followee] }
-      ]
-    }, [])
-  }
+        return [...prev, { title: cur.username[0], data: [cur] }];
+      }, []);
+  };
 
-  const [listItem, setListItem] = useState(makeList(""))
+  const [listItem, setListItem] = useState(makeList(""));
 
   const renderList = (receiver = "") => setListItem(makeList(receiver));
   // const [isLoading, setLoading] = useState(true)
@@ -138,14 +147,20 @@ function Page() {
                 <Input
                   placeholder="search receivers..."
                   // value={receiver}
-                  onChangeText={(receiver) => { renderList(receiver); }}
+                  onChangeText={(receiver) => {
+                    renderList(receiver);
+                  }}
                 />
               </Item>
             </>
           )}
           sections={listItem}
-          renderItem={({ item }) => <Text style={styles.item}>{item.username}</Text>}
-          renderSectionHeader={({ section }) => <Text style={styles.sectionHeader}>{section.title}</Text>}
+          renderItem={({ item }) => (
+            <AvatarItem {...item} button onPress={() => { Actions.createOrder2SelectAddress({ receiver: item }) }} />
+          )}
+          renderSectionHeader={({ section }) => (
+            <Text style={styles.sectionHeader}>{section.title}</Text>
+          )}
           keyExtractor={(item) => item.userId}
         />
       )}

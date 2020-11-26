@@ -16,6 +16,7 @@ import { useQuery } from "react-apollo";
 import { Actions } from "react-native-router-flux";
 import EmptyIcon from "../../components/icons/EmptyIcon";
 import schema from "../../utils/schema";
+import NoData from "../../components/NoData";
 
 const styles = StyleSheet.create({
   col: {
@@ -65,25 +66,16 @@ function Page() {
     return (
       <Container>
         <StatusBar />
-        <Grid>
-          <Col contentContainerStyle={styles.col}>
-            <Row style={styles.row}>
-              <EmptyIcon height="30%" />
-              <H3 style={{ ...styles.header, ...styles.bold }}>
-                No Orders Here!
-              </H3>
-              <Text style={styles.header}>Do you want to create an order now?</Text>
-              <View styles={styles.body}>
-                <Button
-                  onPress={() => Actions.createOrder1SelectReceiver()}
-                  style={styles.header}
-                >
-                  <Text>Create Order</Text>
-                </Button>
-              </View>
-            </Row>
-          </Col>
-        </Grid>
+        <NoData
+          icon={<EmptyIcon height="30%" />}
+          title="No Orders Here!"
+          subtitle="Do you want to create an order now?"
+          button={(
+            <Button onPress={() => Actions.createOrder1SelectReceiver()}>
+              <Text>Create Order</Text>
+            </Button>
+          )}
+        />
       </Container>
     );
   }

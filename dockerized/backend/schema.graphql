@@ -2,6 +2,7 @@ type Query {
   me: User
   users(search: String!): [User]
   user(userId: Int!): User
+  addresses(userId: Int!): [Address]
 }
 
 type Mutation {
@@ -31,6 +32,8 @@ type User {
 }
 
 type Follow {
+  followerId: Int
+  followeeId: Int
   followee: User!
   follower: User!
 }
@@ -52,10 +55,10 @@ type Order {
 }
 
 type Address {
-  addressId: ID!
-  customer: User
-  addressLine1: String
-  addressLine2: String
+  addressId: ID
+  User: User
+  address: String
+  district: String
   latitude: Float
   longitude: Float
   createdAt: String

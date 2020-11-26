@@ -20,7 +20,8 @@ CREATE TABLE "Follow" (
   "followeeId"  INTEGER NOT NULL REFERENCES "User"("userId"),
   "createdAt"   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updatedAt"   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  "deletedAt"   TIMESTAMP NULL
+  "deletedAt"   TIMESTAMP NULL,
+  UNIQUE ("followerId", "followeeId")
 );
 
 CREATE TABLE "Address" (

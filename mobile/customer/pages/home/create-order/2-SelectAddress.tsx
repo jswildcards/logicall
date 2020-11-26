@@ -1,7 +1,7 @@
 // app/ScarletScreen.js
 
 import React, { useEffect, useState } from "react";
-import { StatusBar, StyleSheet, useWindowDimensions, SectionList } from "react-native";
+import { StatusBar, StyleSheet, useWindowDimensions, SectionList, RefreshControl } from "react-native";
 import {
   Container,
   Grid,
@@ -28,6 +28,7 @@ import {
 } from "native-base";
 import { useQuery } from "react-apollo";
 import { Actions, Reducer } from "react-native-router-flux";
+import { NetworkStatus } from "apollo-boost";
 import EmptyIcon from "../../../components/icons/EmptyIcon";
 import schema from "../../../utils/schema";
 import { bp } from "../../../styles";
@@ -75,56 +76,15 @@ const styles = StyleSheet.create({
   },
 });
 
-function Page() {
+function Page(props) {
   // const [receiver, setReceiver] = useState("");
-  const [data] = useState([
-    { value: 'Albania', key: 'AL' },
-    { value: 'Canada', key: 'CA' },
-    { value: 'Benin', key: 'BJ' },
-    { value: 'Guinea', key: 'GN' },
-    { value: 'Ethiopia', key: 'ET' },
-    { value: 'Azerbaijan', key: 'AZ' },
-    { value: 'Bermuda', key: 'BM' },
-    { value: 'Greece', key: 'GR' },
-    { value: 'Hong Kong', key: 'HK' },
-    { value: 'Hungary', key: 'HU' },
-    { value: 'India', key: 'IN' },
-    { value: 'Ireland', key: 'IE' },
-    { value: 'Dominica', key: 'DM' },
-    { value: 'Jamaica', key: 'JM' },
-    { value: 'Mexico', key: 'MX' },
-    { value: 'Lithuania', key: 'LT' },
-    { value: 'Luxembourg', key: 'LU' },
-    { value: 'New Zealand', key: 'NZ' },
-    { value: 'Portugal', key: 'PT' },
-    { value: 'Japan', key: 'JP' },
-    { value: 'France', key: 'FR' },
-    { value: 'Egypt', key: 'EG' },
-    { value: 'Finland', key: 'FI' },
-    { value: 'China', key: 'CN' },
-    { value: 'Denmark', key: 'DK' }
-  ])
 
-  const makeList = (receiver = "") => {
-    return data.filter(item => item.value.toLowerCase().includes(receiver.toLowerCase())).sort((a, b) => a.value > b.value ? 1 : -1).reduce((prev, cur) => {
-      const section = prev.find(item => item.title === cur.value[0])
+  const { loading, data, refetch, networkStatus } = useQuery(schema.query.addresses, { variables: { userId: parseInt(props.receiver.userId) } })
+  const [receiveAddress, setReceiveAddress] = useState(null)
 
-      if (section) {
-        section.data.push(cur)
-        return prev
-      }
-
-      return [
-        ...prev,
-        { title: cur.value[0], data: [cur] }
-      ]
-    }, [])
+  if (loading) {
+    return (<Text>loading</Text>)
   }
-
-  const [listItem, setListItem] = useState(makeList(""))
-
-  const renderList = (receiver = "") => setListItem(makeList(receiver));
-  // const [isLoading, setLoading] = useState(true)
 
   return (
     <Container>
@@ -137,7 +97,7 @@ function Page() {
           </Button>
         </Left>
         <Body>
-          <Title>Select Receiver</Title>
+          <Title>Select Address</Title>
           <Subtitle>Create Order</Subtitle>
         </Body>
         <Right>
@@ -148,7 +108,28 @@ function Page() {
       </Header>
       {/* <View style={}> */}
 
-      <SectionList
+      <RefreshControl onRefresh={refetch} refreshing={networkStatus === NetworkStatus.refetch}>
+        <List>
+          {data.addresses.map((address) => (
+            <ListItem avatar button onPress={() => setReceiveAddress(address)} selected={address.addressId === receiveAddress?.addressId}>
+              <Left>
+                <Icon ios="ios-navigate" name="navigate" />
+              </Left>
+              <Body>
+                <Text>{address.address}</Text>
+                <Text note>{`${address.district} (${address.latitude}, ${address.longitude})`}</Text>
+              </Body>
+              {address.addressId === receiveAddress?.addressId && (
+                <Right>
+                  <Icon style={{ paddingRight: 12 }} ios="ios-checkmark" name="checkmark" />
+                </Right>
+              )}
+            </ListItem>
+          ))}
+        </List>
+      </RefreshControl>
+
+      {/* <SectionList
         style={{ ...styles.header, ...bp(useWindowDimensions()).root }}
         ListHeaderComponent={(
           <>
@@ -166,7 +147,7 @@ function Page() {
         renderItem={({ item }) => <Text style={styles.item}>{item.value}</Text>}
         renderSectionHeader={({ section }) => <Text style={styles.sectionHeader}>{section.title}</Text>}
         keyExtractor={(item) => item.key}
-      />
+      /> */}
       {/* </View> */}
     </Container>
   );

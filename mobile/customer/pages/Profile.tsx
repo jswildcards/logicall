@@ -21,6 +21,7 @@ import schema, { client } from "../utils/schema";
 import banner from '../assets/logicall-banner.png'
 import { bp } from "../styles";
 import Placeholder from "../components/Placeholder";
+import AvatarItem from "../components/AvatarItem";
 
 function Page() {
   const { loading, error, data } = useQuery(schema.query.me);
@@ -43,7 +44,7 @@ function Page() {
     );
   }
 
-  const { userId, firstName, lastName, username, followers, followees } = data.me;
+  // const { userId, firstName, lastName, username, followers, followees } = data.me;
 
   return (
     <Container>
@@ -54,20 +55,10 @@ function Page() {
         </CardItem>
 
         <List>
-          <ListItem avatar>
-            <Left>
-              <Thumbnail
-                source={{
-                  uri: `https://picsum.photos/200/300?random=${userId}`,
-                }}
-              />
-            </Left>
-            <Body>
-              <Text>{`${firstName} ${lastName}`}</Text>
-              <Text note>{`@${username}`}</Text>
-            </Body>
-          </ListItem>
+          <AvatarItem {...data.me} />
         </List>
+
+
 
         <View style={{ ...bp(useWindowDimensions()).root, paddingTop: 12 }}>
           <Mutation

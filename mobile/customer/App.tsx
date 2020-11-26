@@ -20,6 +20,7 @@ import ProfilePage from "./pages/Profile";
 import SignInPage from "./pages/SignIn";
 import SignUpPage from "./pages/SignUp";
 import CreateOrder1SelectReceiverPage from "./pages/home/create-order/1-SelectReceiver";
+import createOrder2SelectAddress from "./pages/home/create-order/2-SelectAddress";
 import PeoplePage from "./pages/People";
 import Tab from "./components/Tab";
 
@@ -73,6 +74,13 @@ function App() {
                 key="createOrder1SelectReceiver"
                 component={CreateOrder1SelectReceiverPage}
                 title="Create Order - Select Receiver"
+                hideNavBar
+                clone
+              />
+              <Scene
+                key="createOrder2SelectAddress"
+                component={createOrder2SelectAddress}
+                title="Create Order - Select Address"
                 hideNavBar
                 clone
               />

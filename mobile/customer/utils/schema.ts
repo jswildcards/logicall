@@ -56,6 +56,15 @@ export const schema = {
         username
       }
     }`,
+    addresses: gql`query($userId: Int!){
+      addresses(userId: $userId) {
+        addressId
+        address
+        district
+        latitude
+        longitude
+      }
+    }`,
   },
   mutation: {
     signIn: gql`mutation($input: SignInInput) {
@@ -80,6 +89,36 @@ export const schema = {
     }`,
     signOut: gql`mutation {
       signOut
+    }`,
+    addFriend: gql`mutation($userId: Int!) {
+      addFriend(userId: $userId) {
+        userId
+        firstName
+        lastName
+        email
+        role
+        username
+        followers {
+          follower {
+            userId
+            firstName
+            lastName
+            email
+            role
+            username
+          }
+        }
+        followees {
+          followee {
+            userId
+            firstName
+            lastName
+            email
+            role
+            username
+          }
+        }
+      }
     }`,
   },
 };

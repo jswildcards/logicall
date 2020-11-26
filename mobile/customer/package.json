@@ -26,7 +26,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz",
     "react-native-calendar": "^0.13.1",
     "react-native-elements": "^3.0.0-alpha.1",
-    "react-native-gesture-handler": "~1.6.0",
+    "react-native-gesture-handler": "1.9.0",
     "react-native-reanimated": "~1.9.0",
     "react-native-router-flux": "^4.2.0",
     "react-native-safe-area-context": "~3.0.7",

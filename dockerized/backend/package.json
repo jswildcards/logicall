@@ -37,6 +37,7 @@
     "tsc": "tsc",
     "start": "tsc && node .",
     "lint": "eslint \"src/**/*\" --fix && prettier --write .",
-    "test": "jest --detectOpenHandles"
+    "test": "jest --detectOpenHandles",
+    "fmt": "prettier --write ."
   }
 }
