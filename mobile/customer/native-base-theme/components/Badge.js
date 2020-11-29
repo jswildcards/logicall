@@ -1,38 +1,38 @@
 // @flow
 
-import variable from './../variables/platform';
+import variable from "../variables/platform";
 
 export default (variables /* : * */ = variable) => {
   const badgeTheme = {
-    '.primary': {
-      backgroundColor: variables.buttonPrimaryBg
+    ".primary": {
+      backgroundColor: variables.buttonPrimaryBg,
     },
-    '.warning': {
-      backgroundColor: variables.buttonWarningBg
+    ".warning": {
+      backgroundColor: variables.buttonWarningBg,
     },
-    '.info': {
-      backgroundColor: variables.buttonInfoBg
+    ".info": {
+      backgroundColor: variables.buttonInfoBg,
     },
-    '.success': {
-      backgroundColor: variables.buttonSuccessBg
+    ".success": {
+      backgroundColor: variables.buttonSuccessBg,
     },
-    '.danger': {
-      backgroundColor: variables.buttonDangerBg
+    ".danger": {
+      backgroundColor: variables.buttonDangerBg,
     },
-    'NativeBase.Text': {
+    "NativeBase.Text": {
       color: variables.badgeColor,
       fontSize: variables.fontSizeBase,
       lineHeight: variables.lineHeight - 1,
-      textAlign: 'center',
-      paddingHorizontal: 3
+      textAlign: "center",
+      paddingHorizontal: 3,
     },
     backgroundColor: variables.badgeBg,
     padding: variables.badgePadding,
     paddingHorizontal: 6,
-    alignSelf: 'flex-start',
-    justifyContent: 'center',
+    alignSelf: "flex-start",
+    justifyContent: "center",
     borderRadius: 13.5,
-    height: 27
+    height: 27,
   };
   return badgeTheme;
 };

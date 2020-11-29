@@ -1,23 +1,15 @@
 // app/ScarletScreen.js
 
-import React, { useEffect, useState } from "react";
-import {
-  StatusBar,
-  StyleSheet,
-  useWindowDimensions,
-  SectionList,
-} from "react-native";
+import React, { useState } from "react";
+import { StatusBar, StyleSheet, SectionList } from "react-native";
 import {
   Container,
-  Grid,
   Text,
   Button,
-  Col,
   // Row,
   // H1,
   H3,
   Body,
-  View,
   Item,
   Icon,
   Subtitle,
@@ -26,18 +18,13 @@ import {
   Left,
   Title,
   Right,
-  List,
-  ListItem,
-  Separator,
-  Content,
 } from "native-base";
 import { useQuery } from "react-apollo";
-import { Actions, Reducer } from "react-native-router-flux";
-import EmptyIcon from "../../../components/icons/EmptyIcon";
+import { Actions } from "react-native-router-flux";
 import schema from "../../../utils/schema";
-import { bp } from "../../../styles";
 import Placeholder from "../../../components/Placeholder";
 import AvatarItem from "../../../components/AvatarItem";
+import FixedContainer from "../../../components/FixedContainer";
 
 const styles = StyleSheet.create({
   col: {
@@ -83,21 +70,20 @@ const styles = StyleSheet.create({
 });
 
 function Page() {
-  // const [receiver, setReceiver] = useState("");
+  const [receiver, setReceiver] = useState(null);
 
   const { loading, data } = useQuery(schema.query.me);
   const { followees } = data.me;
 
   const makeList = (receiver = "") => {
-    return followees.map(({ followee }) => followee)
+    return followees
+      .map(({ followee }) => followee)
       .filter(({ username }) =>
         username.toLowerCase().includes(receiver.toLowerCase())
       )
       .sort((a, b) => (a.username > b.username ? 1 : -1))
       .reduce((prev, cur) => {
-        const section = prev.find(
-          (item) => item.title === cur.username[0]
-        );
+        const section = prev.find((item) => item.title === cur.username[0]);
 
         if (section) {
           section.data.push(cur);
@@ -119,18 +105,23 @@ function Page() {
       <Header>
         <Left>
           <Button onPress={() => Actions.pop()} transparent>
-            <Icon ios="ios-arrow-back" name="arrow-back" />
-            {/* <Text>Home</Text> */}
+            {/* <Icon ios="ios-arrow-back" name="arrow-back" /> */}
+            <Text>Back</Text>
           </Button>
         </Left>
         <Body>
-          <Title>Select Receiver</Title>
+          <Title>Receiver</Title>
           <Subtitle>Create Order</Subtitle>
         </Body>
         <Right>
-          <Button onPress={() => Actions.profile()} transparent>
-            <Text>Next</Text>
-          </Button>
+          {receiver && (
+            <Button
+              onPress={() => Actions.createOrder2SelectAddress({ receiver })}
+              transparent
+            >
+              <Text>Next</Text>
+            </Button>
+          )}
         </Right>
       </Header>
       {/* <View style={}> */}
@@ -139,9 +130,9 @@ function Page() {
 
       {!loading && (
         <SectionList
-          style={{ ...styles.header, ...bp(useWindowDimensions()).root }}
+          style={styles.header}
           ListHeaderComponent={(
-            <>
+            <FixedContainer pad>
               <H3 style={styles.bold}>First, Select a receiver...</H3>
               <Item floatingLabel last>
                 <Input
@@ -152,11 +143,23 @@ function Page() {
                   }}
                 />
               </Item>
-            </>
+            </FixedContainer>
           )}
           sections={listItem}
           renderItem={({ item }) => (
-            <AvatarItem {...item} button onPress={() => { Actions.createOrder2SelectAddress({ receiver: item }) }} />
+            <AvatarItem
+              {...item}
+              button
+              selected={item.userId === receiver?.userId}
+              onPress={() => setReceiver({ ...item })}
+              right={
+                item.userId === receiver?.userId && (
+                  <Right>
+                    <Icon ios="ios-checkmark" name="checkmark" />
+                  </Right>
+                )
+              }
+            />
           )}
           renderSectionHeader={({ section }) => (
             <Text style={styles.sectionHeader}>{section.title}</Text>

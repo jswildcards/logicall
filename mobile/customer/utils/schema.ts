@@ -16,110 +16,125 @@ export const client = new ApolloClient({
 
 export const schema = {
   query: {
-    me: gql`{
-      me {
-        userId
-        firstName
-        lastName
-        email
-        role
-        username
-        followers {
-          follower {
-            userId
-            firstName
-            lastName
-            email
-            role
-            username
+    districts: gql`{districts{districtId name}}`,
+    me: gql`
+      {
+        me {
+          userId
+          firstName
+          lastName
+          email
+          role
+          username
+          followers {
+            follower {
+              userId
+              firstName
+              lastName
+              email
+              role
+              username
+            }
+          }
+          followees {
+            followee {
+              userId
+              firstName
+              lastName
+              email
+              role
+              username
+            }
           }
         }
-        followees {
-          followee {
-            userId
-            firstName
-            lastName
-            email
-            role
-            username
-          }
+      }
+    `,
+    users: gql`
+      query($search: String!) {
+        users(search: $search) {
+          userId
+          firstName
+          lastName
+          email
+          role
+          username
         }
       }
-    }`,
-    users: gql`query($search: String!) {
-      users(search: $search) {
-        userId
-        firstName
-        lastName
-        email
-        role
-        username
+    `,
+    addresses: gql`
+      query($userId: Int!) {
+        addresses(userId: $userId) {
+          addressId
+          address
+          district
+          latitude
+          longitude
+        }
       }
-    }`,
-    addresses: gql`query($userId: Int!){
-      addresses(userId: $userId) {
-        addressId
-        address
-        district
-        latitude
-        longitude
-      }
-    }`,
+    `,
   },
   mutation: {
-    signIn: gql`mutation($input: SignInInput) {
-      signIn(input: $input) {
-        userId
-        firstName
-        lastName
-        email
-        role
-        username
-      }
-    }`,
-    signUp: gql`mutation($input: SignUpInput) {
-      signUp(input: $input) {
-        userId
-        firstName
-        lastName
-        email
-        role
-        username
-      }
-    }`,
-    signOut: gql`mutation {
-      signOut
-    }`,
-    addFriend: gql`mutation($userId: Int!) {
-      addFriend(userId: $userId) {
-        userId
-        firstName
-        lastName
-        email
-        role
-        username
-        followers {
-          follower {
-            userId
-            firstName
-            lastName
-            email
-            role
-            username
-          }
-        }
-        followees {
-          followee {
-            userId
-            firstName
-            lastName
-            email
-            role
-            username
-          }
+    signIn: gql`
+      mutation($input: SignInInput) {
+        signIn(input: $input) {
+          userId
+          firstName
+          lastName
+          email
+          role
+          username
         }
       }
-    }`,
+    `,
+    signUp: gql`
+      mutation($input: SignUpInput) {
+        signUp(input: $input) {
+          userId
+          firstName
+          lastName
+          email
+          role
+          username
+        }
+      }
+    `,
+    signOut: gql`
+      mutation {
+        signOut
+      }
+    `,
+    addFriend: gql`
+      mutation($userId: Int!) {
+        addFriend(userId: $userId) {
+          userId
+          firstName
+          lastName
+          email
+          role
+          username
+          followers {
+            follower {
+              userId
+              firstName
+              lastName
+              email
+              role
+              username
+            }
+          }
+          followees {
+            followee {
+              userId
+              firstName
+              lastName
+              email
+              role
+              username
+            }
+          }
+        }
+      }
+    `,
   },
 };
 

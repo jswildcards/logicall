@@ -1,4 +1,7 @@
 import { UserWhereUniqueInput } from "@prisma/client";
+import Axios from "axios";
+import fs from "fs";
+import path from "path";
 import { Context } from "../utils/types";
 
 export async function users(
@@ -8,7 +11,7 @@ export async function users(
 ) {
   return prisma.user.findMany({
     where: {
-      username: { contains: search },
+      username: { contains: search, mode: "insensitive" },
       userId: { not: auth.userId },
       followers: {
         none: {
@@ -63,4 +66,34 @@ export async function addresses(
   );
 }
 
-export default { users, user, me, addresses };
+export async function districts() {
+  const districtsData = JSON.parse(fs.readFileSync(
+    path.join(__dirname, "../../data/districts.json"),
+    "utf-8",
+  ));
+
+  return districtsData.features.map(({ properties }: any) => ({
+    districtId: properties?.["地區號碼"],
+    name: properties?.["地區"],
+  }));
+}
+
+export async function coordinates(
+  _parent: any,
+  { query, county }: { query: string; county: string },
+) {
+  const results = (await Axios.get(
+    encodeURI(
+      `https://nominatim.openstreetmap.org/search/${query}, ${county}, 香港?format=json&addressdetails=1&limit=1`,
+    ),
+  )).data.map(({ lat, lon }: { lat: number; lon: number }) => ({
+    latitude: lat,
+    longitude: lon,
+  }))[0];
+
+  console.log(results);
+
+  return results;
+}
+
+export default { users, user, me, addresses, districts, coordinates };

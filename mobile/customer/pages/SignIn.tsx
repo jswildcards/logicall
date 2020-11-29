@@ -13,12 +13,13 @@ import {
   Button,
   Text,
   View,
-  Thumbnail, Toast
+  Thumbnail,
+  Toast,
 } from "native-base";
 import { ApolloError } from "apollo-boost";
 import schema from "../utils/schema";
-import { bp } from "../styles";
 import logo from "../assets/icon.png";
+import FixedContainer from "../components/FixedContainer";
 
 const styles = StyleSheet.create({
   buttonSignUp: {
@@ -53,82 +54,87 @@ function Page() {
   const [error, setError] = useState("");
 
   const signInCallBack = () => {
-    setLoading(false)
-    setError("")
+    setLoading(false);
+    setError("");
     Actions.home();
   };
 
   const signInErrorHandler = (err: ApolloError) => {
-    setLoading(false)
+    setLoading(false);
     const msg = err.message.replace("GraphQL error: ", "");
     setError(msg);
-    Toast.show({ text: msg, buttonText: "OK", type: "danger", duration: 6000 })
-  }
+    Toast.show({ text: msg, buttonText: "OK", type: "danger", duration: 6000 });
+  };
 
   return (
-    <Container style={bp(useWindowDimensions()).root}>
+    <Container>
       <StatusBar />
       <Content>
-        <Thumbnail
-          square
-          large
-          style={styles.iconCenter}
-          source={logo}
-        />
-        <Form>
-          <Item floatingLabel last>
-            <Icon ios="ios-person" name="person" />
-            <Label>Username</Label>
-            <Input
-              value={user.username}
-              disabled={isLoading}
-              onChangeText={(username) => setUser({ ...user, username })}
-            />
-          </Item>
-          <Item floatingLabel last error={error.length > 0}>
-            <Icon ios="ios-lock" name="lock" />
-            <Label>Password</Label>
-            <Input
-              value={user.password}
-              disabled={isLoading}
-              secureTextEntry={!isPasswordVisible}
-              onChangeText={(password) => setUser({ ...user, password })}
-            />
-            <Icon
-              ios={isPasswordVisible ? "ios-eye-off" : "ios-eye"}
-              name={isPasswordVisible ? "eye-off" : "eye"}
-              onPress={() => setPasswordVisible(!isPasswordVisible)}
-            />
-          </Item>
-          {/* <Button danger transparent>
+        <FixedContainer pad>
+          <Thumbnail square large style={styles.iconCenter} source={logo} />
+          <Form>
+            <Item floatingLabel last>
+              <Icon ios="ios-person" name="person" />
+              <Label>Username</Label>
+              <Input
+                value={user.username}
+                disabled={isLoading}
+                onChangeText={(username) => setUser({ ...user, username })}
+              />
+            </Item>
+            <Item floatingLabel last error={error.length > 0}>
+              <Icon ios="ios-lock" name="lock" />
+              <Label>Password</Label>
+              <Input
+                value={user.password}
+                disabled={isLoading}
+                secureTextEntry={!isPasswordVisible}
+                onChangeText={(password) => setUser({ ...user, password })}
+              />
+              <Icon
+                ios={isPasswordVisible ? "ios-eye-off" : "ios-eye"}
+                name={isPasswordVisible ? "eye-off" : "eye"}
+                onPress={() => setPasswordVisible(!isPasswordVisible)}
+              />
+            </Item>
+            {/* <Button danger transparent>
             <Text>{error}</Text>
           </Button> */}
-          <Mutation
-            mutation={schema.mutation.signIn}
-            onCompleted={signInCallBack}
-            onError={signInErrorHandler}
-            variables={{ input: { ...user } }}
-          >
-            {(mutation) => (
-              <Button style={styles.textSignUp} disabled={isLoading} block onPress={() => { setLoading(true); return mutation() }}>
-                <Text>Sign In</Text>
-              </Button>
-            )}
-          </Mutation>
-
-          <View style={styles.containerSignUp}>
-            <Text style={styles.textSignUp}>New to Here? </Text>
-            <Button
-              onPress={() => Actions.signUp()}
-              style={styles.buttonSignUp}
-              transparent
-              light
+            <Mutation
+              mutation={schema.mutation.signIn}
+              onCompleted={signInCallBack}
+              onError={signInErrorHandler}
+              variables={{ input: { ...user } }}
             >
-              <Text style={styles.buttonTextSignUp}>Sign Up</Text>
-            </Button>
-            <Text style={styles.textSignUp}>.</Text>
-          </View>
-        </Form>
+              {(mutation) => (
+                <Button
+                  style={styles.textSignUp}
+                  disabled={isLoading}
+                  block
+                  onPress={() => {
+                setLoading(true);
+                return mutation();
+              }}
+                >
+                  <Text>Sign In</Text>
+                </Button>
+            )}
+            </Mutation>
+
+            <View style={styles.containerSignUp}>
+              <Text style={styles.textSignUp}>New to Here? </Text>
+              <Button
+                onPress={() => Actions.signUp()}
+                style={styles.buttonSignUp}
+                transparent
+                light
+              >
+                <Text style={styles.buttonTextSignUp}>Sign Up</Text>
+              </Button>
+              <Text style={styles.textSignUp}>.</Text>
+            </View>
+          </Form>
+        </FixedContainer>
       </Content>
     </Container>
   );

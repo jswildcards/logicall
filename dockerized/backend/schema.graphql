@@ -3,6 +3,8 @@ type Query {
   users(search: String!): [User]
   user(userId: Int!): User
   addresses(userId: Int!): [Address]
+  districts: [District]
+  coordinates(query: String, county: String): LatLng
 }
 
 type Mutation {
@@ -11,6 +13,16 @@ type Mutation {
   signOut: String
 
   addFriend(userId: Int!): User
+}
+
+type District {
+  districtId: ID
+  name: String
+}
+
+type LatLng {
+  latitude: Float
+  longitude: Float
 }
 
 type User {

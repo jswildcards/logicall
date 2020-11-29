@@ -27,6 +27,7 @@
     "react-native-calendar": "^0.13.1",
     "react-native-elements": "^3.0.0-alpha.1",
     "react-native-gesture-handler": "1.9.0",
+    "react-native-maps": "^0.27.1",
     "react-native-reanimated": "~1.9.0",
     "react-native-router-flux": "^4.2.0",
     "react-native-safe-area-context": "~3.0.7",

@@ -16,11 +16,14 @@ import {
   Grid,
   Header,
   Left,
-  Body, Title, Right
+  Body,
+  Title,
+  Right,
 } from "native-base";
 import { ApolloError } from "apollo-boost";
 import schema from "../utils/schema";
-import { bp } from "../styles";
+import HeaderNav from "../components/HeaderNav";
+import FixedContainer from "../components/FixedContainer";
 
 function Page() {
   const [user, setUser] = useState({
@@ -38,104 +41,95 @@ function Page() {
   return (
     <Container>
       <StatusBar />
-      <Header>
-        <Left>
-          <Button onPress={() => Actions.pop()} transparent>
-            <Icon ios="ios-arrow-back" name="arrow-back" />
-            {/* <Text>Sign In</Text> */}
-          </Button>
-        </Left>
-        <Body>
-          <Title>Sign Up</Title>
-        </Body>
-        <Right />
-      </Header>
-      <Content style={bp(useWindowDimensions()).root}>
-        <Form>
-          <Grid>
-            <Col>
-              <Item floatingLabel last>
-                <Label>First Name</Label>
-                <Input
-                  value={user.firstName}
-                  onChangeText={(firstName) => setUser({ ...user, firstName })}
-                />
-              </Item>
-            </Col>
-            <Col>
-              <Item floatingLabel>
-                <Label>Last Name</Label>
-                <Input
-                  value={user.lastName}
-                  onChangeText={(lastName) => setUser({ ...user, lastName })}
-                />
-              </Item>
-            </Col>
-          </Grid>
-          <Item floatingLabel last>
-            <Label>Username</Label>
-            <Input
-              value={user.username}
-              onChangeText={(username) => setUser({ ...user, username })}
-            />
-          </Item>
-          <Item floatingLabel last>
-            <Label>Email</Label>
-            <Input
-              value={user.email}
-              onChangeText={(email) => setUser({ ...user, email })}
-            />
-          </Item>
-          <Item floatingLabel last>
-            <Label>Password</Label>
-            <Input
-              secureTextEntry={!isPasswordVisible[0]}
-              value={user.password}
-              onChangeText={(password) => setUser({ ...user, password })}
-            />
-            <Icon
-              ios={isPasswordVisible[0] ? "ios-eye-off" : "ios-eye"}
-              name={isPasswordVisible[0] ? "eye-off" : "eye"}
-              onPress={() => {
+      <HeaderNav title="Sign Up" />
+      <Content>
+        <FixedContainer pad>
+          <Form>
+            <Grid>
+              <Col>
+                <Item floatingLabel last>
+                  <Label>First Name</Label>
+                  <Input
+                    value={user.firstName}
+                    onChangeText={(firstName) => setUser({ ...user, firstName })}
+                  />
+                </Item>
+              </Col>
+              <Col>
+                <Item floatingLabel>
+                  <Label>Last Name</Label>
+                  <Input
+                    value={user.lastName}
+                    onChangeText={(lastName) => setUser({ ...user, lastName })}
+                  />
+                </Item>
+              </Col>
+            </Grid>
+            <Item floatingLabel last>
+              <Label>Username</Label>
+              <Input
+                value={user.username}
+                onChangeText={(username) => setUser({ ...user, username })}
+              />
+            </Item>
+            <Item floatingLabel last>
+              <Label>Email</Label>
+              <Input
+                value={user.email}
+                onChangeText={(email) => setUser({ ...user, email })}
+              />
+            </Item>
+            <Item floatingLabel last>
+              <Label>Password</Label>
+              <Input
+                secureTextEntry={!isPasswordVisible[0]}
+                value={user.password}
+                onChangeText={(password) => setUser({ ...user, password })}
+              />
+              <Icon
+                ios={isPasswordVisible[0] ? "ios-eye-off" : "ios-eye"}
+                name={isPasswordVisible[0] ? "eye-off" : "eye"}
+                onPress={() => {
                 const [p, c] = isPasswordVisible;
                 setPasswordVisible([!p, c]);
               }}
-            />
-          </Item>
-          <Item floatingLabel last>
-            <Label>Confirm Password</Label>
-            <Input
-              secureTextEntry={!isPasswordVisible[1]}
-              value={confirmPassword}
-              onChangeText={(data) => setConfirmPassword(data)}
-            />
-            <Icon
-              ios={isPasswordVisible[1] ? "ios-eye-off" : "ios-eye"}
-              name={isPasswordVisible[1] ? "eye-off" : "eye"}
-              onPress={() => {
+              />
+            </Item>
+            <Item floatingLabel last>
+              <Label>Confirm Password</Label>
+              <Input
+                secureTextEntry={!isPasswordVisible[1]}
+                value={confirmPassword}
+                onChangeText={(data) => setConfirmPassword(data)}
+              />
+              <Icon
+                ios={isPasswordVisible[1] ? "ios-eye-off" : "ios-eye"}
+                name={isPasswordVisible[1] ? "eye-off" : "eye"}
+                onPress={() => {
                 const [p, c] = isPasswordVisible;
                 setPasswordVisible([p, !c]);
               }}
-            />
-          </Item>
-          <Button danger transparent>
-            <Text>{error}</Text>
-          </Button>
+              />
+            </Item>
+            <Button danger transparent>
+              <Text>{error}</Text>
+            </Button>
 
-          <Mutation
-            mutation={schema.mutation.signUp}
-            onCompleted={() => Actions.home()}
-            onError={(err: ApolloError) =>
+            <Mutation
+              mutation={schema.mutation.signUp}
+              onCompleted={() => Actions.home()}
+              onError={(err: ApolloError) =>
               setError(err.message.replace("GraphQL error: ", ""))}
-            variables={{ input: { ...user } }}
-          >
-            {(mutation) => (
-              <Button block onPress={mutation}>
-                <Text>Sign Up</Text>
-              </Button>
+              variables={{ input: { ...user } }}
+            >
+              {(mutation) => (
+                <Button block onPress={mutation}>
+                  <Text>Sign Up</Text>
+                </Button>
             )}
-          </Mutation>
-        </Form>
+            </Mutation>
+          </Form>
+        </FixedContainer>
       </Content>
     </Container>
   );

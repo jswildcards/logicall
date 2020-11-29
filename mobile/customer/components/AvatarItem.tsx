@@ -2,10 +2,19 @@ import { ListItem, Left, Thumbnail, Body, Text } from "native-base";
 import React from "react";
 
 function AvatarItem(props) {
-  const { userId, firstName, lastName, username, button, onPress } = props;
+  const {
+    userId,
+    firstName,
+    lastName,
+    username,
+    button,
+    onPress,
+    right,
+    selected,
+  } = props;
 
   return (
-    <ListItem avatar button={button} onPress={onPress}>
+    <ListItem avatar button={button} onPress={onPress} selected={selected}>
       <Left>
         <Thumbnail
           source={{
@@ -13,12 +22,13 @@ function AvatarItem(props) {
           }}
         />
       </Left>
-      <Body>
+      <Body style={{ minHeight: 70, flex: 1, justifyContent: "center" }}>
         <Text>{`${firstName} ${lastName}`}</Text>
         <Text note>{`@${username}`}</Text>
       </Body>
+      {right}
     </ListItem>
-  )
+  );
 }
 
 export default AvatarItem;

@@ -20,7 +20,7 @@ import ProfilePage from "./pages/Profile";
 import SignInPage from "./pages/SignIn";
 import SignUpPage from "./pages/SignUp";
 import CreateOrder1SelectReceiverPage from "./pages/home/create-order/1-SelectReceiver";
-import createOrder2SelectAddress from "./pages/home/create-order/2-SelectAddress";
+import createOrder2SelectReceiverAddressPage from "./pages/home/create-order/2-SelectReceiverAddress";
 import PeoplePage from "./pages/People";
 import Tab from "./components/Tab";
 
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
 });
 
 function App() {
-  const [isLoading, setLoading] = useState(true)
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     Font.loadAsync({
@@ -48,12 +48,11 @@ function App() {
       <View>
         <Text>Loading</Text>
       </View>
-    )
+    );
   }
 
   return (
     <Root>
-
       <ApolloProvider client={client}>
         <StyleProvider style={getTheme(platform)}>
           <Router>
@@ -79,7 +78,7 @@ function App() {
               />
               <Scene
                 key="createOrder2SelectAddress"
-                component={createOrder2SelectAddress}
+                component={createOrder2SelectReceiverAddressPage}
                 title="Create Order - Select Address"
                 hideNavBar
                 clone

@@ -24,18 +24,23 @@ import {
   Item,
   Icon,
   Input,
-  Toast, List, Body, ListItem
+  Toast,
+  List,
+  Body,
+  ListItem,
+  Right,
 } from "native-base";
 import { Mutation, useLazyQuery, useQuery } from "react-apollo";
 import { RectButton } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { ApolloError } from "apollo-boost";
+import { Actions } from "react-native-router-flux";
 import EmptyIcon from "../components/icons/EmptyIcon";
 import schema from "../utils/schema";
-import { bp } from "../styles";
 import NoData from "../components/NoData";
 import AddFriendsIcon from "../components/icons/AddFriendsIcon";
 import AvatarItem from "../components/AvatarItem";
+import FixedContainer from "../components/FixedContainer";
 
 const styles = StyleSheet.create({
   col: {
@@ -81,10 +86,10 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     backgroundColor: "transparent",
-    padding: 4,
+    // padding: 2,
   },
   rightAction: {
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
     flex: 1,
     justifyContent: "center",
@@ -117,8 +122,8 @@ function SwipeableRow(props) {
               style={[styles.rightAction, { backgroundColor: color }]}
               onPress={mutation}
             >
-              <Text style={styles.actionText}>{text}</Text>
               <View>{icon}</View>
+              <Text style={styles.actionText}>{text}</Text>
             </RectButton>
           )}
         </Mutation>
@@ -138,7 +143,11 @@ function SwipeableRow(props) {
         "#5cb85c",
         96,
         progress,
-        <Icon style={styles.actionText} ios="ios-add" name="add" />
+        <Icon
+          style={{ ...styles.actionText, fontSize: 32 }}
+          ios="ios-add"
+          name="add"
+        />
       )}
     </View>
   );
@@ -175,7 +184,11 @@ function ConditionRender(props) {
       <SectionList
         sections={makeList()}
         renderItem={({ item }) => (
-          <SwipeableRow userId={parseInt(item.userId)} lazyRefetch={lazyRefetch} refetch={refetch}>
+          <SwipeableRow
+            userId={parseInt(item.userId)}
+            lazyRefetch={lazyRefetch}
+            refetch={refetch}
+          >
             <AvatarItem {...item} />
           </SwipeableRow>
         )}
@@ -204,31 +217,43 @@ function ConditionRender(props) {
   }
 
   return (
-    <View>
-      <Grid style={{ paddingVertical: 12 }}>
-        <Row>
-          <Col>
-            <TouchableOpacity onPress={() => console.log("hi")}>
-              <H3 style={{ alignSelf: "center" }}>{followerNumber}</H3>
-              <Text style={{ alignSelf: "center" }}>Followers</Text>
-            </TouchableOpacity>
-          </Col>
-          <Col>
-            <TouchableOpacity onPress={() => console.log("hi")}>
-              <H3 style={{ alignSelf: "center" }}>{followeeNumber}</H3>
-              <Text style={{ alignSelf: "center" }}>Followees</Text>
-            </TouchableOpacity>
-          </Col>
-        </Row>
-      </Grid>
-      <List>
-        {
-          followees.map(({ followee }) => (
-            <AvatarItem {...followee} />
-          ))
-        }
-      </List>
-    </View>
+    <FixedContainer>
+      <SectionList
+        style={styles.header}
+        ListHeaderComponent={(
+          <Grid style={{ paddingVertical: 12 }}>
+            <Row>
+              <Col>
+                <TouchableOpacity onPress={() => console.log("hi")}>
+                  <H3 style={{ alignSelf: "center" }}>{followerNumber}</H3>
+                  <Text style={{ alignSelf: "center" }}>Followers</Text>
+                </TouchableOpacity>
+              </Col>
+              <Col>
+                <TouchableOpacity onPress={() => console.log("hi")}>
+                  <H3 style={{ alignSelf: "center" }}>{followeeNumber}</H3>
+                  <Text style={{ alignSelf: "center" }}>Followees</Text>
+                </TouchableOpacity>
+              </Col>
+            </Row>
+          </Grid>
+        )}
+        sections={makeList(followees.map(({ followee }) => followee))}
+        renderItem={({ item }) => (
+          <AvatarItem
+            {...item}
+            button
+            onPress={() => {
+              Actions.createOrder2SelectAddress({ receiver: item });
+            }}
+          />
+        )}
+        renderSectionHeader={({ section }) => (
+          <Text style={styles.sectionHeader}>{section.title}</Text>
+        )}
+        keyExtractor={(item) => item.userId}
+      />
+    </FixedContainer>
   );
 }
 
@@ -263,18 +288,17 @@ function Page() {
   const fullRefetch = async () => {
     await refetch();
     await lazyRefetch();
-  }
+  };
 
   const userSearching = (word: string) => {
     setSearch(word);
-
     if (word.length > 1) getUsers({ variables: { search: word } });
   };
 
-  const makeList = () => {
-    if (!lazyData) return null;
+  const makeList = (rawList = lazyData?.users) => {
+    if (!rawList) return null;
 
-    return lazyData.users
+    return rawList
       .sort((a, b) => (a.username > b.username ? 1 : -1))
       .reduce((prev, cur) => {
         const section = prev.find((item) => item.title === cur.username[0]);
@@ -299,14 +323,16 @@ function Page() {
             onChangeText={userSearching}
             placeholder="Search"
           />
-          <Button
-            style={{ margin: -2 }}
-            onPress={() => userSearching("")}
-            transparent
-            light
-          >
-            <Icon ios="ios-close-circle" name="close-circle" />
-          </Button>
+          <Right>
+            <Button
+              // style={{ margin: -2 }}
+              onPress={() => userSearching("")}
+              transparent
+              light
+            >
+              <Icon ios="ios-close-circle" name="close-circle" />
+            </Button>
+          </Right>
         </Item>
       </Header>
 

@@ -35,9 +35,7 @@ function NoData(props) {
           {icon}
           <H3 style={{ ...styles.header, ...styles.bold }}>{title}</H3>
           <Text style={styles.header}>{subtitle}</Text>
-          <View style={{ ...styles.body, ...styles.header }}>
-            {button}
-          </View>
+          <View style={{ ...styles.body, ...styles.header }}>{button}</View>
         </Row>
       </Col>
     </Grid>

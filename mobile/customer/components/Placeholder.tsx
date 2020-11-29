@@ -15,7 +15,7 @@ function Placeholder() {
         </View>
       </View>
     </SkeletonPlaceholder>
-  )
+  );
 }
 
 export default Placeholder;
