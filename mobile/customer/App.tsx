@@ -15,12 +15,15 @@ import RobotoMedium from "native-base/Fonts/Roboto_medium.ttf";
 import getTheme from "./native-base-theme/components";
 import platform from "./native-base-theme/variables/platform";
 
-import HomePage from "./pages/home/Home";
+import HomePage from "./pages/Home";
 import ProfilePage from "./pages/Profile";
 import SignInPage from "./pages/SignIn";
 import SignUpPage from "./pages/SignUp";
-import CreateOrder1SelectReceiverPage from "./pages/home/create-order/1-SelectReceiver";
-import createOrder2SelectReceiverAddressPage from "./pages/home/create-order/2-SelectReceiverAddress";
+import CreateOrder1SelectReceiverPage from "./pages/create-order/1-SelectReceiver";
+import createOrder2SelectReceiverAddressPage from "./pages/create-order/2-SelectReceiverAddress";
+import createOrder2aNewReceiverAddressPage from "./pages/create-order/2a-NewReceiverAddress";
+import createOrder3SelectSenderAddressPage from "./pages/create-order/3-SelectSendAddress";
+import createOrder4FinishPage from "./pages/create-order/4-Finish";
 import PeoplePage from "./pages/People";
 import Tab from "./components/Tab";
 
@@ -72,14 +75,35 @@ function App() {
               <Scene
                 key="createOrder1SelectReceiver"
                 component={CreateOrder1SelectReceiverPage}
-                title="Create Order - Select Receiver"
+                title="Create Order - Receiver"
                 hideNavBar
                 clone
               />
               <Scene
                 key="createOrder2SelectAddress"
                 component={createOrder2SelectReceiverAddressPage}
-                title="Create Order - Select Address"
+                title="Create Order - Select Receiver Address"
+                hideNavBar
+                clone
+              />
+              <Scene
+                key="createOrder2aNewAddress"
+                component={createOrder2aNewReceiverAddressPage}
+                title="Create Order - New Receiver Address"
+                hideNavBar
+                clone
+              />
+              <Scene
+                key="createOrder3SelectSendAddress"
+                component={createOrder3SelectSenderAddressPage}
+                title="Create Order - Sender Address"
+                hideNavBar
+                clone
+              />
+              <Scene
+                key="createOrder4Finish"
+                component={createOrder4FinishPage}
+                title="Create Order - Confirm"
                 hideNavBar
                 clone
               />

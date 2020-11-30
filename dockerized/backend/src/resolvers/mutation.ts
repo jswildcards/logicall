@@ -1,4 +1,4 @@
-import { User, UserWhereUniqueInput } from "@prisma/client";
+import { Order, User, UserWhereUniqueInput } from "@prisma/client";
 import { Cookie as CookieConfig } from "../utils/config";
 import { encrypt } from "../utils/crypto";
 import token from "../utils/token";
@@ -7,12 +7,13 @@ import { Context } from "../utils/types";
 export async function signUp(
   _: any,
   { input }: { input: User },
-  { prisma, response }: Context
+  { prisma, response }: Context,
 ) {
   const data = { ...input, password: encrypt(input.password) };
   const user = await prisma.user.create({ data });
   response.cookie(CookieConfig.token, await token.assign(user), {
     httpOnly: true,
+    sameSite: "none"
   });
   return user;
 }
@@ -20,7 +21,7 @@ export async function signUp(
 export async function signIn(
   _: any,
   { input }: { input: User },
-  { response, prisma }: Context
+  { response, prisma }: Context,
 ) {
   const encryptedPassword = encrypt(input.password);
   const user = await prisma.user.findOne({
@@ -30,6 +31,7 @@ export async function signIn(
   if (user?.password === encryptedPassword && user?.role === input.role) {
     response.cookie(CookieConfig.token, await token.assign(user), {
       httpOnly: true,
+      sameSite: "none"
     });
     return user;
   }
@@ -45,7 +47,7 @@ export async function signOut(_parent: any, _args: any, { response }: Context) {
 export async function addFriend(
   _parent: any,
   { userId }: UserWhereUniqueInput,
-  { auth, prisma, response }: Context
+  { auth, prisma, response }: Context,
 ) {
   if (!auth?.userId) {
     response.status(401);
@@ -74,4 +76,29 @@ export async function addFriend(
   return result;
 }
 
-export default { signUp, signIn, signOut, addFriend };
+export async function createOrder(
+  _: any,
+  { input }: { input: Order },
+  { auth, response, prisma }: Context,
+) {
+  if (!auth?.userId) {
+    response.status(401);
+    throw new Error("Unathorized");
+  }
+
+  const { receiverId, sendAddressId, receiveAddressId } = input;
+  return prisma.order.create({
+    data: {
+      orderId: `${
+        new Date().valueOf().toString(36)
+      }-${auth.userId}-${receiverId}`.toUpperCase(),
+      sender: { connect: { userId: auth.userId } },
+      receiver: { connect: { userId: receiverId } },
+      senderAddress: { connect: { addressId: sendAddressId } },
+      receiverAddress: { connect: { addressId: receiveAddressId } },
+      status: "Approving",
+    },
+  });
+}
+
+export default { signUp, signIn, signOut, addFriend, createOrder };

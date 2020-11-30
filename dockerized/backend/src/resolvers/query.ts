@@ -43,9 +43,17 @@ export async function me(
   return prisma.user.findOne({
     where: { userId: auth.userId },
     include: {
-      receiveOrders: true,
+      receiveOrders: {
+        include: {
+          sender: true,
+          senderAddress: true,
+          receiver: true,
+          receiverAddress: true,
+        },
+      },
       sendOrders: true,
       deliverOrders: true,
+      addresses: true,
       followees: {
         include: { followee: true },
       },
@@ -96,4 +104,21 @@ export async function coordinates(
   return results;
 }
 
-export default { users, user, me, addresses, districts, coordinates };
+export async function orders(
+  _parent: any,
+  _args: any,
+  { prisma }: Context,
+) {
+  return prisma.order.findMany(
+    {
+      include: {
+        sender: true,
+        senderAddress: true,
+        receiverAddress: true,
+        receiver: true,
+      },
+    },
+  );
+}
+
+export default { users, user, me, addresses, districts, coordinates, orders };

@@ -42,6 +42,39 @@ export const graphql = {
         username
       }
     }`,
+    orders: gql `{
+      orders {
+        orderId
+        sender {
+          userId
+          username
+          firstName
+          lastName
+        }
+        receiver {
+          userId
+          username
+          firstName
+          lastName
+        }
+        senderAddress {
+          addressId
+          address
+          district
+          latitude
+          longitude
+        }
+        receiverAddress {
+          addressId
+          address
+          district
+          latitude
+          longitude
+        }
+        status
+        comments
+      }
+    }`
   },
   mutation: {
     signIn: gql`mutation($input: SignInInput) {

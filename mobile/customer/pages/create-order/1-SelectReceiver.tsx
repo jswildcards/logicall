@@ -21,10 +21,11 @@ import {
 } from "native-base";
 import { useQuery } from "react-apollo";
 import { Actions } from "react-native-router-flux";
-import schema from "../../../utils/schema";
-import Placeholder from "../../../components/Placeholder";
-import AvatarItem from "../../../components/AvatarItem";
-import FixedContainer from "../../../components/FixedContainer";
+import schema from "../../utils/schema";
+import Placeholder from "../../components/Placeholder";
+import AvatarItem from "../../components/AvatarItem";
+import FixedContainer from "../../components/FixedContainer";
+import HeaderNav from "../../components/HeaderNav";
 
 const styles = StyleSheet.create({
   col: {
@@ -102,29 +103,18 @@ function Page() {
   return (
     <Container>
       <StatusBar />
-      <Header>
-        <Left>
-          <Button onPress={() => Actions.pop()} transparent>
-            {/* <Icon ios="ios-arrow-back" name="arrow-back" /> */}
-            <Text>Back</Text>
+      <HeaderNav
+        title="Receiver"
+        subtitle="Create Order"
+        right={receiver && (
+          <Button
+            onPress={() => Actions.createOrder2SelectAddress({ receiver })}
+            transparent
+          >
+            <Text>Next</Text>
           </Button>
-        </Left>
-        <Body>
-          <Title>Receiver</Title>
-          <Subtitle>Create Order</Subtitle>
-        </Body>
-        <Right>
-          {receiver && (
-            <Button
-              onPress={() => Actions.createOrder2SelectAddress({ receiver })}
-              transparent
-            >
-              <Text>Next</Text>
-            </Button>
-          )}
-        </Right>
-      </Header>
-      {/* <View style={}> */}
+        )}
+      />
 
       {loading && <Placeholder />}
 
@@ -148,7 +138,7 @@ function Page() {
           sections={listItem}
           renderItem={({ item }) => (
             <AvatarItem
-              {...item}
+              item={item}
               button
               selected={item.userId === receiver?.userId}
               onPress={() => setReceiver({ ...item })}
@@ -167,7 +157,6 @@ function Page() {
           keyExtractor={(item) => item.userId}
         />
       )}
-      {/* </View> */}
     </Container>
   );
 }

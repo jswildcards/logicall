@@ -19,6 +19,7 @@
     "expo-font": "~8.2.1",
     "expo-status-bar": "^1.0.2",
     "graphql": "^15.4.0",
+    "moment-timezone": "^0.5.32",
     "native-base": "^2.13.14",
     "react": "~16.11.0",
     "react-apollo": "^3.1.5",

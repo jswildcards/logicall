@@ -112,13 +112,13 @@ function Page() {
                   disabled={isLoading}
                   block
                   onPress={() => {
-                setLoading(true);
-                return mutation();
-              }}
+                    setLoading(true);
+                    return mutation();
+                  }}
                 >
                   <Text>Sign In</Text>
                 </Button>
-            )}
+              )}
             </Mutation>
 
             <View style={styles.containerSignUp}>

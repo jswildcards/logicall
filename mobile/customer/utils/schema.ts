@@ -16,6 +16,12 @@ export const client = new ApolloClient({
 
 export const schema = {
   query: {
+    coordinates: gql`query($query: String, $county: String) {
+      coordinates(query: $query, county: $county){
+        latitude 
+        longitude
+      }
+    }`,
     districts: gql`{districts{districtId name}}`,
     me: gql`
       {
@@ -26,6 +32,29 @@ export const schema = {
           email
           role
           username
+          addresses {
+            addressId
+            address
+            district
+            latitude
+            longitude
+          }
+          receiveOrders {
+            orderId
+            sender {
+              userId
+              username
+              firstName
+              lastName
+            }
+            senderAddress {
+              addressId
+              address
+              district
+            }
+            status
+            createdAt
+          }
           followers {
             follower {
               userId
@@ -74,6 +103,34 @@ export const schema = {
     `,
   },
   mutation: {
+    createOrder: gql`
+      mutation createOrder($input: CreateOrderInput) {
+        createOrder(input: $input) {
+          orderId
+          sender {
+            userId
+            username
+          }
+          senderAddress {
+            addressId
+            address
+          }
+          receiver {
+            userId
+            username
+          }
+          receiverAddress {
+            addressId
+            address
+          }
+          status
+          driver {
+            userId
+            username
+          }
+        }
+      }
+    `,
     signIn: gql`
       mutation($input: SignInInput) {
         signIn(input: $input) {

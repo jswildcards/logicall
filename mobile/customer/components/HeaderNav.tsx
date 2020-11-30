@@ -1,13 +1,31 @@
 import React from "react";
-import { Body, Button, Header, Left, Right, Subtitle, Text, Title } from "native-base";
+import {
+  Body,
+  Button,
+  Header,
+  Icon,
+  Left,
+  Right,
+  Subtitle,
+  Text,
+  Title,
+} from "native-base";
 import { Actions } from "react-native-router-flux";
 
-function HeaderBackButton({ right = null, title, subtitle = null }) {
+function HeaderNav({
+  title,
+  subtitle = null,
+  right = null,
+}: {
+  title: string;
+  subtitle: string | null;
+  right: any | null;
+}) {
   return (
     <Header>
       <Left>
         <Button onPress={() => Actions.pop()} transparent>
-          <Text>Back</Text>
+          <Icon ios="ios-arrow-back" name="arrow-back" />
         </Button>
       </Left>
       <Body>
@@ -19,4 +37,4 @@ function HeaderBackButton({ right = null, title, subtitle = null }) {
   );
 }
 
-export default HeaderBackButton;
+export default HeaderNav;

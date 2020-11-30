@@ -11,12 +11,20 @@ import {
   H3,
   // Body,
   View,
+  Body,
+  Card,
+  CardItem,
+  Content,
+  List,
 } from "native-base";
 import { useQuery } from "react-apollo";
 import { Actions } from "react-native-router-flux";
-import EmptyIcon from "../../components/icons/EmptyIcon";
-import schema from "../../utils/schema";
-import NoData from "../../components/NoData";
+import moment from "moment-timezone";
+import EmptyIcon from "../components/icons/EmptyIcon";
+import schema from "../utils/schema";
+import NoData from "../components/NoData";
+import FixedContainer from "../components/FixedContainer";
+import AvatarItem from "../components/AvatarItem";
 
 const styles = StyleSheet.create({
   col: {
@@ -82,7 +90,30 @@ function Page() {
   return (
     <Container>
       <StatusBar />
-      <Text>Not Implemented Yet</Text>
+      <Content>
+        <FixedContainer pad>
+          <H3 style={{ paddingTop: 12 }}>Orders</H3>
+          {data.me.receiveOrders.map((order) => (
+            <Card>
+              <CardItem>
+                <Body>
+                  <H3>Receive</H3>
+                </Body>
+              </CardItem>
+              <AvatarItem item={order.sender} />
+              <CardItem>
+                <Body>
+                  <Text>{order.status}</Text>
+                  <Text note>
+                    {`created ${moment.tz(parseInt(order.createdAt), "Asia/Hong_Kong").format("YYYY-MM-DD HH:mm")}`}
+                  </Text>
+                </Body>
+              </CardItem>
+            </Card>
+          ))}
+          {/* <Text>{JSON.stringify(data.me.receiveOrders)}</Text> */}
+        </FixedContainer>
+      </Content>
     </Container>
   );
 }

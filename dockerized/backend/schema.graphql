@@ -5,6 +5,7 @@ type Query {
   addresses(userId: Int!): [Address]
   districts: [District]
   coordinates(query: String, county: String): LatLng
+  orders: [Order]
 }
 
 type Mutation {
@@ -13,6 +14,8 @@ type Mutation {
   signOut: String
 
   addFriend(userId: Int!): User
+
+  createOrder(input: CreateOrderInput): Order
 }
 
 type District {
@@ -101,4 +104,10 @@ input SignInInput {
   username: String!
   password: String!
   role: String!
+}
+
+input CreateOrderInput {
+  receiverId: Int
+  sendAddressId: Int
+  receiveAddressId: Int
 }

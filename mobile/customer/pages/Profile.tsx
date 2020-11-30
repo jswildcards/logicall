@@ -51,7 +51,7 @@ function Page() {
 
         <FixedContainer pad>
           <List>
-            <AvatarItem {...data.me} />
+            <AvatarItem item={data.me} />
           </List>
 
           <Mutation

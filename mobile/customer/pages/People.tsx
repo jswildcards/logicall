@@ -189,7 +189,7 @@ function ConditionRender(props) {
             lazyRefetch={lazyRefetch}
             refetch={refetch}
           >
-            <AvatarItem {...item} />
+            <AvatarItem item={item} />
           </SwipeableRow>
         )}
         renderSectionHeader={({ section }) => (
@@ -223,14 +223,14 @@ function ConditionRender(props) {
         ListHeaderComponent={(
           <Grid style={{ paddingVertical: 12 }}>
             <Row>
-              <Col>
+              {/* <Col>
                 <TouchableOpacity onPress={() => console.log("hi")}>
                   <H3 style={{ alignSelf: "center" }}>{followerNumber}</H3>
                   <Text style={{ alignSelf: "center" }}>Followers</Text>
                 </TouchableOpacity>
-              </Col>
+              </Col> */}
               <Col>
-                <TouchableOpacity onPress={() => console.log("hi")}>
+                <TouchableOpacity>
                   <H3 style={{ alignSelf: "center" }}>{followeeNumber}</H3>
                   <Text style={{ alignSelf: "center" }}>Followees</Text>
                 </TouchableOpacity>
@@ -241,7 +241,7 @@ function ConditionRender(props) {
         sections={makeList(followees.map(({ followee }) => followee))}
         renderItem={({ item }) => (
           <AvatarItem
-            {...item}
+            item={item}
             button
             onPress={() => {
               Actions.createOrder2SelectAddress({ receiver: item });

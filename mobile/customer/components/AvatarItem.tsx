@@ -3,10 +3,7 @@ import React from "react";
 
 function AvatarItem(props) {
   const {
-    userId,
-    firstName,
-    lastName,
-    username,
+    item,
     button,
     onPress,
     right,
@@ -18,13 +15,13 @@ function AvatarItem(props) {
       <Left>
         <Thumbnail
           source={{
-            uri: `https://picsum.photos/200/300?random=${userId}`,
+            uri: `https://picsum.photos/200/300?random=${item.userId}`,
           }}
         />
       </Left>
       <Body style={{ minHeight: 70, flex: 1, justifyContent: "center" }}>
-        <Text>{`${firstName} ${lastName}`}</Text>
-        <Text note>{`@${username}`}</Text>
+        <Text>{`${item.firstName} ${item.lastName}`}</Text>
+        <Text note>{`@${item.username}`}</Text>
       </Body>
       {right}
     </ListItem>
