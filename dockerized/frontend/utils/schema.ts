@@ -77,6 +77,39 @@ export const graphql = {
     }`
   },
   mutation: {
+    updateOrderStatus: gql`mutation($orderId: String, $status: String) {
+      updateOrderStatus(orderId: $orderId, status: $status) {
+        orderId
+        sender {
+          userId
+          username
+          firstName
+          lastName
+        }
+        receiver {
+          userId
+          username
+          firstName
+          lastName
+        }
+        senderAddress {
+          addressId
+          address
+          district
+          latitude
+          longitude
+        }
+        receiverAddress {
+          addressId
+          address
+          district
+          latitude
+          longitude
+        }
+        status
+        comments
+      }
+    }`,
     signIn: gql`mutation($input: SignInInput) {
       signIn(input: $input) {
         userId

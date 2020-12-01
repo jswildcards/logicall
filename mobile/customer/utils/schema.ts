@@ -47,6 +47,7 @@ export const schema = {
               username
               firstName
               lastName
+              avatarUri
             }
             senderAddress {
               addressId

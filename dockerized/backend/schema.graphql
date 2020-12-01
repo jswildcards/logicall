@@ -16,6 +16,7 @@ type Mutation {
   addFriend(userId: Int!): User
 
   createOrder(input: CreateOrderInput): Order
+  updateOrderStatus(orderId: String, status: String): Order
 }
 
 type District {

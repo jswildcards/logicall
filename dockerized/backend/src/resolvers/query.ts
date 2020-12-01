@@ -12,6 +12,7 @@ export async function users(
   return prisma.user.findMany({
     where: {
       username: { contains: search, mode: "insensitive" },
+      role: "customer",
       userId: { not: auth.userId },
       followers: {
         none: {

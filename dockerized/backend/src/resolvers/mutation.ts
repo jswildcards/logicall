@@ -13,7 +13,7 @@ export async function signUp(
   const user = await prisma.user.create({ data });
   response.cookie(CookieConfig.token, await token.assign(user), {
     httpOnly: true,
-    sameSite: "none"
+    sameSite: "none",
   });
   return user;
 }
@@ -31,7 +31,7 @@ export async function signIn(
   if (user?.password === encryptedPassword && user?.role === input.role) {
     response.cookie(CookieConfig.token, await token.assign(user), {
       httpOnly: true,
-      sameSite: "none"
+      sameSite: "none",
     });
     return user;
   }
@@ -101,4 +101,22 @@ export async function createOrder(
   });
 }
 
-export default { signUp, signIn, signOut, addFriend, createOrder };
+export async function updateOrderStatus(
+  _parent: any,
+  { orderId, status }: { orderId: string; status: string },
+  { prisma }: Context,
+) {
+  return prisma.order.update({
+    where: { orderId },
+    data: { status },
+  });
+}
+
+export default {
+  signUp,
+  signIn,
+  signOut,
+  addFriend,
+  createOrder,
+  updateOrderStatus,
+};
