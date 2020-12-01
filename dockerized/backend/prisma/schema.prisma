@@ -63,6 +63,7 @@ model User {
   username      String    @unique
   password      String
   role          role
+  avatarUri     String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now())
   deletedAt     DateTime?
@@ -83,6 +84,8 @@ model Follow {
   deletedAt  DateTime?
   followee   User      @relation("Follow_followeeIdToUser", fields: [followeeId], references: [userId])
   follower   User      @relation("Follow_followerIdToUser", fields: [followerId], references: [userId])
+
+  @@unique([followerId, followeeId], name: "Follow_followerId_followeeId_key")
 }
 
 enum role {

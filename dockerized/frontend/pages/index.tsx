@@ -9,32 +9,28 @@ import {
   Box,
   makeStyles,
   Container,
-  Breadcrumbs,
+  Card,
+  CardHeader,
 } from "@material-ui/core";
 import { Menu } from "@material-ui/icons";
-import { styled } from "@material-ui/core/styles";
 import React, { useEffect } from "react";
 import { useQuery, Mutation } from "react-apollo";
 import { useRouter } from "next/router";
-import { DataGrid } from "@material-ui/data-grid";
-import schema from "../utils/schema"; // import SignInDetection from '../containers/sign-in-detection';
+import schema from "../utils/schema";
 
-const IndexRoot = styled("div")({
-  flexGrow: 1,
-});
-
-const Loading = styled(Grid)({
-  height: "100vh",
-});
-
-const MenuButton = styled(IconButton)({
-  marginRight: "2rem",
-});
-
-const Title = styled(Typography)({
-  flexGrow: 1,
-});
 const useStyles = makeStyles({
+  root: {
+    flexGrow: 1,
+  },
+  loading: {
+    height: "100vh",
+  },
+  menuButton: {
+    marginRight: "2rem",
+  },
+  title: {
+    flexGrow: 1,
+  },
   table: {
     minWidth: 650,
   },
@@ -44,8 +40,7 @@ export default function Home() {
   // const [isSignedIn, setSignedIn] = useState(true);
   // const [isLoading, setLoading] = useState(true);
   const { loading, error, data } = useQuery(schema.query.me);
-  const { data: orders } = useQuery(schema.query.orders);
-  const classes = useStyles();
+  const styles = useStyles();
   // const [rows, setRows] = useState([
   //   {
   //     name: "Frozen yoghurt",
@@ -80,7 +75,8 @@ export default function Home() {
 
   if (loading) {
     return (
-      <Loading
+      <Grid
+        className={styles.loading}
         container
         direction="column"
         justify="center"
@@ -90,7 +86,7 @@ export default function Home() {
         <Box my={1}>
           <Typography>Loading data...</Typography>
         </Box>
-      </Loading>
+      </Grid>
     );
   }
 
@@ -98,7 +94,8 @@ export default function Home() {
     router.replace("/sign-in");
 
     return (
-      <Loading
+      <Grid
+        className={styles.loading}
         container
         direction="column"
         justify="center"
@@ -108,18 +105,18 @@ export default function Home() {
         <Box my={1}>
           <Typography>We are redirecting you to sign in page.</Typography>
         </Box>
-      </Loading>
+      </Grid>
     );
   }
 
   return (
-    <IndexRoot>
+    <div className={styles.root}>
       <AppBar position="static">
         <Toolbar>
-          <MenuButton edge="start" color="inherit" aria-label="menu">
+          <IconButton className={styles.menuButton} edge="start" color="inherit" aria-label="menu">
             <Menu />
-          </MenuButton>
-          <Title variant="h6">Dashboard</Title>
+          </IconButton>
+          <Typography className={styles.title} variant="h6">Dashboard</Typography>
           <Mutation mutation={schema.mutation.signOut} onCompleted={signOut}>
             {(mutation) => (
               <Button color="inherit" onClick={mutation}>
@@ -130,15 +127,10 @@ export default function Home() {
         </Toolbar>
       </AppBar>
       <Container>
-        <Breadcrumbs aria-label="breadcrumb">
-          <Typography color="textPrimary">Home</Typography>
-        </Breadcrumbs>
-        <DataGrid
-          rows={orders?.orders}
-          columns={[{ field: "id", headerName: "ID" }]}
-          checkboxSelection
-        />
+        <Card>
+          <CardHeader />
+        </Card>
       </Container>
-    </IndexRoot>
+    </div>
   );
 }

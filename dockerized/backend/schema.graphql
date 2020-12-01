@@ -35,6 +35,7 @@ type User {
   email: String
   username: String
   role: String
+  avatarUri: String
   receiveOrders: [Order]
   sendOrders: [Order]
   deliverOrders: [Order]

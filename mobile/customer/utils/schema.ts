@@ -31,6 +31,7 @@ export const schema = {
           lastName
           email
           role
+          avatarUri
           username
           addresses {
             addressId
@@ -63,6 +64,7 @@ export const schema = {
               email
               role
               username
+              avatarUri
             }
           }
           followees {
@@ -73,6 +75,7 @@ export const schema = {
               email
               role
               username
+              avatarUri
             }
           }
         }
@@ -87,6 +90,7 @@ export const schema = {
           email
           role
           username
+          avatarUri
         }
       }
     `,
@@ -140,6 +144,7 @@ export const schema = {
           email
           role
           username
+          avatarUri
         }
       }
     `,
@@ -152,6 +157,7 @@ export const schema = {
           email
           role
           username
+          avatarUri
         }
       }
     `,
@@ -169,6 +175,7 @@ export const schema = {
           email
           role
           username
+          avatarUri
           followers {
             follower {
               userId
@@ -177,6 +184,7 @@ export const schema = {
               email
               role
               username
+              avatarUri
             }
           }
           followees {
@@ -187,6 +195,7 @@ export const schema = {
               email
               role
               username
+              avatarUri
             }
           }
         }

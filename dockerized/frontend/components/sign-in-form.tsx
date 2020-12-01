@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { styled } from "@material-ui/core/styles";
 import { Mutation } from "react-apollo";
 import { useRouter } from "next/router";
 import {
@@ -13,6 +12,7 @@ import {
   CircularProgress,
   Snackbar,
   SnackbarContent,
+  makeStyles,
 } from "@material-ui/core";
 import {
   AccountBox,
@@ -22,30 +22,34 @@ import {
   Close,
 } from "@material-ui/icons";
 import schema from "../utils/schema";
-// import { setUser as setUserAction } from "../actions";
 
-const Wrapper = styled("div")({
-  position: "relative",
-});
-
-const ButtonProgress = styled(CircularProgress)({
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  marginTop: -12,
-  marginLeft: -12,
-});
-
-const BarContent = styled(SnackbarContent)({
-  background: "#f44336",
+const useStyles = makeStyles({
+  wrapper: {
+    position: "relative",
+  },
+  buttonProgress: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    marginTop: -12,
+    marginLeft: -12,
+  },
+  barContent: {
+    background: "#f44336",
+  },
 });
 
 export default function SignInForm() {
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const [user, setUser] = useState({ username: "", password: "", role: "admin" })
+  const [user, setUser] = useState({
+    username: "",
+    password: "",
+    role: "admin",
+  });
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const styles = useStyles();
 
   const handleClickShowPassword = () => {
     setPasswordVisibility(!isPasswordVisible);
@@ -72,7 +76,7 @@ export default function SignInForm() {
   };
 
   return (
-    <div>
+    <>
       <Box pb="1rem">
         <FormControl fullWidth>
           <InputLabel htmlFor="username">Username</InputLabel>
@@ -118,7 +122,7 @@ export default function SignInForm() {
           />
         </FormControl>
       </Box>
-      <Wrapper>
+      <div className={styles.wrapper}>
         <Mutation
           mutation={schema.mutation.signIn}
           onCompleted={signIn}
@@ -139,7 +143,9 @@ export default function SignInForm() {
             </Button>
           )}
         </Mutation>
-        {isLoading && <ButtonProgress size={24} />}
+        {isLoading && (
+          <CircularProgress className={styles.buttonProgress} size={24} />
+        )}
         <Snackbar
           anchorOrigin={{
             vertical: "bottom",
@@ -149,7 +155,8 @@ export default function SignInForm() {
           autoHideDuration={6000}
           onClose={handleClose}
         >
-          <BarContent
+          <SnackbarContent
+            className={styles.barContent}
             message="Login Failed. Please Try Again."
             action={(
               <IconButton size="small" color="inherit" onClick={handleClose}>
@@ -158,7 +165,7 @@ export default function SignInForm() {
             )}
           />
         </Snackbar>
-      </Wrapper>
-    </div>
+      </div>
+    </>
   );
 }
