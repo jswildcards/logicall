@@ -1,6 +1,7 @@
 import { Order, User, UserWhereUniqueInput } from "@prisma/client";
 import { Cookie as CookieConfig } from "../utils/config";
 import { encrypt } from "../utils/crypto";
+import { orderAssign } from "../utils/order-assign";
 import token from "../utils/token";
 import { Context } from "../utils/types";
 
@@ -106,6 +107,9 @@ export async function updateOrderStatus(
   { orderId, status }: { orderId: string; status: string },
   { prisma }: Context,
 ) {
+  if(status === "Approved")
+    orderAssign();
+
   return prisma.order.update({
     where: { orderId },
     data: { status },

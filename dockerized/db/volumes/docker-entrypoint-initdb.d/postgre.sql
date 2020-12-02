@@ -1,4 +1,6 @@
 CREATE TYPE role AS ENUM ('customer', 'admin', 'driver');
+CREATE TYPE status AS ENUM('Pending', 'Approved', 'Rejected', 'Cancelled', 'Assigned', 'Collecting', 'Collected', 'Delivering', 'Delivered', 'Verified');
+CREATE TYPE shift AS ENUM('AM', 'PM');
 
 CREATE TABLE "User" (
   "userId"    SERIAL PRIMARY KEY NOT NULL,
@@ -37,6 +39,14 @@ CREATE TABLE "Address" (
   "deletedAt"     TIMESTAMP NULL
 );
 
+CREATE TABLE "Depot" (
+  "depotId"       SERAIL PRIMARY KEY NOT NULL,
+  "district"      VARCHAR(255) NULL,
+  "createdAt"     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt"     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "deletedAt"     TIMESTAMP NULL
+);
+
 CREATE TABLE "Order" (
   "orderId"           VARCHAR(255) PRIMARY KEY NOT NULL,
   "senderId"          INTEGER NOT NULL REFERENCES "User"("userId"),
@@ -44,7 +54,9 @@ CREATE TABLE "Order" (
   "receiverId"        INTEGER NOT NULL REFERENCES "User"("userId"),
   "receiveAddressId"  INTEGER NOT NULL REFERENCES "Address"("addressId"),
   "driverId"          INTEGER NULL REFERENCES "User"("userId"),
-  "status"            TEXT NULL,
+  "weight"            REAL NULL,
+  "depotId"           INTEGER NULL REFERENCES "Depot"("depotId"),
+  "status"            STATUS NULL,
   "qrcode"            TEXT NULL,
   "comments"          TEXT NULL,
   "createdAt"         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -61,6 +73,17 @@ CREATE TABLE "OrderLog" (
   "updatedAt"   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "deletedAt"   TIMESTAMP NULL
 );
+
+CREATE TABLE "Job" (
+  "jobId"           SERIAL PRIMARY KEY NOT NULL,
+  "driverId"        INTEGER NOT NULL REFERENCES "User"("userId"),
+  "shift"           SHIFT NULL,
+  "district"        VARCHAR(255) NULL,
+  "totalWeight"     REAL NOT NULL DEFAULT 0,
+  "createdAt"       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt"       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "deletedAt"       TIMESTAMP NULL
+)
 
 CREATE FUNCTION "OrderLogProcedure"() RETURNS TRIGGER AS $OrderLog$
   BEGIN
@@ -176,16 +199,16 @@ INSERT INTO "User"("avatarUri", "firstName", "lastName", "email", "role", "usern
 ('https://picsum.photos/id/69/200', 'Elli', 'Lepisto', 'elli.lepisto@example.com', 'driver', 'redzebra144', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '82272941'),
 ('https://picsum.photos/id/70/200', 'Tristan', 'Olivier', 'tristan.olivier@example.com', 'driver', 'bigleopard434', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '17472516'),
 ('https://picsum.photos/id/71/200', 'Megan', 'Hart', 'megan.hart@example.com', 'driver', 'crazybutterfly331', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '82897565'),
-('https://picsum.photos/id/72/200', 'Vanessa', 'Roberts', 'vanessa.roberts@example.com', 'customer', 'sadsnake795', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '50249922'),
-('https://picsum.photos/id/73/200', 'Mina', 'Opstad', 'mina.opstad@example.com', 'customer', 'goldenbird864', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '84560747'),
-('https://picsum.photos/id/74/200', 'Tristan', 'Martin', 'tristan.martin@example.com', 'customer', 'crazyrabbit561', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '34519117'),
-('https://picsum.photos/id/75/200', 'Georgia', 'Wang', 'georgia.wang@example.com', 'customer', 'bigsnake862', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '69065416'),
-('https://picsum.photos/id/76/200', 'Bernard', 'Carpenter', 'bernard.carpenter@example.com', 'customer', 'angrybird110', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '86304360'),
-('https://picsum.photos/id/77/200', 'Nathanael', 'De Weerd', 'nathanael.deweerd@example.com', 'customer', 'sadfish374', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '33863743'),
-('https://picsum.photos/id/78/200', 'Chris', 'Laurent', 'chris.laurent@example.com', 'customer', 'silverostrich843', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '96967828'),
-('https://picsum.photos/id/79/200', 'Orlanda', 'Rezende', 'orlanda.rezende@example.com', 'customer', 'blackostrich904', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '29242423'),
-('https://picsum.photos/id/80/200', 'Cameron', 'Chen', 'cameron.chen@example.com', 'customer', 'tinydog377', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '32529155'),
-('https://picsum.photos/id/81/200', 'Bertha', 'Bryant', 'bertha.bryant@example.com', 'customer', 'crazydog884', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '46276890'),
+('https://picsum.photos/id/72/200', 'Vanessa', 'Roberts', 'vanessa.roberts@example.com', 'driver', 'sadsnake795', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '50249922'),
+('https://picsum.photos/id/73/200', 'Mina', 'Opstad', 'mina.opstad@example.com', 'driver', 'goldenbird864', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '84560747'),
+('https://picsum.photos/id/74/200', 'Tristan', 'Martin', 'tristan.martin@example.com', 'driver', 'crazyrabbit561', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '34519117'),
+('https://picsum.photos/id/75/200', 'Georgia', 'Wang', 'georgia.wang@example.com', 'driver', 'bigsnake862', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '69065416'),
+('https://picsum.photos/id/76/200', 'Bernard', 'Carpenter', 'bernard.carpenter@example.com', 'driver', 'angrybird110', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '86304360'),
+('https://picsum.photos/id/77/200', 'Nathanael', 'De Weerd', 'nathanael.deweerd@example.com', 'driver', 'sadfish374', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '33863743'),
+('https://picsum.photos/id/78/200', 'Chris', 'Laurent', 'chris.laurent@example.com', 'driver', 'silverostrich843', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '96967828'),
+('https://picsum.photos/id/79/200', 'Orlanda', 'Rezende', 'orlanda.rezende@example.com', 'driver', 'blackostrich904', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '29242423'),
+('https://picsum.photos/id/80/200', 'Cameron', 'Chen', 'cameron.chen@example.com', 'driver', 'tinydog377', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '32529155'),
+('https://picsum.photos/id/81/200', 'Bertha', 'Bryant', 'bertha.bryant@example.com', 'driver', 'crazydog884', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '46276890'),
 ('https://picsum.photos/id/82/200', 'Francisco', 'Elliott', 'francisco.elliott@example.com', 'customer', 'goldenzebra325', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '76308001'),
 ('https://picsum.photos/id/83/200', 'Ide', 'Van den Boorn', 'ide.vandenboorn@example.com', 'customer', 'blackfrog994', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '36649448'),
 ('https://picsum.photos/id/84/200', 'Greg', 'Holt', 'greg.holt@example.com', 'customer', 'greenmouse149', 'e1f3ed9c4fd35d621584356eff577be55e1025b7b18a6a09a7e06b28fcff7ad3', '75854296'),
