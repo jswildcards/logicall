@@ -8,7 +8,6 @@ import {
   Typography,
   Box,
   makeStyles,
-  Container,
   Card,
   CardContent,
   ListItemText,
@@ -16,6 +15,7 @@ import {
   Divider,
   Modal,
 } from "@material-ui/core";
+import { Container } from "@chakra-ui/react"
 import { ArrowForward, Menu } from "@material-ui/icons";
 import React, { useEffect, useState } from "react";
 import { useQuery, Mutation } from "react-apollo";

@@ -4,6 +4,7 @@ import { encrypt } from "../utils/crypto";
 import { orderAssign } from "../utils/order-assign";
 import token from "../utils/token";
 import { Context } from "../utils/types";
+import { setCookie } from '../utils/cookies'
 
 export async function signUp(
   _: any,
@@ -12,7 +13,7 @@ export async function signUp(
 ) {
   const data = { ...input, password: encrypt(input.password) };
   const user = await prisma.user.create({ data });
-  response.cookie(CookieConfig.token, await token.assign(user), {
+  setCookie(response, CookieConfig.token, await token.assign(user), {
     httpOnly: true,
     sameSite: "none",
   });
@@ -22,15 +23,15 @@ export async function signUp(
 export async function signIn(
   _: any,
   { input }: { input: User },
-  { response, prisma }: Context,
+  { prisma, response }: Context,
 ) {
   const encryptedPassword = encrypt(input.password);
-  const user = await prisma.user.findOne({
+  const user = await prisma.user.findUnique({
     where: { username: input.username },
   });
 
   if (user?.password === encryptedPassword && user?.role === input.role) {
-    response.cookie(CookieConfig.token, await token.assign(user), {
+    setCookie(response, CookieConfig.token, await token.assign(user), {
       httpOnly: true,
       sameSite: "none",
     });
@@ -41,7 +42,7 @@ export async function signIn(
 }
 
 export async function signOut(_parent: any, _args: any, { response }: Context) {
-  response.clearCookie(CookieConfig.token);
+  setCookie(response, CookieConfig.token, "", { maxAge: 0 });
   return "Logout Success";
 }
 
