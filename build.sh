@@ -1,4 +1,9 @@
 case $1 in
+  init)
+    cp ./.env.example ./.env
+    cp ./web/.env.example ./web/.env
+    cp ./app/customer/.env.example ./app/customer/.env
+    ;;
   dev)
     docker kill dev
     docker rm dev
@@ -19,6 +24,7 @@ case $1 in
 Usage: sh ./build.sh COMMAND
 
 Commands:
+  init    initialize each app environment variables
   dev     build docker development-stage database
   test    build docker environment for testing the whole web app (including APIs)
   deploy  build deploy docker containers using docker swarm
