@@ -1,8 +1,12 @@
+#!/bin/bash
+
 case $1 in
   init)
-    cp ./.env.example ./.env
-    cp ./web/.env.example ./web/.env
-    cp ./app/customer/.env.example ./app/customer/.env
+    for dir in '.' './web' './app/customer'
+    do
+      cp "$dir/.env.example" "$dir/.env"
+      [ -f "$dir/.env" ] && echo "Created: $dir/.env"
+    done
     ;;
   dev)
     docker kill dev
