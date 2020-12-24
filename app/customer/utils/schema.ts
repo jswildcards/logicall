@@ -5,7 +5,7 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import Constants from "expo-constants";
 
 const httpLink = createHttpLink(
-  { uri: `${Constants.manifest.extra.host}/api` },
+  { uri: `${Constants.manifest.extra.host}/api`, credentials: "include" },
   // { uri, credentials: 'include' }
 );
 

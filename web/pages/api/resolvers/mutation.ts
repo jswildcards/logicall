@@ -1,5 +1,5 @@
-import type { status as Status } from "@prisma/client";
-import { Order, User, UserWhereUniqueInput } from "@prisma/client";
+import type { status as Status, Prisma } from "@prisma/client";
+import { Order, User } from "@prisma/client";
 import { Cookie as CookieConfig } from "../utils/config";
 import { encrypt } from "../utils/crypto";
 import token from "../utils/token";
@@ -48,7 +48,7 @@ export async function signOut(_parent: any, _args: any, { response }: Context) {
 
 export async function addFriend(
   _parent: any,
-  { userId }: UserWhereUniqueInput,
+  { userId }: Prisma.UserWhereUniqueInput,
   { auth, prisma, response }: Context,
 ) {
   if (!auth?.userId) {
@@ -63,7 +63,7 @@ export async function addFriend(
     },
   });
 
-  const result = await prisma.user.findOne({
+  const result = await prisma.user.findUnique({
     where: { userId: auth.userId },
     include: {
       receiveOrders: true,

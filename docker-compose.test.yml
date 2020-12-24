@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  db:
+    container_name: db
+    expose:
+      - 5432
+
+  web:
+    container_name: web
+    build:
+      context: ./web

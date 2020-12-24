@@ -2,23 +2,15 @@ version: "3.8"
 
 services:
   db:
-    container_name: db
     env_file: .env
     image: postgres:13.1-alpine
     volumes:
       - ./volumes/:/docker-entrypoint-initdb.d/
-    expose:
-      - 5432
 
   web:
-    container_name: web
-    build:
-      context: ./web
     image: logicall_web:latest
     env_file: .env
     depends_on:
       - "db"
     ports:
       - "80:3000"
-    deploy:
-      replicas: 2

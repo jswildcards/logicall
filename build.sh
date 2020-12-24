@@ -9,18 +9,20 @@ case $1 in
     done
     ;;
   dev)
-    docker kill dev
-    docker rm dev
-    docker run --name dev \
-      -v $(pwd)/volumes/:/docker-entrypoint-initdb.d/ \
-      --env-file ./web/.env -dp 5432:5432 postgres:13.1-alpine
+    docker-compose -p dev -f docker-compose.yml -f docker-compose.dev.yml up -d db adminer
     ;;
   test)
-    docker-compose -p test build --force-rm --compress --no-cache
-    docker-compose -p test up -d
+    docker-compose -p test -f docker-compose.yml -f docker-compose.test.yml build --force-rm --compress --no-cache db web
+    docker-compose -p test -f docker-compose.yml -f docker-compose.test.yml up -d db web
     ;;
-  deploy)
-    docker stack deploy --compose-file=docker-compose.yml deploy
+  prod)
+    docker kill db web
+    docker swarm init
+    docker stack deploy -c docker-compose.yml -c stack.yml prod
+    ;;
+  exit-prod)
+    docker stack rm prod
+    docker swarm leave --force
     ;;
   *)
     cat << EOF 
@@ -28,10 +30,11 @@ case $1 in
 Usage: sh ./build.sh COMMAND
 
 Commands:
-  init    initialize each app environment variables
-  dev     build docker development-stage database
-  test    build docker environment for testing the whole web app (including APIs)
-  deploy  build deploy docker containers using docker swarm
+  init        initialize each app environment variables
+  dev         build docker development-stage database
+  test        build docker environment for testing the whole web app (including APIs)
+  prod        build deploy docker containers using docker swarm
+  exit-prod   exit production mode
 
 EOF
     ;;

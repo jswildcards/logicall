@@ -61,7 +61,7 @@ function Page() {
 
   const signInErrorHandler = (err: ApolloError) => {
     setLoading(false);
-    const msg = err.message.replace("GraphQL error: ", "");
+    const msg = err.message;
     setError(msg);
     Toast.show({ text: msg, buttonText: "OK", type: "danger", duration: 6000 });
   };
