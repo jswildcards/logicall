@@ -2,177 +2,102 @@ import React, { useState } from "react";
 import { useMutation } from "react-apollo";
 import { useRouter } from "next/router";
 import {
-  Box,
-  Input,
-  InputAdornment,
-  IconButton,
-  InputLabel,
-  FormControl,
+  Alert,
+  AlertIcon,
   Button,
-  CircularProgress,
-  Snackbar,
-  SnackbarContent,
-  makeStyles,
-} from "@material-ui/core";
+  Icon,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
+  Stack,
+} from "@chakra-ui/react";
 import {
-  AccountBox,
-  Lock,
-  Visibility,
-  VisibilityOff,
-  Close,
-} from "@material-ui/icons";
+  MdAccountBox,
+  MdLock,
+  MdVisibility,
+  MdVisibilityOff,
+} from "react-icons/md";
 import schema from "../utils/schema";
 
-const useStyles = makeStyles({
-  wrapper: {
-    position: "relative",
-  },
-  buttonProgress: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    marginTop: -12,
-    marginLeft: -12,
-  },
-  barContent: {
-    background: "#f44336",
-  },
-});
-
 export default function SignInForm() {
+  const router = useRouter();
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [user, setUser] = useState({
     username: "",
     password: "",
     role: "admin",
   });
-  const [open, setOpen] = useState(false);
-  const router = useRouter();
-  const styles = useStyles();
   const [signIn] = useMutation(schema.mutation.signIn, {
     onCompleted: () => router.replace("/"),
+    onError: (err) => {
+      setError(err.message);
+      setLoading(false);
+    },
   });
-
-  const handleClickShowPassword = () => {
-    setPasswordVisibility(!isPasswordVisible);
-  };
-
   const trySignIn = () => {
     setLoading(true);
-    signIn({
-      variables: {
-        input: { ...user },
-      },
-    });
-  };
-
-  // const signIn = () => {
-  //   // setLoading(true);
-
-  //   // const userFetched = await fetch("/api/users/sign-in", {
-  //   //   method: "POST",
-  //   //   headers: {
-  //   //     "Content-Type": "application/json",
-  //   //   },
-  //   //   body: JSON.stringify({ username, password }),
-  //   // }).then((res) => res.json()).catch(() => { setOpen(true); setLoading(false) });
-
-  //   // setUser({ ...user });
-  //   router.replace("/");
-  //   // setLoading(false);
-  // };
-
-  const handleClose = () => {
-    setOpen(false);
+    signIn({ variables: { input: { ...user } } });
   };
 
   return (
-    <>
-      <Box pb="1rem">
-        <FormControl fullWidth>
-          <InputLabel htmlFor="username">Username</InputLabel>
-          <Input
-            fullWidth
-            disabled={isLoading}
-            startAdornment={(
-              <InputAdornment position="start">
-                <AccountBox />
-              </InputAdornment>
-            )}
-            id="username"
-            value={user.username}
-            onChange={(e) => setUser({ ...user, username: e.target.value })}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") trySignIn();
-            }}
-          />
-        </FormControl>
-      </Box>
-      <Box pb="1rem">
-        <FormControl fullWidth>
-          <InputLabel htmlFor="password">Password</InputLabel>
-          <Input
-            id="password"
-            disabled={isLoading}
-            startAdornment={(
-              <InputAdornment position="start">
-                <Lock />
-              </InputAdornment>
-            )}
-            endAdornment={(
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleClickShowPassword}
-                >
-                  {isPasswordVisible ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </InputAdornment>
-            )}
-            value={user.password}
-            type={isPasswordVisible ? "text" : "password"}
-            onChange={(e) => setUser({ ...user, password: e.target.value })}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") trySignIn();
-            }}
-          />
-        </FormControl>
-      </Box>
-      <div className={styles.wrapper}>
-        <Button
-          variant="contained"
-          fullWidth
-          color="primary"
+    <Stack spacing={4}>
+      {error && (
+        <Alert status="error">
+          <AlertIcon />
+          {error}
+        </Alert>
+      )}
+
+      <InputGroup>
+        <InputLeftElement pointerEvents="none">
+          <Icon as={MdAccountBox} color="gray.300" />
+        </InputLeftElement>
+        <Input
           disabled={isLoading}
-          onClick={() => trySignIn()}
-        >
-          Sign In
-        </Button>
-        {isLoading && (
-          <CircularProgress className={styles.buttonProgress} size={24} />
-        )}
-        <Snackbar
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
+          placeholder="Username"
+          value={user.username}
+          onChange={(e) => setUser({ ...user, username: e.target.value })}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") trySignIn();
           }}
-          open={open}
-          autoHideDuration={6000}
-          onClose={handleClose}
-        >
-          <SnackbarContent
-            className={styles.barContent}
-            message="Login Failed. Please Try Again."
-            action={(
-              <IconButton size="small" color="inherit" onClick={handleClose}>
-                <Close fontSize="small" />
-              </IconButton>
-            )}
-          />
-        </Snackbar>
-      </div>
-    </>
+        />
+      </InputGroup>
+
+      <InputGroup>
+        <InputLeftElement pointerEvents="none">
+          <Icon as={MdLock} color="gray.300" />
+        </InputLeftElement>
+        <Input
+          onChange={(e) => setUser({ ...user, password: e.target.value })}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") trySignIn();
+          }}
+          disabled={isLoading}
+          type={isPasswordVisible ? "text" : "password"}
+          placeholder="Password"
+          value={user.password}
+        />
+        <InputRightElement width="4.5rem">
+          <Button>
+            <Icon
+              as={isPasswordVisible ? MdVisibility : MdVisibilityOff}
+              onClick={() => setPasswordVisibility(!isPasswordVisible)}
+            />
+          </Button>
+        </InputRightElement>
+      </InputGroup>
+
+      <Button
+        w="100%"
+        colorScheme="blue"
+        isLoading={isLoading}
+        onClick={() => trySignIn()}
+      >
+        Sign In
+      </Button>
+    </Stack>
   );
 }

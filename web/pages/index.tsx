@@ -1,17 +1,22 @@
 import {
-  Button,
-  CircularProgress,
-  Typography,
   Box,
-  makeStyles,
-  Card,
-  CardContent,
-  ListItemText,
-  CardActions,
+  Container,
+  Heading,
+  Grid,
+  GridItem,
+  Flex,
+  Text,
   Divider,
+  Button,
   Modal,
-} from "@material-ui/core";
-import { Container, Heading, Grid, GridItem, Flex } from "@chakra-ui/react";
+  useDisclosure,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+} from "@chakra-ui/react";
 import { ArrowForward } from "@material-ui/icons";
 import React, { useState } from "react";
 import { useQuery, useMutation } from "react-apollo";
@@ -19,53 +24,17 @@ import { useRouter } from "next/router";
 import schema from "../utils/schema";
 import AppBar from "../components/appbar";
 
-const useStyles = makeStyles({
-  root: {
-    flexGrow: 1,
-  },
-  loading: {
-    height: "100vh",
-  },
-  menuButton: {
-    marginRight: "2rem",
-  },
-  title: {
-    flexGrow: 1,
-  },
-  table: {
-    minWidth: 650,
-  },
-  paddingVertical: {
-    padding: "12px 0",
-  },
-  end: {
-    textAlign: "end",
-  },
-  marginLeft: {
-    marginLeft: "auto",
-  },
-  center: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  paddingAll: {
-    padding: 12,
-  },
-});
 export default function Home() {
   const router = useRouter();
   const { data: me, loading, error } = useQuery(schema.query.me);
   const { data: orders, refetch } = useQuery(schema.query.orders);
-  const [open, setOpen] = useState(false);
-  const handleModal = (state: boolean) => setOpen(state);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [updateOrderStatus] = useMutation(schema.mutation.updateOrderStatus, {
     onCompleted: () => {
       refetch();
-      handleModal(false);
+      onClose();
     },
   });
-  const styles = useStyles();
   const [orderActions, setOrderActions] = useState({
     orderId: null,
     action: null,
@@ -73,155 +42,123 @@ export default function Home() {
   });
 
   if (loading) {
-    return (
-      <Grid
-        className={styles.loading}
-        container
-        direction="column"
-        justify="center"
-        alignItems="center"
-      >
-        <CircularProgress />
-        <Box my={1}>
-          <Typography>Loading data...</Typography>
-        </Box>
-      </Grid>
-    );
+    return <></>;
   }
 
   if (error) {
     router.replace("/sign-in");
-
-    return (
-      <Grid
-        className={styles.loading}
-        container
-        direction="column"
-        justify="center"
-        alignItems="center"
-      >
-        <CircularProgress />
-        <Box my={1}>
-          <Typography>We are redirecting you to sign in page.</Typography>
-        </Box>
-      </Grid>
-    );
+    return <></>;
   }
 
   return (
-    <div className={styles.root}>
+    <>
       <AppBar user={me} />
       <Container maxW="6xl">
-        <Heading color="blue.400" paddingY="3">
+        <Heading color="blue.400" py="3">
           Incoming Orders
         </Heading>
         {orders?.orders?.map((order) => (
-          <Box width="100%">
-            <Heading color="gray.400" size="sm" paddingBottom="1">
+          <Box
+            border="1px"
+            borderColor="gray.300"
+            borderRadius="md"
+            p="3"
+            width="100%"
+          >
+            <Heading color="gray.500" size="sm" pb="1">
               {order.orderId}
             </Heading>
             <Heading
               color={order.status === "Rejected" ? "red.500" : "green.500"}
               size="sm"
-              paddingBottom="1"
+              pb="1"
             >
               {order.status}
             </Heading>
-            <Grid templateColumns="repeat(5, 1fr)" paddingY="3">
+            <Grid templateColumns="repeat(5, 1fr)" py="3">
               <GridItem colSpan={2}>
-                <ListItemText
-                  primary={order.senderAddress.address}
-                  secondary={`@${order.sender.username}`}
-                />
+                <Text>{order.senderAddress.address}</Text>
+                <Text color="gray.500">
+                  @
+                  {order.sender.username}
+                </Text>
               </GridItem>
               <GridItem colSpan={1}>
                 <Flex h="100%" justify="center" align="center">
                   <ArrowForward />
                 </Flex>
               </GridItem>
-              <GridItem colSpan={2}>
-                <ListItemText
-                  className={styles.end}
-                  primary={order.receiverAddress.address}
-                  secondary={`@${order.receiver.username}`}
-                />
+              <GridItem colSpan={2} textAlign="right">
+                <Text>{order.receiverAddress.address}</Text>
+                <Text color="gray.500">
+                  @
+                  {order.receiver.username}
+                </Text>
               </GridItem>
             </Grid>
             <Divider />
-            <Button
-              variant="contained"
-              color="secondary"
-              className={styles.marginLeft}
-              onClick={() => {
-                setOrderActions({
-                  orderId: order.orderId,
-                  action: "Reject",
-                  status: "Rejected",
-                });
-                handleModal(true);
-              }}
-            >
-              Reject
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              className={styles.marginLeft}
-              onClick={() => {
-                setOrderActions({
-                  orderId: order.orderId,
-                  action: "Approve",
-                  status: "Approved",
-                });
-                handleModal(true);
-              }}
-            >
-              Approve
-            </Button>
+            <Flex justify="right" pt="3">
+              <Button
+                variant="ghost"
+                colorScheme="red"
+                mr="3"
+                onClick={() => {
+                  setOrderActions({
+                    orderId: order.orderId,
+                    action: "Reject",
+                    status: "Rejected",
+                  });
+                  onOpen();
+                }}
+              >
+                Reject
+              </Button>
+              <Button
+                colorScheme="green"
+                onClick={() => {
+                  setOrderActions({
+                    orderId: order.orderId,
+                    action: "Approve",
+                    status: "Approved",
+                  });
+                  onOpen();
+                }}
+              >
+                Approve
+              </Button>
+            </Flex>
           </Box>
         ))}
-        <Modal
-          className={styles.center}
-          open={open}
-          onClose={() => handleModal(false)}
-        >
-          <Card className={styles.paddingAll}>
-            <CardContent>
-              <Typography variant="h5" gutterBottom>
-                {`${orderActions.action} ${orderActions.orderId}?`}
-              </Typography>
-              <Typography gutterBottom>
-                {`Do you want to ${orderActions.action} order ${orderActions.orderId}?`}
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button
-                className={styles.marginLeft}
-                onClick={() => handleModal(false)}
-              >
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>
+              {`${orderActions.action} ${orderActions.orderId}?`}
+            </ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              {`Do you want to ${orderActions.action} order ${orderActions.orderId}?`}
+            </ModalBody>
+            <ModalFooter>
+              <Button bg="white" variant="ghost" mr="3" onClick={onClose}>
                 Back
               </Button>
               <Button
-                variant="contained"
-                color={
-                  orderActions.action === "Reject" ? "secondary" : "primary"
-                }
-                className={styles.marginLeft}
+                colorScheme={orderActions.action === "Reject" ? "red" : "green"}
                 onClick={() =>
                   updateOrderStatus({
                     variables: {
                       orderId: orderActions.orderId,
                       status: orderActions.status,
                     },
-                  })
-                }
+                  })}
               >
                 {orderActions.action}
               </Button>
-            </CardActions>
-          </Card>
+            </ModalFooter>
+          </ModalContent>
         </Modal>
       </Container>
-    </div>
+    </>
   );
 }

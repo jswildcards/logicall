@@ -37,7 +37,7 @@ function AppBar({ user }) {
       justify="space-between"
       wrap="wrap"
       padding="1.5rem"
-      bg="blue.400"
+      bg="blue.500"
       color="white"
     >
       <Flex align="center" direction="column" mr={5}>
@@ -59,15 +59,15 @@ function AppBar({ user }) {
         alignItems="center"
         flexGrow={1}
       >
-        <MenuItems>Orders</MenuItems>
-        <MenuItems>Drivers</MenuItems>
+        <MenuItems><Button variant="link" color="white">Orders</Button></MenuItems>
+        <MenuItems><Button variant="link" color="white">Drivers</Button></MenuItems>
       </Box>
 
       <Box display={{ sm: show ? "block" : "none", md: "flex" }}>
         <Menu>
           <MenuButton
             as={Button}
-            color="blue.400"
+            colorScheme="blue"
             rightIcon={<ChevronDownIcon />}
           >
             {user?.me?.username}
