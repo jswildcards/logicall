@@ -45,7 +45,7 @@ export default function SignInForm() {
   return (
     <Stack spacing={4}>
       {error && (
-        <Alert status="error">
+        <Alert borderRadius="md" status="error">
           <AlertIcon />
           {error}
         </Alert>
@@ -80,12 +80,12 @@ export default function SignInForm() {
           placeholder="Password"
           value={user.password}
         />
-        <InputRightElement width="4.5rem">
-          <Button>
-            <Icon
-              as={isPasswordVisible ? MdVisibility : MdVisibilityOff}
-              onClick={() => setPasswordVisibility(!isPasswordVisible)}
-            />
+        <InputRightElement>
+          <Button
+            variant="ghost"
+            onClick={() => setPasswordVisibility(!isPasswordVisible)}
+          >
+            <Icon as={isPasswordVisible ? MdVisibility : MdVisibilityOff} />
           </Button>
         </InputRightElement>
       </InputGroup>

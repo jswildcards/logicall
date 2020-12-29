@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import {
   Box,
   Heading,
@@ -14,7 +15,7 @@ import {
 import { useMutation } from "react-apollo";
 import { useRouter } from "next/router";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { MdMenu } from "react-icons/md"
+import { MdMenu } from "react-icons/md";
 import schema from "../utils/schema";
 
 const MenuItems = ({ children }) => (
@@ -23,7 +24,6 @@ const MenuItems = ({ children }) => (
   </Text>
 );
 
-// Note: This code could be better, so I'd recommend you to understand how I solved and you could write yours better :)
 function AppBar({ user }) {
   const router = useRouter();
   const [show, setShow] = React.useState(false);
@@ -59,8 +59,20 @@ function AppBar({ user }) {
         alignItems="center"
         flexGrow={1}
       >
-        <MenuItems><Button variant="link" color="white">Orders</Button></MenuItems>
-        <MenuItems><Button variant="link" color="white">Drivers</Button></MenuItems>
+        <MenuItems>
+          <Link href="/orders">
+            <Button variant="link" color="white">
+              Orders
+            </Button>
+          </Link>
+        </MenuItems>
+        <MenuItems>
+          <Link href="/drivers">
+            <Button variant="link" color="white">
+              Drivers
+            </Button>
+          </Link>
+        </MenuItems>
       </Box>
 
       <Box display={{ sm: show ? "block" : "none", md: "flex" }}>

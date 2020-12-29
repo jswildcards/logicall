@@ -1,12 +1,6 @@
 import {
-  Box,
   Container,
   Heading,
-  Grid,
-  GridItem,
-  Flex,
-  Text,
-  Divider,
   Button,
   Modal,
   useDisclosure,
@@ -16,13 +10,14 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalFooter,
+  Stack,
 } from "@chakra-ui/react";
-import { ArrowForward } from "@material-ui/icons";
 import React, { useState } from "react";
 import { useQuery, useMutation } from "react-apollo";
 import { useRouter } from "next/router";
 import schema from "../utils/schema";
 import AppBar from "../components/appbar";
+import OrderCard from "../components/order-card";
 
 export default function Home() {
   const router = useRouter();
@@ -53,82 +48,31 @@ export default function Home() {
   return (
     <>
       <AppBar user={me} />
-      <Container maxW="6xl">
-        <Heading color="blue.400" py="3">
-          Incoming Orders
-        </Heading>
-        {orders?.orders?.map((order) => (
-          <Box
-            border="1px"
-            borderColor="gray.300"
-            borderRadius="md"
-            p="3"
-            width="100%"
-          >
-            <Heading color="gray.500" size="sm" pb="1">
-              {order.orderId}
-            </Heading>
-            <Heading
-              color={order.status === "Rejected" ? "red.500" : "green.500"}
-              size="sm"
-              pb="1"
-            >
-              {order.status}
-            </Heading>
-            <Grid templateColumns="repeat(5, 1fr)" py="3">
-              <GridItem colSpan={2}>
-                <Text>{order.senderAddress.address}</Text>
-                <Text color="gray.500">
-                  @
-                  {order.sender.username}
-                </Text>
-              </GridItem>
-              <GridItem colSpan={1}>
-                <Flex h="100%" justify="center" align="center">
-                  <ArrowForward />
-                </Flex>
-              </GridItem>
-              <GridItem colSpan={2} textAlign="right">
-                <Text>{order.receiverAddress.address}</Text>
-                <Text color="gray.500">
-                  @
-                  {order.receiver.username}
-                </Text>
-              </GridItem>
-            </Grid>
-            <Divider />
-            <Flex justify="right" pt="3">
-              <Button
-                variant="ghost"
-                colorScheme="red"
-                mr="3"
-                onClick={() => {
-                  setOrderActions({
-                    orderId: order.orderId,
-                    action: "Reject",
-                    status: "Rejected",
-                  });
-                  onOpen();
-                }}
-              >
-                Reject
-              </Button>
-              <Button
-                colorScheme="green"
-                onClick={() => {
-                  setOrderActions({
-                    orderId: order.orderId,
-                    action: "Approve",
-                    status: "Approved",
-                  });
-                  onOpen();
-                }}
-              >
-                Approve
-              </Button>
-            </Flex>
-          </Box>
-        ))}
+      <Container maxW="6xl" py="3">
+        <Stack spacing="4">
+          <Heading color="blue.400">Incoming Orders</Heading>
+          {orders?.orders?.map((order) => (
+            <OrderCard
+              order={order}
+              onApprove={() => {
+                setOrderActions({
+                  orderId: order.orderId,
+                  action: "Approve",
+                  status: "Approved",
+                });
+                onOpen();
+              }}
+              onReject={() => {
+                setOrderActions({
+                  orderId: order.orderId,
+                  action: "Reject",
+                  status: "Rejected",
+                });
+                onOpen();
+              }}
+            />
+          ))}
+        </Stack>
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
@@ -137,7 +81,7 @@ export default function Home() {
             </ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              {`Do you want to ${orderActions.action} order ${orderActions.orderId}?`}
+              {`Do you want to ${orderActions.action?.toLowerCase()} order ${orderActions.orderId}?`}
             </ModalBody>
             <ModalFooter>
               <Button bg="white" variant="ghost" mr="3" onClick={onClose}>
