@@ -18,10 +18,12 @@ import { useRouter } from "next/router";
 import schema from "../utils/schema";
 import AppBar from "../components/appbar";
 import OrderCard from "../components/order-card";
+import { client } from "./_app";
 
 export default function Home() {
   const router = useRouter();
-  const { data: me, loading, error } = useQuery(schema.query.me);
+  const { data: me, loading, error } = useQuery(schema.query.me,);
+  const [signOut] = useMutation(schema.mutation.signOut);
   const { data: orders, refetch } = useQuery(schema.query.orders);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [updateOrderStatus] = useMutation(schema.mutation.updateOrderStatus, {
@@ -47,10 +49,18 @@ export default function Home() {
 
   return (
     <>
-      <AppBar user={me} />
+      <AppBar
+        user={me}
+        signOut={() => {
+          signOut().then(() => {
+            client.cache.reset();
+            router.replace("/sign-in");
+          });
+        }}
+      />
       <Container maxW="6xl" py="3">
         <Stack spacing="4">
-          <Heading color="blue.400">Incoming Orders</Heading>
+          <Heading color="blue.400">Orders</Heading>
           {orders?.orders?.map((order) => (
             <OrderCard
               order={order}
@@ -81,7 +91,9 @@ export default function Home() {
             </ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              {`Do you want to ${orderActions.action?.toLowerCase()} order ${orderActions.orderId}?`}
+              {`Do you want to ${orderActions.action?.toLowerCase()} order ${
+                orderActions.orderId
+              }?`}
             </ModalBody>
             <ModalFooter>
               <Button bg="white" variant="ghost" mr="3" onClick={onClose}>

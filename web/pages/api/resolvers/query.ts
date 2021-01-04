@@ -7,7 +7,7 @@ import { Context } from "../utils/types";
 export async function users(
   _parent: any,
   { search }: { search: string },
-  { auth, prisma }: Context,
+  { auth, prisma }: Context
 ) {
   return prisma.user.findMany({
     where: {
@@ -26,22 +26,22 @@ export async function users(
 export async function user(
   _parent: any,
   { userId }: UserWhereUniqueInput,
-  { prisma }: Context,
+  { prisma }: Context
 ) {
-  return prisma.user.findOne({ where: { userId } });
+  return prisma.user.findUnique({ where: { userId } });
 }
 
 export async function me(
   _parent: any,
   _args: any,
-  { auth, prisma, response }: Context,
+  { auth, prisma, response }: Context
 ) {
   if (!auth?.userId) {
     response.status(401);
     throw new Error("Unathorized");
   }
 
-  return prisma.user.findOne({
+  return prisma.user.findUnique({
     where: { userId: auth.userId },
     include: {
       receiveOrders: {
@@ -53,7 +53,6 @@ export async function me(
         },
       },
       sendOrders: true,
-      deliverOrders: true,
       addresses: true,
       followees: {
         include: { followee: true },
@@ -61,6 +60,7 @@ export async function me(
       followers: {
         include: { follower: true },
       },
+      depot: true,
     },
   });
 }
@@ -68,18 +68,18 @@ export async function me(
 export async function addresses(
   _parent: any,
   { userId: customerId }: { userId: number },
-  { prisma }: Context,
+  { prisma }: Context
 ) {
-  return prisma.address.findMany(
-    { where: { customerId }, include: { User: true } },
-  );
+  return prisma.address.findMany({
+    where: { customerId },
+    include: { User: true },
+  });
 }
 
 export async function districts() {
-  const districtsData = JSON.parse(fs.readFileSync(
-    path.join(__dirname, "../../data/districts.json"),
-    "utf-8",
-  ));
+  const districtsData = JSON.parse(
+    fs.readFileSync(path.join(__dirname, "../../data/districts.json"), "utf-8")
+  );
 
   return districtsData.features.map(({ properties }: any) => ({
     districtId: properties?.["地區號碼"],
@@ -89,13 +89,15 @@ export async function districts() {
 
 export async function coordinates(
   _parent: any,
-  { query, county }: { query: string; county: string },
+  { query, county }: { query: string; county: string }
 ) {
-  const results = (await Axios.get(
-    encodeURI(
-      `https://nominatim.openstreetmap.org/search/${query}, ${county}, 香港?format=json&addressdetails=1&limit=1`,
-    ),
-  )).data.map(({ lat, lon }: { lat: number; lon: number }) => ({
+  const results = (
+    await Axios.get(
+      encodeURI(
+        `https://nominatim.openstreetmap.org/search/${query}, ${county}, 香港?format=json&addressdetails=1&limit=1`
+      )
+    )
+  ).data.map(({ lat, lon }: { lat: number; lon: number }) => ({
     latitude: lat,
     longitude: lon,
   }))[0];
@@ -106,18 +108,31 @@ export async function coordinates(
 export async function orders(
   _parent: any,
   _args: any,
-  { prisma }: Context,
+  { prisma, auth, response }: Context
 ) {
-  return prisma.order.findMany(
-    {
-      include: {
-        sender: true,
-        senderAddress: true,
-        receiverAddress: true,
-        receiver: true,
+  if (!auth?.userId || auth?.role !== "admin") {
+    response.status(401);
+    throw new Error("Unathorized");
+  }
+  let where = {};
+  if ((auth.depotId ?? null) !== null) {
+    where = {
+      OR: {
+        sendDepotId: Number(auth.depotId),
+        receiveDepotId: Number(auth.depotId),
       },
+    };
+  }
+
+  return prisma.order.findMany({
+    where,
+    include: {
+      sender: true,
+      senderAddress: true,
+      receiverAddress: true,
+      receiver: true,
     },
-  );
+  });
 }
 
 export default { users, user, me, addresses, districts, coordinates, orders };

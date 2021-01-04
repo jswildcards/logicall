@@ -12,11 +12,8 @@ import {
   MenuItem,
   Icon,
 } from "@chakra-ui/react";
-import { useMutation } from "react-apollo";
-import { useRouter } from "next/router";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { MdMenu } from "react-icons/md";
-import schema from "../utils/schema";
 
 const MenuItems = ({ children }) => (
   <Text mt={{ base: 4, md: 0 }} mr={6} display="block">
@@ -24,10 +21,8 @@ const MenuItems = ({ children }) => (
   </Text>
 );
 
-function AppBar({ user }) {
-  const router = useRouter();
+function AppBar({ user, signOut }) {
   const [show, setShow] = React.useState(false);
-  const [signOut] = useMutation(schema.mutation.signOut);
   const handleToggle = () => setShow(!show);
 
   return (
@@ -87,10 +82,7 @@ function AppBar({ user }) {
           <MenuList>
             <MenuItem
               color="red.500"
-              onClick={() => {
-                signOut();
-                router.replace("sign-in");
-              }}
+              onClick={signOut}
             >
               Sign Out
             </MenuItem>

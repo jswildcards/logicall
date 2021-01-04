@@ -28,20 +28,24 @@ model Order {
   sendAddressId    Int
   receiverId       Int
   receiveAddressId Int
-  driverId         Int?
+  sendDriverId     Int?
+  receiveDriverId  Int?
   weight           Float?
-  depotId          Int?
+  receiveDepotId   Int?
+  sendDepotId      Int?
   status           status?
   qrcode           String?
   comments         String?
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @default(now())
   deletedAt        DateTime?
-  Depot            Depot?     @relation(fields: [depotId], references: [depotId])
-  driver           User?      @relation("Order_driverIdToUser", fields: [driverId], references: [userId])
   receiverAddress  Address    @relation("AddressToOrder_receiveAddressId", fields: [receiveAddressId], references: [addressId])
+  receiveDepot     Depot?     @relation("DepotToOrder_receiveDepotId", fields: [receiveDepotId], references: [depotId])
+  receiveDriver    User?      @relation("Order_receiveDriverIdToUser", fields: [receiveDriverId], references: [userId])
   receiver         User       @relation("Order_receiverIdToUser", fields: [receiverId], references: [userId])
   senderAddress    Address    @relation("AddressToOrder_sendAddressId", fields: [sendAddressId], references: [addressId])
+  sendDepot        Depot?     @relation("DepotToOrder_sendDepotId", fields: [sendDepotId], references: [depotId])
+  sendDriver       User?      @relation("Order_sendDriverIdToUser", fields: [sendDriverId], references: [userId])
   sender           User       @relation("Order_senderIdToUser", fields: [senderId], references: [userId])
   logs             OrderLog[]
 }
@@ -58,25 +62,28 @@ model OrderLog {
 }
 
 model User {
-  userId        Int       @id @default(autoincrement())
-  firstName     String?
-  lastName      String?
-  email         String    @unique
-  phone         String?
-  username      String    @unique
-  password      String
-  role          role
-  avatarUri     String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @default(now())
-  deletedAt     DateTime?
-  addresses     Address[]
-  followers     Follow[]  @relation("Follow_followeeIdToUser")
-  followees     Follow[]  @relation("Follow_followerIdToUser")
-  Job           Job[]
-  deliverOrders Order[]   @relation("Order_driverIdToUser")
-  receiveOrders Order[]   @relation("Order_receiverIdToUser")
-  sendOrders    Order[]   @relation("Order_senderIdToUser")
+  userId              Int       @id @default(autoincrement())
+  firstName           String?
+  lastName            String?
+  email               String    @unique
+  phone               String?
+  username            String    @unique
+  password            String
+  role                role
+  avatarUri           String?
+  depotId             Int?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @default(now())
+  deletedAt           DateTime?
+  depot               Depot?    @relation(fields: [depotId], references: [depotId])
+  addresses           Address[]
+  followers           Follow[]  @relation("Follow_followeeIdToUser")
+  followees           Follow[]  @relation("Follow_followerIdToUser")
+  Job                 Job[]
+  receiveDriverOrders Order[]   @relation("Order_receiveDriverIdToUser")
+  receiveOrders       Order[]   @relation("Order_receiverIdToUser")
+  sendDriverOrders    Order[]   @relation("Order_sendDriverIdToUser")
+  sendOrders          Order[]   @relation("Order_senderIdToUser")
 }
 
 model Follow {
@@ -93,12 +100,17 @@ model Follow {
 }
 
 model Depot {
-  depotId   Int       @id @default(autoincrement())
-  district  String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now())
-  deletedAt DateTime?
-  Order     Order[]
+  depotId       Int       @id @default(autoincrement())
+  name          String?
+  district      String?
+  latitude      Float?
+  longitude     Float?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now())
+  deletedAt     DateTime?
+  receiveOrders Order[]   @relation("DepotToOrder_receiveDepotId")
+  sendOrders    Order[]   @relation("DepotToOrder_sendDepotId")
+  User          User[]
 }
 
 model Job {
@@ -134,5 +146,4 @@ enum status {
   Collected
   Delivering
   Delivered
-  Verified
 }

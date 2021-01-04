@@ -9,6 +9,13 @@ export const graphql = {
         lastName
         email
         role
+        depot{
+          depotId
+          name
+          district
+          latitude
+          longitude
+        }
         username
         followers {
           follower {

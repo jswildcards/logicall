@@ -5,7 +5,7 @@ type Query {
   addresses(userId: Int!): [Address]
   districts: [District]
   coordinates(query: String, county: String): LatLng
-  orders: [Order]
+  orders(orderSearch: OrderSearch): [Order]
 }
 
 type Mutation {
@@ -37,6 +37,7 @@ type User {
   username: String
   role: String
   avatarUri: String
+  depot: Depot
   receiveOrders: [Order]
   sendOrders: [Order]
   deliverOrders: [Order]
@@ -55,13 +56,24 @@ type Follow {
   follower: User!
 }
 
+type Depot {
+  depotId: Int
+  name: String
+  district: String
+  latitude: Float
+  longitude: Float
+}
+
 type Order {
   orderId: ID!
   sender: User
   senderAddress: Address
   receiver: User
   receiverAddress: Address
-  driver: User
+  sendDriver: User
+  receiveDriver: User
+  sendDepot: Depot
+  receiveDepot: Depot
   status: String
   qrcode: String
   comments: String
@@ -91,6 +103,11 @@ type OrderLog {
   createdAt: String
   updatedAt: String
   deletedAt: String
+}
+
+input OrderSearch {
+  depotId: ID
+  status: String
 }
 
 input SignUpInput {

@@ -6,7 +6,7 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import { ChakraProvider } from "@chakra-ui/react";
 
 const link = createHttpLink({ uri: "/api", credentials: "include" });
-const client = new ApolloClient({ link, cache: new InMemoryCache() });
+export const client = new ApolloClient({ link, cache: new InMemoryCache() });
 
 function MyApp({ Component, pageProps }) {
   return (

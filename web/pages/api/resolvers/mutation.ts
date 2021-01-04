@@ -1,15 +1,22 @@
-import type { status as Status, Prisma } from "@prisma/client";
+import type { Prisma, status as Status } from "@prisma/client";
 import { Order, User } from "@prisma/client";
 import { Cookie as CookieConfig } from "../utils/config";
 import { encrypt } from "../utils/crypto";
 import token from "../utils/token";
 import { Context } from "../utils/types";
-import { setCookie } from '../utils/cookies'
+import { setCookie } from "../utils/cookies";
+
+async function findDepotByAddressId(addressId: number, prisma) {
+  const { district } = await prisma.address.findUnique({
+    where: { addressId },
+  });
+  return prisma.depot.findFirst({ where: { district } });
+}
 
 export async function signUp(
   _: any,
   { input }: { input: User },
-  { prisma, response }: Context,
+  { prisma, response }: Context
 ) {
   const data = { ...input, password: encrypt(input.password) };
   const user = await prisma.user.create({ data });
@@ -23,7 +30,7 @@ export async function signUp(
 export async function signIn(
   _: any,
   { input }: { input: User },
-  { prisma, response }: Context,
+  { prisma, response }: Context
 ) {
   const encryptedPassword = encrypt(input.password);
   const user = await prisma.user.findUnique({
@@ -42,14 +49,18 @@ export async function signIn(
 }
 
 export async function signOut(_parent: any, _args: any, { response }: Context) {
-  setCookie(response, CookieConfig.token, "", { maxAge: 0 });
+  setCookie(response, CookieConfig.token, "", {
+    maxAge: 0,
+    httpOnly: true,
+    sameSite: "none",
+  });
   return "Logout Success";
 }
 
 export async function addFriend(
   _parent: any,
   { userId }: Prisma.UserWhereUniqueInput,
-  { auth, prisma, response }: Context,
+  { auth, prisma, response }: Context
 ) {
   if (!auth?.userId) {
     response.status(401);
@@ -68,7 +79,6 @@ export async function addFriend(
     include: {
       receiveOrders: true,
       sendOrders: true,
-      deliverOrders: true,
       followees: {
         include: { followee: true },
       },
@@ -81,7 +91,7 @@ export async function addFriend(
 export async function createOrder(
   _: any,
   { input }: { input: Order },
-  { auth, response, prisma }: Context,
+  { auth, response, prisma }: Context
 ) {
   if (!auth?.userId) {
     response.status(401);
@@ -89,15 +99,20 @@ export async function createOrder(
   }
 
   const { receiverId, sendAddressId, receiveAddressId } = input;
+  const sendDepot = await findDepotByAddressId(sendAddressId, prisma);
+  const receiveDepot = await findDepotByAddressId(receiveAddressId, prisma);
+
   return prisma.order.create({
     data: {
-      orderId: `${
-        new Date().valueOf().toString(36)
-      }-${auth.userId}-${receiverId}`.toUpperCase(),
+      orderId: `${new Date().valueOf().toString(36)}-${
+        auth.userId
+      }-${receiverId}`.toUpperCase(),
       sender: { connect: { userId: auth.userId } },
       receiver: { connect: { userId: receiverId } },
       senderAddress: { connect: { addressId: sendAddressId } },
       receiverAddress: { connect: { addressId: receiveAddressId } },
+      sendDepot: { connect: { depotId: sendDepot.depotId } },
+      receiveDepot: { connect: { depotId: receiveDepot.depotId } },
       status: "Pending",
     },
   });
@@ -106,12 +121,8 @@ export async function createOrder(
 export async function updateOrderStatus(
   _parent: any,
   { orderId, status }: { orderId: string; status: Status },
-  { prisma }: Context,
+  { prisma }: Context
 ) {
-  if(status === "Approved") {
-    throw new Error("Not Implemented");
-  };
-
   return prisma.order.update({
     where: { orderId },
     data: { status },

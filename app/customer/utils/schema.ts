@@ -129,10 +129,6 @@ export const schema = {
             address
           }
           status
-          driver {
-            userId
-            username
-          }
         }
       }
     `,
