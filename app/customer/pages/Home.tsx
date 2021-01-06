@@ -16,6 +16,7 @@ import {
   CardItem,
   Content,
   List,
+  Fab,
 } from "native-base";
 import { useQuery } from "react-apollo";
 import { Actions } from "react-native-router-flux";
@@ -70,7 +71,7 @@ function Page() {
     );
   }
 
-  if (!data.me.receiveOrders?.length) {
+  if (!data.me.receiveOrders?.length && !data.me.sendOrders?.length) {
     return (
       <Container>
         <StatusBar />
@@ -92,14 +93,9 @@ function Page() {
       <StatusBar />
       <Content>
         <FixedContainer pad>
-          <H3 style={{ paddingTop: 12 }}>Orders</H3>
+          <H3 style={{ paddingTop: 12 }}>Receive Orders</H3>
           {data.me.receiveOrders.map((order) => (
             <Card>
-              <CardItem>
-                <Body>
-                  <H3>Receive</H3>
-                </Body>
-              </CardItem>
               <AvatarItem item={order.sender} />
               <CardItem>
                 <Body>
@@ -111,6 +107,22 @@ function Page() {
               </CardItem>
             </Card>
           ))}
+          <H3 style={{ paddingTop: 12 }}>Send Orders</H3>
+          {data.me.sendOrders.map((order) => (
+            <Card>
+              <AvatarItem item={order.receiver} />
+              <CardItem>
+                <Body>
+                  <Text>{order.status}</Text>
+                  <Text note>
+                    {`created ${moment.tz(parseInt(order.createdAt), "Asia/Hong_Kong").format("YYYY-MM-DD HH:mm")}`}
+                  </Text>
+                </Body>
+              </CardItem>
+            </Card>
+          ))}
+
+          {/* <Fab /> */}
           {/* <Text>{JSON.stringify(data.me.receiveOrders)}</Text> */}
         </FixedContainer>
       </Content>

@@ -15,15 +15,14 @@ model Order {
   receiverId     Int
   receiveAddress String?
   receiveLatLng  String?
-  driverId       Int?
   status         status?
   comments       String?
   createdAt      DateTime   @default(now())
   updatedAt      DateTime   @default(now())
   deletedAt      DateTime?
-  driver         User?      @relation("Order_driverIdToUser", fields: [driverId], references: [userId])
   receiver       User       @relation("Order_receiverIdToUser", fields: [receiverId], references: [userId])
   sender         User       @relation("Order_senderIdToUser", fields: [senderId], references: [userId])
+  jobs           Job[]
   logs           OrderLog[]
 }
 
@@ -50,9 +49,21 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now())
   deletedAt     DateTime?
-  driverOrders  Order[]   @relation("Order_driverIdToUser")
+  jobs          Job[]
   receiveOrders Order[]   @relation("Order_receiverIdToUser")
   sendOrders    Order[]   @relation("Order_senderIdToUser")
+}
+
+model Job {
+  jobId     Int         @id @default(autoincrement())
+  driverId  Int
+  orderId   String
+  status    job_status?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @default(now())
+  deletedAt DateTime?
+  driver    User        @relation(fields: [driverId], references: [userId])
+  order     Order       @relation(fields: [orderId], references: [orderId])
 }
 
 enum role {
@@ -71,4 +82,10 @@ enum status {
   Collected
   Delivering
   Delivered
+}
+
+enum job_status {
+  Created
+  Processing
+  Finished
 }

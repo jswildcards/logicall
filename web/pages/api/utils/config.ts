@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const { CRY_ALG, CRY_SECRET, JWT_ALG, JWT_SECRET } = process.env;
+const { CRY_ALG, CRY_SECRET, JWT_ALG, JWT_SECRET, HERE_API_KEY } = process.env;
 
 const Crypto = {
   algorithm: CRY_ALG ?? "sha256",
@@ -23,5 +23,7 @@ const Cookie = {
   token: "LOGICALL_JWT",
 };
 
-export { Cookie, Crypto, Jwt, Page };
-export default { Crypto, Page, Jwt, Cookie };
+const HereApiKey = HERE_API_KEY;
+
+export { Cookie, Crypto, Jwt, Page, HereApiKey };
+export default { Crypto, Page, Jwt, Cookie, HereApiKey };

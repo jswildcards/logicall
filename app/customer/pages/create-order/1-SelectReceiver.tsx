@@ -1,28 +1,19 @@
-// app/ScarletScreen.js
-
 import React, { useState } from "react";
 import { StatusBar, StyleSheet, SectionList } from "react-native";
 import {
   Container,
   Text,
   Button,
-  // Row,
-  // H1,
   H3,
-  Body,
   Item,
   Icon,
-  Subtitle,
   Input,
-  Header,
-  Left,
-  Title,
   Right,
 } from "native-base";
-import { useQuery } from "react-apollo";
+import { useLazyQuery, } from "react-apollo";
 import { Actions } from "react-native-router-flux";
+import { Title } from "react-native-paper";
 import schema from "../../utils/schema";
-import Placeholder from "../../components/Placeholder";
 import AvatarItem from "../../components/AvatarItem";
 import FixedContainer from "../../components/FixedContainer";
 import HeaderNav from "../../components/HeaderNav";
@@ -47,8 +38,9 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   bold: {
-    fontWeight: "bold",
-    // marginTop: 12,
+    // fontWeight: "bold",
+    color: "#434343",
+    marginTop: 12,
   },
   container: {
     flex: 1,
@@ -72,16 +64,21 @@ const styles = StyleSheet.create({
 
 function Page() {
   const [receiver, setReceiver] = useState(null);
+  const [search, setSearch] = useState("");
+  const [isRefreshing, setRefreshing] = useState(false);
+  const [getUsers, { data: lazyData, refetch: lazyRefetch }] = useLazyQuery(
+    schema.query.users
+  );
 
-  const { loading, data } = useQuery(schema.query.me);
-  const { followees } = data.me;
+  const userSearching = (word: string) => {
+    setSearch(word);
+    if (word.length > 1) getUsers({ variables: { search: word } });
+  };
 
-  const makeList = (receiver = "") => {
-    return followees
-      .map(({ followee }) => followee)
-      .filter(({ username }) =>
-        username.toLowerCase().includes(receiver.toLowerCase())
-      )
+  const makeList = (rawList = lazyData?.users) => {
+    if (!rawList) return null;
+
+    return rawList
       .sort((a, b) => (a.username > b.username ? 1 : -1))
       .reduce((prev, cur) => {
         const section = prev.find((item) => item.title === cur.username[0]);
@@ -95,68 +92,64 @@ function Page() {
       }, []);
   };
 
-  const [listItem, setListItem] = useState(makeList(""));
-
-  const renderList = (receiver = "") => setListItem(makeList(receiver));
-  // const [isLoading, setLoading] = useState(true)
-
   return (
     <Container>
       <StatusBar />
       <HeaderNav
         title="Receiver"
         subtitle="Create Order"
-        right={receiver && (
-          <Button
-            onPress={() => Actions.createOrder2SelectAddress({ receiver })}
-            transparent
-          >
-            <Text>Next</Text>
-          </Button>
-        )}
+        right={
+          receiver && (
+            <Button
+              onPress={() => Actions.createOrder2SelectAddress({ receiver })}
+              transparent
+            >
+              <Text>Next</Text>
+            </Button>
+          )
+        }
       />
 
-      {loading && <Placeholder />}
-
-      {!loading && (
-        <SectionList
-          style={styles.header}
-          ListHeaderComponent={(
-            <FixedContainer pad>
-              <H3 style={styles.bold}>First, Select a receiver...</H3>
-              <Item floatingLabel last>
-                <Input
-                  placeholder="search receivers..."
-                  // value={receiver}
-                  onChangeText={(receiver) => {
-                    renderList(receiver);
-                  }}
-                />
-              </Item>
-            </FixedContainer>
-          )}
-          sections={listItem}
-          renderItem={({ item }) => (
-            <AvatarItem
-              item={item}
-              button
-              selected={item.userId === receiver?.userId}
-              onPress={() => setReceiver({ ...item })}
-              right={
-                item.userId === receiver?.userId && (
-                  <Right>
-                    <Icon ios="ios-checkmark" name="checkmark" />
-                  </Right>
-                )
-              }
-            />
-          )}
-          renderSectionHeader={({ section }) => (
-            <Text style={styles.sectionHeader}>{section.title}</Text>
-          )}
-          keyExtractor={(item) => item.userId}
-        />
+      <SectionList
+        sections={makeList()}
+        renderItem={({ item }) => (
+          <AvatarItem
+            item={item}
+            button
+            selected={item.userId === receiver?.userId}
+            onPress={() => setReceiver({ ...item })}
+            right={
+            item.userId === receiver?.userId && (
+              <Right>
+                <Icon ios="ios-checkmark" name="checkmark" />
+              </Right>
+            )
+          }
+          />
       )}
+        renderSectionHeader={({ section }) => (
+          <Title style={styles.sectionHeader}>{section.title}</Title>
+        )}
+        keyExtractor={(item) => item.userId}
+        onRefresh={async () => {
+          setRefreshing(true);
+          await lazyRefetch();
+          setRefreshing(false);
+        }}
+        refreshing={isRefreshing}
+        ListHeaderComponent={(
+          <FixedContainer pad>
+            <H3 style={styles.bold}>First, Select a receiver...</H3>
+            <Item floatingLabel last>
+              <Input
+                value={search}
+                onChangeText={userSearching}
+                placeholder="Search receiver..."
+              />
+            </Item>
+          </FixedContainer>
+        )}
+      />
     </Container>
   );
 }

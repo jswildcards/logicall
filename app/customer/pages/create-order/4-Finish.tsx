@@ -1,12 +1,5 @@
 import { ApolloError } from "apollo-boost";
-import {
-  Button,
-  Container,
-  Content,
-  ListItem,
-  Text,
-  Toast,
-} from "native-base";
+import { Button, Container, Content, ListItem, Text, Toast } from "native-base";
 import React, { useState } from "react";
 import { useMutation } from "react-apollo";
 import { StatusBar } from "react-native";
@@ -17,8 +10,20 @@ import FixedContainer from "../../components/FixedContainer";
 import HeaderNav from "../../components/HeaderNav";
 import schema from "../../utils/schema";
 
-function Page(props: { receiver: any; receiveAddress: any; sendAddress: any; }) {
-  const { receiver, receiveAddress, sendAddress } = props;
+function Page(props: {
+  receiver: any;
+  receiveLatLng: any;
+  sendLatLng: any;
+  receiveAddress: any;
+  sendAddress: any;
+}) {
+  const {
+    receiver,
+    receiveLatLng,
+    sendLatLng,
+    receiveAddress,
+    sendAddress,
+  } = props;
   const [error, setError] = useState("");
 
   const createOrderCallBack = () => {
@@ -50,11 +55,13 @@ function Page(props: { receiver: any; receiveAddress: any; sendAddress: any; }) 
           <ListItem itemDivider>
             <Text>Receiver Address</Text>
           </ListItem>
-          <AddressItem item={receiveAddress} />
+          <AddressItem
+            item={{ address: receiveAddress, latlng: receiveLatLng }}
+          />
           <ListItem itemDivider>
             <Text>Sender Address</Text>
           </ListItem>
-          <AddressItem item={sendAddress} />
+          <AddressItem item={{ address: sendAddress, latlng: sendLatLng }} />
         </FixedContainer>
         <Button
           block
@@ -63,11 +70,14 @@ function Page(props: { receiver: any; receiveAddress: any; sendAddress: any; }) 
               variables: {
                 input: {
                   receiverId: parseInt(receiver.userId),
-                  sendAddressId: parseInt(sendAddress.addressId),
-                  receiveAddressId: parseInt(receiveAddress.addressId),
+                  sendAddress,
+                  receiveAddress,
+                  sendLatLng,
+                  receiveLatLng,
                 },
               },
-            })}
+            })
+          }
         >
           <Text>Confirm</Text>
         </Button>

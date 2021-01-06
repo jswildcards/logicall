@@ -21,10 +21,8 @@ import SignInPage from "./pages/SignIn";
 import SignUpPage from "./pages/SignUp";
 import CreateOrder1SelectReceiverPage from "./pages/create-order/1-SelectReceiver";
 import createOrder2SelectReceiverAddressPage from "./pages/create-order/2-SelectReceiverAddress";
-import createOrder2aNewReceiverAddressPage from "./pages/create-order/2a-NewReceiverAddress";
 import createOrder3SelectSenderAddressPage from "./pages/create-order/3-SelectSendAddress";
 import createOrder4FinishPage from "./pages/create-order/4-Finish";
-import PeoplePage from "./pages/People";
 import Tab from "./components/Tab";
 
 import { client } from "./utils/schema";
@@ -87,13 +85,6 @@ function App() {
                 clone
               />
               <Scene
-                key="createOrder2aNewAddress"
-                component={createOrder2aNewReceiverAddressPage}
-                title="Create Order - New Receiver Address"
-                hideNavBar
-                clone
-              />
-              <Scene
                 key="createOrder3SelectSendAddress"
                 component={createOrder3SelectSenderAddressPage}
                 title="Create Order - Sender Address"
@@ -114,15 +105,6 @@ function App() {
                 tabBarStyle={styles.tabs}
                 showLabel={false}
               >
-                <Scene
-                  key="people"
-                  icon={Tab}
-                  iconName="people"
-                  iosIconName="ios-people"
-                  component={PeoplePage}
-                  title="People"
-                  hideNavBar
-                />
                 <Scene
                   key="home"
                   icon={Tab}

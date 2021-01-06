@@ -17,6 +17,7 @@ import {
   Toast,
 } from "native-base";
 import { ApolloError } from "apollo-boost";
+import { Headline } from "react-native-paper";
 import schema from "../utils/schema";
 import logo from "../assets/icon.png";
 import FixedContainer from "../components/FixedContainer";
@@ -41,6 +42,11 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginVertical: 12,
   },
+  headline: {
+    textAlign: "center",
+    fontWeight: "bold",
+    // paddingTop: 12
+  }
 });
 
 function Page() {
@@ -77,6 +83,7 @@ function Page() {
       <Content>
         <FixedContainer pad>
           <Thumbnail square large style={styles.iconCenter} source={logo} />
+          <Headline style={styles.headline}>LogiCall</Headline>
           <Form>
             <Item floatingLabel last>
               <Icon ios="ios-person" name="person" />

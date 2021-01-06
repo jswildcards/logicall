@@ -3,6 +3,7 @@ type Query {
   users(search: String!): [User]
   user(userId: Int!): User
   orders: [Order]
+  route(origin: String, destination: String): String
 }
 
 type Mutation {
@@ -12,6 +13,8 @@ type Mutation {
 
   createOrder(input: CreateOrderInput): Order
   updateOrderStatus(input: UpdateOrderStatusInput): Order
+
+  createJob: Job
 }
 
 type LatLng {
@@ -30,6 +33,7 @@ type User {
   receiveOrders: [Order]
   sendOrders: [Order]
   driverOrders: [Order]
+  jobs: [Job]
   createdAt: String
   updatedAt: String
   deletedAt: String
@@ -43,13 +47,20 @@ type Order {
   receiver: User
   receiveAddress: String
   receiveLatLng: LatLng
-  driver: User
   status: String
   comments: String
   logs: [OrderLog]
+  jobs: [Job]
   createdAt: String
   updatedAt: String
   deletedAt: String
+}
+
+type Job {
+  jobId: ID!
+  driver: User
+  order: Order
+  status: String
 }
 
 type OrderLog {

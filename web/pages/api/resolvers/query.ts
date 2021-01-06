@@ -1,4 +1,6 @@
 import { UserWhereUniqueInput } from "@prisma/client";
+import Axios from "axios";
+import { HereApiKey } from "../utils/config";
 import { Context } from "../utils/types";
 
 export async function users(
@@ -33,7 +35,7 @@ export async function me(
     throw new Error("Unathorized");
   }
 
-  return prisma.user.findUnique({
+  const result = await prisma.user.findUnique({
     where: { userId: auth.userId },
     include: {
       receiveOrders: {
@@ -42,11 +44,33 @@ export async function me(
       sendOrders: {
         include: { sender: true, receiver: true },
       },
-      driverOrders: {
-        include: { sender: true, receiver: true },
+      jobs: {
+        include: {
+          driver: true,
+          order: { include: { sender: true, receiver: true } },
+        },
       },
     },
   });
+
+  return {
+    ...result,
+    jobs: result.jobs.map((job) => {
+      const [receiveLat, receiveLng] = job.order.receiveLatLng
+        .split(",")
+        .map(Number);
+      const [sendLat, sendLng] = job.order.sendLatLng.split(",").map(Number);
+
+      return {
+        ...job,
+        order: {
+          ...job.order,
+          receiveLatLng: { latitude: receiveLat, longitude: receiveLng },
+          sendLatLng: { latitude: sendLat, longitude: sendLng },
+        },
+      };
+    }),
+  };
 }
 
 export async function orders(
@@ -63,9 +87,10 @@ export async function orders(
     include: {
       sender: true,
       receiver: true,
-      driver: true,
+      jobs: { include: { driver: true } },
       logs: true,
     },
+    orderBy: { orderId: "desc" },
   });
 
   return results.map((order) => {
@@ -80,4 +105,15 @@ export async function orders(
   });
 }
 
-export default { users, user, me, orders };
+export async function route(
+  _parent: any,
+  { origin, destination }: { origin: string; destination: string }
+) {
+  const result = (await Axios.get(
+    `https://router.hereapi.com/v8/routes?transportMode=car&origin=${origin}&destination=${destination}&return=polyline,summary&apiKey=${HereApiKey}`
+  )).data;
+
+  return JSON.stringify(result.routes[0]);
+}
+
+export default { users, user, me, orders, route };

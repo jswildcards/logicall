@@ -11,6 +11,7 @@ import {
   ModalBody,
   ModalFooter,
   Stack,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useQuery, useMutation } from "react-apollo";
@@ -22,7 +23,7 @@ import { client } from "./_app";
 
 export default function Home() {
   const router = useRouter();
-  const { data: me, loading, error } = useQuery(schema.query.me,);
+  const { data: me, loading, error } = useQuery(schema.query.me);
   const [signOut] = useMutation(schema.mutation.signOut);
   const { data: orders, refetch } = useQuery(schema.query.orders);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -61,27 +62,29 @@ export default function Home() {
       <Container maxW="6xl" py="3">
         <Stack spacing="4">
           <Heading color="blue.400">Orders</Heading>
-          {orders?.orders?.map((order) => (
-            <OrderCard
-              order={order}
-              onApprove={() => {
-                setOrderActions({
-                  orderId: order.orderId,
-                  action: "Approve",
-                  status: "Approved",
-                });
-                onOpen();
-              }}
-              onReject={() => {
-                setOrderActions({
-                  orderId: order.orderId,
-                  action: "Reject",
-                  status: "Rejected",
-                });
-                onOpen();
-              }}
-            />
-          ))}
+          <SimpleGrid columns={[1, 1, 2, 3]} spacing="16px">
+            {orders?.orders?.map((order) => (
+              <OrderCard
+                order={order}
+                onApprove={() => {
+                  setOrderActions({
+                    orderId: order.orderId,
+                    action: "Approve",
+                    status: "Approved",
+                  });
+                  onOpen();
+                }}
+                onReject={() => {
+                  setOrderActions({
+                    orderId: order.orderId,
+                    action: "Reject",
+                    status: "Rejected",
+                  });
+                  onOpen();
+                }}
+              />
+            ))}
+          </SimpleGrid>
         </Stack>
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
@@ -104,10 +107,14 @@ export default function Home() {
                 onClick={() =>
                   updateOrderStatus({
                     variables: {
-                      orderId: orderActions.orderId,
-                      status: orderActions.status,
+                      input: {
+                        orderId: orderActions.orderId,
+                        status: orderActions.status,
+                        comments: `${orderActions.action} by @${me.me.username}`,
+                      },
                     },
-                  })}
+                  })
+                }
               >
                 {orderActions.action}
               </Button>

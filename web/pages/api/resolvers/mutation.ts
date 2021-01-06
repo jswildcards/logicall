@@ -80,6 +80,7 @@ export async function createOrder(
       sendAddress,
       sendLatLng,
       status: "Pending",
+      comments: `Created by @${auth.username}`,
     },
   });
 }
@@ -103,10 +104,36 @@ export async function updateOrderStatus(
   });
 }
 
+export async function createJob(_, _args, { prisma, auth, response }: Context) {
+  if (!auth?.userId || auth?.role !== "driver") {
+    response.status(401);
+    throw new Error("Unathorized");
+  }
+
+  const order = await prisma.order.findFirst({
+    where: { status: "Approved" },
+    orderBy: { createdAt: "asc" },
+  });
+
+  await prisma.order.update({
+    where: { orderId: order.orderId },
+    data: { status: "Assigned", comments: `Assigned to @${auth.username}` },
+  });
+
+  return prisma.job.create({
+    data: {
+      order: { connect: { orderId: order.orderId } },
+      driver: { connect: { userId: auth.userId } },
+      status: "Created",
+    },
+  });
+}
+
 export default {
   signUp,
   signIn,
   signOut,
   createOrder,
   updateOrderStatus,
+  createJob,
 };

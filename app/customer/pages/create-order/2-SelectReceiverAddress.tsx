@@ -1,128 +1,121 @@
-// app/ScarletScreen.js
-
 import React, { useState } from "react";
-import { StatusBar, RefreshControl, FlatList } from "react-native";
-import {
-  Container,
-  Text,
-  Button,
-  Body,
-  View,
-  Item,
-  Icon,
-  Subtitle,
-  Input,
-  Header,
-  Left,
-  Title,
-  Right,
-  ListItem,
-  Picker,
-} from "native-base";
-import { useQuery } from "react-apollo";
+import MapView, { Marker } from "react-native-maps";
+import { Button, Container, Text, Textarea } from "native-base";
+import { StatusBar, StyleSheet } from "react-native";
 import { Actions } from "react-native-router-flux";
-import { NetworkStatus } from "apollo-boost";
-import MapView from "react-native-maps";
-import schema from "../../utils/schema";
+import { Title, Subheading } from "react-native-paper";
 import FixedContainer from "../../components/FixedContainer";
 import HeaderNav from "../../components/HeaderNav";
-import AddressItem from "../../components/AddressItem";
+
+const styles = StyleSheet.create({
+  text: {
+    color: "#434343",
+  },
+});
 
 function Page({ receiver }) {
-  const { loading, data, refetch, networkStatus } = useQuery(
-    schema.query.addresses,
-    {
-      variables: { userId: parseInt(receiver.userId) },
-    }
-  );
-  const [receiveAddress, setReceiveAddress] = useState(null);
+  const [receiveAddress, setReceiveAddress] = useState({
+    address: "",
+    latitude: null,
+    longitude: null,
+  });
 
-  if (loading) {
-    return <Text>loading</Text>;
-  }
+  const changeRoutingDestination = (e) => {
+    const { latitude, longitude } = e.nativeEvent.coordinate;
+    setReceiveAddress({ ...receiveAddress, latitude, longitude });
+  };
 
   return (
     <Container>
       <StatusBar />
       <HeaderNav
-        title="Address"
-        subtitle="Create Order - Receiver"
-        right={receiveAddress && (
-          <Button
-            onPress={() => Actions.createOrder3SelectSendAddress({ receiver, receiveAddress })}
-            transparent
+        title="Receive Address"
+        subtitle="Create Order"
+        right={
+          receiveAddress?.latitude && (
+            <Button
+              onPress={() =>
+                Actions.createOrder3SelectSendAddress({
+                  receiver,
+                  receiveAddress: receiveAddress.address,
+                  receiveLatLng: `${receiveAddress.latitude},${receiveAddress.longitude}`,
+                })}
+              transparent
+            >
+              <Text>Next</Text>
+            </Button>
+          )
+        }
+      />
+      <FixedContainer pad>
+        {/* <Item > */}
+        {/* <Icon name="compass" /> */}
+        <Title style={styles.text}>Address Detail</Title>
+        <Textarea
+          // style={{marginBottom:12}}
+          // placeholder="Address"
+          rowSpan={5}
+          bordered
+          underline={false}
+          value={receiveAddress.address}
+          onChangeText={(address) => setReceiveAddress({ ...receiveAddress, address })}
+        />
+        <Title style={styles.text}>Address Coordinates</Title>
+        <Subheading style={styles.text}>
+          Please click on the map to confirm address coordinates.
+        </Subheading>
+        {/* </Item> */}
+        {/* <Item picker>
+          <Left
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              alignItems: "center",
+            }}
           >
-            <Text>Next</Text>
-          </Button>
-        )}
-      />
-      {/* <View style={}> */}
-
-      {/* <List> */}
-      <FlatList
-        data={data.addresses}
-        ListHeaderComponent={(
-          <ListItem itemDivider>
-            <Text>Select an address</Text>
-          </ListItem>
-        )}
-        renderItem={({ item }) => (
-          <AddressItem
-            button
-            item={item}
-            onPress={() => setReceiveAddress(item)}
-            selected={item.addressId === receiveAddress?.addressId}
-            right={item.addressId === receiveAddress?.addressId && (
-              <Right>
-                <Icon
-                  style={{ paddingRight: 12 }}
-                  ios="ios-checkmark"
-                  name="checkmark"
-                />
-              </Right>
-            )}
-          />
-        )}
-        // ListFooterComponent={(
-        //   <View>
-        //     <ListItem itemDivider>
-        //       <Text>Or send a delivery with a new address:</Text>
-        //     </ListItem>
-        //     <FixedContainer pad>
-        //       <Button onPress={() => Actions.createOrder2aNewAddress({ receiver })} block><Text>New Address</Text></Button>
-        //     </FixedContainer>
-        //   </View>
-        // )}
-        refreshControl={(
-          <RefreshControl
-            onRefresh={refetch}
-            refreshing={networkStatus === NetworkStatus.refetch}
-          />
-        )}
-        keyExtractor={({ addressId }) => addressId}
-      />
-      {/* </List> */}
-
-      {/* <SectionList
-        style={{ ...styles.header, ...bp.root }}
-        ListHeaderComponent={(
-          <>
-          <H3 style={styles.bold}>First, Select a receiver...</H3>
-          <Item floatingLabel last>
-          <Input
-          placeholder="search receivers..."
-          // value={receiver}
-                onChangeText={(receiver) => { renderList(receiver); }}
+            <Icon ios="ios-locate" name="locate" style={{ marginRight: 8 }} />
+            <Text>District</Text>
+          </Left>
+          <Picker
+            mode="dropdown"
+            iosIcon={<Icon name="arrow-down" />}
+            placeholder="Select district"
+            placeholderStyle={{ color: "#bfc6ea" }}
+            placeholderIconColor="#007aff"
+            selectedValue={receiveAddress.district}
+            onValueChange={(district) =>
+              setReceiveAddress({ ...receiveAddress, district })}
+          >
+            {data.districts?.map((district) => (
+              <Picker.Item
+                key={district.districtId}
+                label={district.name}
+                value={district.districtId}
               />
-            </Item>
-          </>
-        )}
-        sections={listItem}
-        renderItem={({ item }) => <Text style={styles.item}>{item.value}</Text>}
-        renderSectionHeader={({ section }) => <Text style={styles.sectionHeader}>{section.title}</Text>}
-        keyExtractor={(item) => item.key}
-      /> */}
-      {/* </View> */}
+            ))}
+          </Picker>
+        </Item> */}
+
+        <MapView
+          style={{ width: "100%", height: 350 }}
+          initialRegion={{
+            latitude: 22.38131,
+            longitude: 114.168639,
+            latitudeDelta: 0.9,
+            longitudeDelta: 0.9,
+          }}
+          onPress={changeRoutingDestination}
+        >
+          {(receiveAddress?.latitude ?? null) && (
+            <Marker
+              coordinate={{
+                latitude: receiveAddress.latitude!,
+                longitude: receiveAddress.longitude!,
+              }}
+            />
+          )}
+        </MapView>
+      </FixedContainer>
     </Container>
   );
 }

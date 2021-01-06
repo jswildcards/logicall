@@ -26,6 +26,72 @@ export const schema = {
           role
           phone
           username
+          sendOrders {
+            orderId
+            sender {
+              userId
+              username
+              firstName
+              lastName
+              email
+              phone
+            }
+            receiver {
+              userId
+              username
+              firstName
+              lastName
+              email
+              phone
+            }
+            sendAddress
+            sendLatLng {
+              latitude
+              longitude
+            }
+            receiveAddress
+            receiveLatLng {
+              latitude
+              longitude
+            }
+            status
+            comments
+            createdAt
+            updatedAt
+          }
+          receiveOrders {
+            orderId
+            sender {
+              userId
+              username
+              firstName
+              lastName
+              email
+              phone
+            }
+            receiver {
+              userId
+              username
+              firstName
+              lastName
+              email
+              phone
+            }
+            sendAddress
+            sendLatLng {
+              latitude
+              longitude
+            }
+            receiveAddress
+            receiveLatLng {
+              latitude
+              longitude
+            }
+            status
+            comments
+            createdAt
+            updatedAt
+          }
         }
       }
     `,
@@ -123,7 +189,7 @@ export const schema = {
           email
           role
           username
-          avatarUri
+          phone
         }
       }
     `,
@@ -136,7 +202,7 @@ export const schema = {
           email
           role
           username
-          avatarUri
+          phone
         }
       }
     `,

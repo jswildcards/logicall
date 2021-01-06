@@ -1,5 +1,6 @@
 CREATE TYPE role AS ENUM ('customer', 'admin', 'driver');
 CREATE TYPE status AS ENUM('Pending', 'Approved', 'Rejected', 'Cancelled', 'Assigned', 'Collecting', 'Collected', 'Delivering', 'Delivered');
+CREATE TYPE job_status AS ENUM('Created', 'Processing', 'Finished');
 
 CREATE TABLE "User" (
   "userId"    SERIAL PRIMARY KEY NOT NULL,
@@ -23,7 +24,6 @@ CREATE TABLE "Order" (
   "receiverId"        INTEGER NOT NULL REFERENCES "User"("userId"),
   "receiveAddress"    TEXT NULL,
   "receiveLatLng"     TEXT NULL,
-  "driverId"          INTEGER NULL REFERENCES "User"("userId"),
   "status"            STATUS NULL,
   "comments"          TEXT NULL,
   "createdAt"         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -36,6 +36,16 @@ CREATE TABLE "OrderLog" (
   "orderId"     VARCHAR(255) NOT NULL REFERENCES "Order"("orderId"),
   "status"      TEXT NULL,
   "comments"    TEXT NULL,
+  "createdAt"   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt"   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "deletedAt"   TIMESTAMP NULL
+);
+
+CREATE TABLE "Job" (
+  "jobId"       SERIAL PRIMARY KEY NOT NULL,
+  "driverId"    INTEGER NOT NULL REFERENCES "User"("userId"),
+  "orderId"     VARCHAR(255) NOT NULL REFERENCES "Order"("orderId"),
+  "status"      JOB_STATUS NULL,
   "createdAt"   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updatedAt"   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "deletedAt"   TIMESTAMP NULL
@@ -75,6 +85,11 @@ EXECUTE PROCEDURE "UpdateTimestamp"();
 
 CREATE TRIGGER "UserBeforeUpdateTrigger"
   BEFORE UPDATE ON "User"
+  FOR EACH ROW
+EXECUTE PROCEDURE "UpdateTimestamp"();
+
+CREATE TRIGGER "JobBeforeUpdateTrigger"
+  BEFORE UPDATE ON "Job"
   FOR EACH ROW
 EXECUTE PROCEDURE "UpdateTimestamp"();
 

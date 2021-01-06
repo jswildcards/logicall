@@ -8,12 +8,17 @@ import {
   Divider,
   Button,
   Text,
-  Icon
+  Icon,
 } from "@chakra-ui/react";
 import React from "react";
 
 export function OrderCard(props) {
   const { order, onApprove, onReject } = props;
+  const statusColor = {
+    Rejected: "red.500",
+    Approved: "green.500",
+    default: "blue.700"
+  }
 
   return (
     <Box
@@ -27,7 +32,7 @@ export function OrderCard(props) {
         {order.orderId}
       </Heading>
       <Heading
-        color={order.status === "Rejected" ? "red.500" : "green.500"}
+        color={statusColor?.[order.status] ? statusColor[order.status] : statusColor.default}
         size="sm"
         pb="1"
       >
@@ -35,7 +40,7 @@ export function OrderCard(props) {
       </Heading>
       <Grid templateColumns="repeat(5, 1fr)" py="3">
         <GridItem colSpan={2}>
-          <Text>{order.senderAddress.address}</Text>
+          <Text>{order.sendAddress}</Text>
           <Text color="gray.500">
             @
             {order.sender.username}
@@ -47,22 +52,26 @@ export function OrderCard(props) {
           </Flex>
         </GridItem>
         <GridItem colSpan={2} textAlign="right">
-          <Text>{order.receiverAddress.address}</Text>
+          <Text>{order.receiveAddress}</Text>
           <Text color="gray.500">
             @
             {order.receiver.username}
           </Text>
         </GridItem>
       </Grid>
-      <Divider />
-      <Flex justify="right" pt="3">
-        <Button variant="ghost" colorScheme="red" mr="3" onClick={onReject}>
-          Reject
-        </Button>
-        <Button colorScheme="green" onClick={onApprove}>
-          Approve
-        </Button>
-      </Flex>
+      {order.status === "Pending" && (
+        <>
+          <Divider />
+          <Flex justify="right" pt="3">
+            <Button variant="ghost" colorScheme="red" mr="3" onClick={onReject}>
+              Reject
+            </Button>
+            <Button colorScheme="green" onClick={onApprove}>
+              Approve
+            </Button>
+          </Flex>
+        </>
+      )}
     </Box>
   );
 }
