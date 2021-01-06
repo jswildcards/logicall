@@ -5,7 +5,7 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import Constants from "expo-constants";
 
 const httpLink = createHttpLink(
-  { uri: `${Constants.manifest.extra.host}/api`, credentials: "include" },
+  { uri: `${Constants.manifest.extra.host}/api`, credentials: "include" }
   // { uri, credentials: 'include' }
 );
 
@@ -16,13 +16,6 @@ export const client = new ApolloClient({
 
 export const schema = {
   query: {
-    coordinates: gql`query($query: String, $county: String) {
-      coordinates(query: $query, county: $county){
-        latitude 
-        longitude
-      }
-    }`,
-    districts: gql`{districts{districtId name}}`,
     me: gql`
       {
         me {
@@ -31,54 +24,8 @@ export const schema = {
           lastName
           email
           role
-          avatarUri
+          phone
           username
-          addresses {
-            addressId
-            address
-            district
-            latitude
-            longitude
-          }
-          receiveOrders {
-            orderId
-            sender {
-              userId
-              username
-              firstName
-              lastName
-              avatarUri
-            }
-            senderAddress {
-              addressId
-              address
-              district
-            }
-            status
-            createdAt
-          }
-          followers {
-            follower {
-              userId
-              firstName
-              lastName
-              email
-              role
-              username
-              avatarUri
-            }
-          }
-          followees {
-            followee {
-              userId
-              firstName
-              lastName
-              email
-              role
-              username
-              avatarUri
-            }
-          }
         }
       }
     `,
@@ -89,20 +36,38 @@ export const schema = {
           firstName
           lastName
           email
+          phone
           role
           username
-          avatarUri
         }
       }
     `,
-    addresses: gql`
-      query($userId: Int!) {
-        addresses(userId: $userId) {
-          addressId
-          address
-          district
-          latitude
-          longitude
+    orders: gql`
+      {
+        orders {
+          orderId
+          sender {
+            userId
+            username
+            firstName
+            lastName
+            email
+            phone
+          }
+          receiver {
+            userId
+            username
+            firstName
+            lastName
+            email
+            phone
+          }
+          sendAddress
+          sendLatLng
+          receiveAddress
+          receiveLatLng
+          status
+          comments
         }
       }
     `,
@@ -115,20 +80,25 @@ export const schema = {
           sender {
             userId
             username
-          }
-          senderAddress {
-            addressId
-            address
+            firstName
+            lastName
+            email
+            phone
           }
           receiver {
             userId
             username
+            firstName
+            lastName
+            email
+            phone
           }
-          receiverAddress {
-            addressId
-            address
-          }
+          sendAddress
+          sendLatLng
+          receiveAddress
+          receiveLatLng
           status
+          comments
         }
       }
     `,
@@ -161,41 +131,6 @@ export const schema = {
     signOut: gql`
       mutation {
         signOut
-      }
-    `,
-    addFriend: gql`
-      mutation($userId: Int!) {
-        addFriend(userId: $userId) {
-          userId
-          firstName
-          lastName
-          email
-          role
-          username
-          avatarUri
-          followers {
-            follower {
-              userId
-              firstName
-              lastName
-              email
-              role
-              username
-              avatarUri
-            }
-          }
-          followees {
-            followee {
-              userId
-              firstName
-              lastName
-              email
-              role
-              username
-              avatarUri
-            }
-          }
-        }
       }
     `,
   },

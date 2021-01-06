@@ -9,7 +9,7 @@ import { setCookie } from "../utils/cookies";
 export async function signUp(
   _: any,
   { input }: { input: User },
-  { prisma, response }: Context,
+  { prisma, response }: Context
 ) {
   const data = { ...input, password: encrypt(input.password) };
   const user = await prisma.user.create({ data });
@@ -23,7 +23,7 @@ export async function signUp(
 export async function signIn(
   _: any,
   { input }: { input: User },
-  { prisma, response }: Context,
+  { prisma, response }: Context
 ) {
   const encryptedPassword = encrypt(input.password);
   const user = await prisma.user.findUnique({
@@ -53,21 +53,26 @@ export async function signOut(_parent: any, _args: any, { response }: Context) {
 export async function createOrder(
   _: any,
   { input }: { input: Order },
-  { auth, response, prisma }: Context,
+  { auth, response, prisma }: Context
 ) {
   if (!auth?.userId) {
     response.status(401);
     throw new Error("Unathorized");
   }
 
-  const { receiverId, receiveAddress, receiveLatLng, sendLatLng, sendAddress } =
-    input;
+  const {
+    receiverId,
+    receiveAddress,
+    receiveLatLng,
+    sendLatLng,
+    sendAddress,
+  } = input;
 
   return prisma.order.create({
     data: {
-      orderId: `${
-        new Date().valueOf().toString(36)
-      }-${auth.userId}-${receiverId}`.toUpperCase(),
+      orderId: `${new Date().valueOf().toString(36)}-${
+        auth.userId
+      }-${receiverId}`.toUpperCase(),
       sender: { connect: { userId: auth.userId } },
       receiver: { connect: { userId: receiverId } },
       receiveAddress,
@@ -81,12 +86,16 @@ export async function createOrder(
 
 export async function updateOrderStatus(
   _parent: any,
-  { orderId, status, comments }: {
-    orderId: string;
-    status: Status;
-    comments: string;
+  {
+    input: { orderId, status, comments },
+  }: {
+    input: {
+      orderId: string;
+      status: Status;
+      comments: string;
+    };
   },
-  { prisma }: Context,
+  { prisma }: Context
 ) {
   return prisma.order.update({
     where: { orderId },

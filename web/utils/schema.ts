@@ -9,34 +9,8 @@ export const graphql = {
         lastName
         email
         role
-        depot{
-          depotId
-          name
-          district
-          latitude
-          longitude
-        }
+        phone
         username
-        followers {
-          follower {
-            userId
-            firstName
-            lastName
-            email
-            role
-            username
-          }
-        }
-        followees {
-          followee {
-            userId
-            firstName
-            lastName
-            email
-            role
-            username
-          }
-        }
       }
     }`,
     users: gql`query($search: String!) {
@@ -45,6 +19,7 @@ export const graphql = {
         firstName
         lastName
         email
+        phone
         role
         username
       }
@@ -57,35 +32,29 @@ export const graphql = {
           username
           firstName
           lastName
+          email
+          phone
         }
         receiver {
           userId
           username
           firstName
           lastName
+          email
+          phone
         }
-        senderAddress {
-          addressId
-          address
-          district
-          latitude
-          longitude
-        }
-        receiverAddress {
-          addressId
-          address
-          district
-          latitude
-          longitude
-        }
+        sendAddress
+        sendLatLng
+        receiveAddress
+        receiveLatLng
         status
         comments
       }
     }`
   },
   mutation: {
-    updateOrderStatus: gql`mutation($orderId: String, $status: String) {
-      updateOrderStatus(orderId: $orderId, status: $status) {
+    updateOrderStatus: gql`mutation($input: UpdateOrderStatusInput) {
+      updateOrderStatus(input: $input) {
         orderId
         sender {
           userId
@@ -99,20 +68,16 @@ export const graphql = {
           firstName
           lastName
         }
-        senderAddress {
-          addressId
-          address
-          district
-          latitude
-          longitude
+        driver {
+          userId
+          username
+          firstName
+          lastName
         }
-        receiverAddress {
-          addressId
-          address
-          district
-          latitude
-          longitude
-        }
+        sendAddress
+        sendLatLng
+        receiveAddress
+        receiveLatLng
         status
         comments
       }

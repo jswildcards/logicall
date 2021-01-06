@@ -11,7 +11,7 @@ type Mutation {
   signOut: String
 
   createOrder(input: CreateOrderInput): Order
-  updateOrderStatus(orderId: String, status: String): Order
+  updateOrderStatus(input: UpdateOrderStatusInput): Order
 }
 
 type LatLng {
@@ -83,4 +83,10 @@ input CreateOrderInput {
   sendLatLng: String
   receiveAddress: String
   receiveLatLng: String
+}
+
+input UpdateOrderStatusInput {
+  orderId: String
+  status: String
+  comments: String
 }
