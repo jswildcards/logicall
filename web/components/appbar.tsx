@@ -55,7 +55,7 @@ function AppBar({ user, signOut }) {
         flexGrow={1}
       >
         <MenuItems>
-          <Link href="/orders">
+          <Link href="/">
             <Button variant="link" color="white">
               Orders
             </Button>

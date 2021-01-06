@@ -9,9 +9,7 @@ import schema from "../utils/schema";
 import { decode } from "../utils/here-polyline";
 
 function Page(props: { job: any }) {
-  const {
-    job: { order },
-  } = props;
+  const { job: { order }, } = props;
   const [location, setLocation] = useState({ latitude: 0, longitude: 0 });
   const [errorMsg, setErrorMsg] = useState("");
   const { data, loading, error } = useQuery(schema.query.route, {
@@ -54,7 +52,6 @@ function Page(props: { job: any }) {
         { timeInterval: 1000 },
         ({ coords: { latitude, longitude } }) => {
           setLocation({ latitude, longitude });
-          console.log(`${latitude} ${longitude}`);
         }
       );
     });

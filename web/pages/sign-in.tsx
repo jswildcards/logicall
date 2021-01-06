@@ -1,5 +1,12 @@
 import React from "react";
-import { SimpleGrid, Image, Flex, Stack, Container } from "@chakra-ui/react";
+import {
+  SimpleGrid,
+  Image,
+  Flex,
+  Stack,
+  Container,
+  Heading,
+} from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useQuery } from "react-apollo";
 import SignInForm from "../components/sign-in-form";
@@ -17,24 +24,19 @@ export default function SignIn() {
   }
 
   return (
-    <SimpleGrid h="100vh" columns={{ base: 1, md: 2 }}>
-      <Flex
-        display={{ base: "none", md: "flex" }}
-        h="100vh"
-        style={{ background: "#7e89fd" }}
-        justify="center"
-        align="center"
-      >
-        <Image src="/logicall-banner.png" alt="" />
-      </Flex>
-      <Container pt="8">
-        <Stack spacing="12">
-          <Flex justify="center" align="center">
-            <Image width="30%" src="/box.svg" alt="" />
-          </Flex>
-          <SignInForm />
-        </Stack>
-      </Container>
-    </SimpleGrid>
+    <Container pt="8">
+      <Stack spacing="8">
+        <Flex justify="center" color="gray.600" align="center" direction="column">
+          <Image width="30%" src="/box.svg" alt="" />
+          <Heading as="h1" size="lg" mt="4">
+            LogiCall
+          </Heading>
+          <Heading as="h5" size="xs">
+            admin
+          </Heading>
+        </Flex>
+        <SignInForm />
+      </Stack>
+    </Container>
   );
 }

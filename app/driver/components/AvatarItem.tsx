@@ -6,7 +6,7 @@ function AvatarItem(props) {
   const { item, button, onPress, right, selected } = props;
 
   return (
-    <ListItem avatar button={button} onPress={onPress} selected={selected}>
+    <ListItem avatar key={item.userId} button={button} onPress={onPress} selected={selected}>
       <Left>
         {/* <Thumbnail source={{ uri: item.avatarUri }} /> */}
         <Avatar.Text size={48} label={item.firstName[0] + item.lastName[0]} />

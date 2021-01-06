@@ -74,11 +74,13 @@ export const graphql = {
           firstName
           lastName
         }
-        driver {
-          userId
-          username
-          firstName
-          lastName
+        jobs{
+          driver {
+            userId
+            username
+            firstName
+            lastName
+          }
         }
         sendAddress
         sendLatLng {
