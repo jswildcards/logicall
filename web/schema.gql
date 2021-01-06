@@ -2,10 +2,7 @@ type Query {
   me: User
   users(search: String!): [User]
   user(userId: Int!): User
-  addresses(userId: Int!): [Address]
-  districts: [District]
-  coordinates(query: String, county: String): LatLng
-  orders(orderSearch: OrderSearch): [Order]
+  orders: [Order]
 }
 
 type Mutation {
@@ -13,15 +10,8 @@ type Mutation {
   signIn(input: SignInInput): User!
   signOut: String
 
-  addFriend(userId: Int!): User
-
   createOrder(input: CreateOrderInput): Order
   updateOrderStatus(orderId: String, status: String): Order
-}
-
-type District {
-  districtId: ID
-  name: String
 }
 
 type LatLng {
@@ -36,60 +26,26 @@ type User {
   email: String
   username: String
   role: String
-  avatarUri: String
-  depot: Depot
   receiveOrders: [Order]
   sendOrders: [Order]
-  deliverOrders: [Order]
-  followees: [Follow]
-  followers: [Follow]
-  addresses: [Address]
+  driverOrders: [Order]
   createdAt: String
   updatedAt: String
   deletedAt: String
-}
-
-type Follow {
-  followerId: Int
-  followeeId: Int
-  followee: User!
-  follower: User!
-}
-
-type Depot {
-  depotId: Int
-  name: String
-  district: String
-  latitude: Float
-  longitude: Float
 }
 
 type Order {
   orderId: ID!
   sender: User
-  senderAddress: Address
+  sendAddress: String
+  sendLatLng: LatLng
   receiver: User
-  receiverAddress: Address
-  sendDriver: User
-  receiveDriver: User
-  sendDepot: Depot
-  receiveDepot: Depot
+  receiveAddress: String
+  receiveLatLng: LatLng
+  driver: User
   status: String
-  qrcode: String
   comments: String
   logs: [OrderLog]
-  createdAt: String
-  updatedAt: String
-  deletedAt: String
-}
-
-type Address {
-  addressId: ID
-  User: User
-  address: String
-  district: String
-  latitude: Float
-  longitude: Float
   createdAt: String
   updatedAt: String
   deletedAt: String
@@ -105,15 +61,11 @@ type OrderLog {
   deletedAt: String
 }
 
-input OrderSearch {
-  depotId: ID
-  status: String
-}
-
 input SignUpInput {
   firstName: String!
   lastName: String!
   email: String!
+  phone: String
   username: String!
   password: String!
   role: String!
@@ -127,6 +79,8 @@ input SignInInput {
 
 input CreateOrderInput {
   receiverId: Int
-  sendAddressId: Int
-  receiveAddressId: Int
+  sendAddress: String
+  sendLatLng: String
+  receiveAddress: String
+  receiveLatLng: String
 }

@@ -7,47 +7,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Address {
-  addressId    Int       @id @default(autoincrement())
-  customerId   Int
-  address      String?
-  district     String?
-  latitude     Float?
-  longitude    Float?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @default(now())
-  deletedAt    DateTime?
-  User         User      @relation(fields: [customerId], references: [userId])
-  receiveOrder Order[]   @relation("AddressToOrder_receiveAddressId")
-  sendOrder    Order[]   @relation("AddressToOrder_sendAddressId")
-}
-
 model Order {
-  orderId          String     @id
-  senderId         Int
-  sendAddressId    Int
-  receiverId       Int
-  receiveAddressId Int
-  sendDriverId     Int?
-  receiveDriverId  Int?
-  weight           Float?
-  receiveDepotId   Int?
-  sendDepotId      Int?
-  status           status?
-  qrcode           String?
-  comments         String?
-  createdAt        DateTime   @default(now())
-  updatedAt        DateTime   @default(now())
-  deletedAt        DateTime?
-  receiverAddress  Address    @relation("AddressToOrder_receiveAddressId", fields: [receiveAddressId], references: [addressId])
-  receiveDepot     Depot?     @relation("DepotToOrder_receiveDepotId", fields: [receiveDepotId], references: [depotId])
-  receiveDriver    User?      @relation("Order_receiveDriverIdToUser", fields: [receiveDriverId], references: [userId])
-  receiver         User       @relation("Order_receiverIdToUser", fields: [receiverId], references: [userId])
-  senderAddress    Address    @relation("AddressToOrder_sendAddressId", fields: [sendAddressId], references: [addressId])
-  sendDepot        Depot?     @relation("DepotToOrder_sendDepotId", fields: [sendDepotId], references: [depotId])
-  sendDriver       User?      @relation("Order_sendDriverIdToUser", fields: [sendDriverId], references: [userId])
-  sender           User       @relation("Order_senderIdToUser", fields: [senderId], references: [userId])
-  logs             OrderLog[]
+  orderId        String     @id
+  senderId       Int
+  sendAddress    String?
+  sendLatLng     String?
+  receiverId     Int
+  receiveAddress String?
+  receiveLatLng  String?
+  driverId       Int?
+  status         status?
+  comments       String?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @default(now())
+  deletedAt      DateTime?
+  driver         User?      @relation("Order_driverIdToUser", fields: [driverId], references: [userId])
+  receiver       User       @relation("Order_receiverIdToUser", fields: [receiverId], references: [userId])
+  sender         User       @relation("Order_senderIdToUser", fields: [senderId], references: [userId])
+  logs           OrderLog[]
 }
 
 model OrderLog {
@@ -62,78 +39,26 @@ model OrderLog {
 }
 
 model User {
-  userId              Int       @id @default(autoincrement())
-  firstName           String?
-  lastName            String?
-  email               String    @unique
-  phone               String?
-  username            String    @unique
-  password            String
-  role                role
-  avatarUri           String?
-  depotId             Int?
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @default(now())
-  deletedAt           DateTime?
-  depot               Depot?    @relation(fields: [depotId], references: [depotId])
-  addresses           Address[]
-  followers           Follow[]  @relation("Follow_followeeIdToUser")
-  followees           Follow[]  @relation("Follow_followerIdToUser")
-  Job                 Job[]
-  receiveDriverOrders Order[]   @relation("Order_receiveDriverIdToUser")
-  receiveOrders       Order[]   @relation("Order_receiverIdToUser")
-  sendDriverOrders    Order[]   @relation("Order_sendDriverIdToUser")
-  sendOrders          Order[]   @relation("Order_senderIdToUser")
-}
-
-model Follow {
-  followId   Int       @id @default(autoincrement())
-  followerId Int
-  followeeId Int
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @default(now())
-  deletedAt  DateTime?
-  followee   User      @relation("Follow_followeeIdToUser", fields: [followeeId], references: [userId])
-  follower   User      @relation("Follow_followerIdToUser", fields: [followerId], references: [userId])
-
-  @@unique([followerId, followeeId], name: "Follow_followerId_followeeId_key")
-}
-
-model Depot {
-  depotId       Int       @id @default(autoincrement())
-  name          String?
-  district      String?
-  latitude      Float?
-  longitude     Float?
+  userId        Int       @id @default(autoincrement())
+  firstName     String?
+  lastName      String?
+  email         String    @unique
+  phone         String?
+  username      String    @unique
+  password      String
+  role          role
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now())
   deletedAt     DateTime?
-  receiveOrders Order[]   @relation("DepotToOrder_receiveDepotId")
-  sendOrders    Order[]   @relation("DepotToOrder_sendDepotId")
-  User          User[]
-}
-
-model Job {
-  jobId       Int       @id @default(autoincrement())
-  driverId    Int
-  shift       shift?
-  district    String?
-  totalWeight Float     @default(0)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now())
-  deletedAt   DateTime?
-  User        User      @relation(fields: [driverId], references: [userId])
+  driverOrders  Order[]   @relation("Order_driverIdToUser")
+  receiveOrders Order[]   @relation("Order_receiverIdToUser")
+  sendOrders    Order[]   @relation("Order_senderIdToUser")
 }
 
 enum role {
   customer
   admin
   driver
-}
-
-enum shift {
-  AM
-  PM
 }
 
 enum status {

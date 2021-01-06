@@ -1,4 +1,4 @@
-import type { Prisma, status as Status } from "@prisma/client";
+import type { status as Status } from "@prisma/client";
 import { Order, User } from "@prisma/client";
 import { Cookie as CookieConfig } from "../utils/config";
 import { encrypt } from "../utils/crypto";
@@ -6,17 +6,10 @@ import token from "../utils/token";
 import { Context } from "../utils/types";
 import { setCookie } from "../utils/cookies";
 
-async function findDepotByAddressId(addressId: number, prisma) {
-  const { district } = await prisma.address.findUnique({
-    where: { addressId },
-  });
-  return prisma.depot.findFirst({ where: { district } });
-}
-
 export async function signUp(
   _: any,
   { input }: { input: User },
-  { prisma, response }: Context
+  { prisma, response }: Context,
 ) {
   const data = { ...input, password: encrypt(input.password) };
   const user = await prisma.user.create({ data });
@@ -30,7 +23,7 @@ export async function signUp(
 export async function signIn(
   _: any,
   { input }: { input: User },
-  { prisma, response }: Context
+  { prisma, response }: Context,
 ) {
   const encryptedPassword = encrypt(input.password);
   const user = await prisma.user.findUnique({
@@ -57,62 +50,30 @@ export async function signOut(_parent: any, _args: any, { response }: Context) {
   return "Logout Success";
 }
 
-export async function addFriend(
-  _parent: any,
-  { userId }: Prisma.UserWhereUniqueInput,
-  { auth, prisma, response }: Context
-) {
-  if (!auth?.userId) {
-    response.status(401);
-    throw new Error("Unathorized");
-  }
-
-  await prisma.follow.create({
-    data: {
-      follower: { connect: { userId: auth.userId } },
-      followee: { connect: { userId } },
-    },
-  });
-
-  const result = await prisma.user.findUnique({
-    where: { userId: auth.userId },
-    include: {
-      receiveOrders: true,
-      sendOrders: true,
-      followees: {
-        include: { followee: true },
-      },
-    },
-  });
-
-  return result;
-}
-
 export async function createOrder(
   _: any,
   { input }: { input: Order },
-  { auth, response, prisma }: Context
+  { auth, response, prisma }: Context,
 ) {
   if (!auth?.userId) {
     response.status(401);
     throw new Error("Unathorized");
   }
 
-  const { receiverId, sendAddressId, receiveAddressId } = input;
-  const sendDepot = await findDepotByAddressId(sendAddressId, prisma);
-  const receiveDepot = await findDepotByAddressId(receiveAddressId, prisma);
+  const { receiverId, receiveAddress, receiveLatLng, sendLatLng, sendAddress } =
+    input;
 
   return prisma.order.create({
     data: {
-      orderId: `${new Date().valueOf().toString(36)}-${
-        auth.userId
-      }-${receiverId}`.toUpperCase(),
+      orderId: `${
+        new Date().valueOf().toString(36)
+      }-${auth.userId}-${receiverId}`.toUpperCase(),
       sender: { connect: { userId: auth.userId } },
       receiver: { connect: { userId: receiverId } },
-      senderAddress: { connect: { addressId: sendAddressId } },
-      receiverAddress: { connect: { addressId: receiveAddressId } },
-      sendDepot: { connect: { depotId: sendDepot.depotId } },
-      receiveDepot: { connect: { depotId: receiveDepot.depotId } },
+      receiveAddress,
+      receiveLatLng,
+      sendAddress,
+      sendLatLng,
       status: "Pending",
     },
   });
@@ -120,12 +81,16 @@ export async function createOrder(
 
 export async function updateOrderStatus(
   _parent: any,
-  { orderId, status }: { orderId: string; status: Status },
-  { prisma }: Context
+  { orderId, status, comments }: {
+    orderId: string;
+    status: Status;
+    comments: string;
+  },
+  { prisma }: Context,
 ) {
   return prisma.order.update({
     where: { orderId },
-    data: { status },
+    data: { status, comments },
   });
 }
 
@@ -133,7 +98,6 @@ export default {
   signUp,
   signIn,
   signOut,
-  addFriend,
   createOrder,
   updateOrderStatus,
 };

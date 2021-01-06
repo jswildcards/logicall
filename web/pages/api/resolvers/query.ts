@@ -1,7 +1,4 @@
 import { UserWhereUniqueInput } from "@prisma/client";
-import Axios from "axios";
-import fs from "fs";
-import path from "path";
 import { Context } from "../utils/types";
 
 export async function users(
@@ -14,11 +11,6 @@ export async function users(
       username: { contains: search, mode: "insensitive" },
       role: "customer",
       userId: { not: auth.userId },
-      followers: {
-        none: {
-          followerId: auth.userId,
-        },
-      },
     },
   });
 }
@@ -45,64 +37,16 @@ export async function me(
     where: { userId: auth.userId },
     include: {
       receiveOrders: {
-        include: {
-          sender: true,
-          senderAddress: true,
-          receiver: true,
-          receiverAddress: true,
-        },
+        include: { sender: true, receiver: true },
       },
-      sendOrders: true,
-      addresses: true,
-      followees: {
-        include: { followee: true },
+      sendOrders: {
+        include: { sender: true, receiver: true },
       },
-      followers: {
-        include: { follower: true },
+      driverOrders: {
+        include: { sender: true, receiver: true },
       },
-      depot: true,
     },
   });
-}
-
-export async function addresses(
-  _parent: any,
-  { userId: customerId }: { userId: number },
-  { prisma }: Context
-) {
-  return prisma.address.findMany({
-    where: { customerId },
-    include: { User: true },
-  });
-}
-
-export async function districts() {
-  const districtsData = JSON.parse(
-    fs.readFileSync(path.join(__dirname, "../../data/districts.json"), "utf-8")
-  );
-
-  return districtsData.features.map(({ properties }: any) => ({
-    districtId: properties?.["地區號碼"],
-    name: properties?.["地區"],
-  }));
-}
-
-export async function coordinates(
-  _parent: any,
-  { query, county }: { query: string; county: string }
-) {
-  const results = (
-    await Axios.get(
-      encodeURI(
-        `https://nominatim.openstreetmap.org/search/${query}, ${county}, 香港?format=json&addressdetails=1&limit=1`
-      )
-    )
-  ).data.map(({ lat, lon }: { lat: number; lon: number }) => ({
-    latitude: lat,
-    longitude: lon,
-  }))[0];
-
-  return results;
 }
 
 export async function orders(
@@ -114,25 +58,26 @@ export async function orders(
     response.status(401);
     throw new Error("Unathorized");
   }
-  let where = {};
-  if ((auth.depotId ?? null) !== null) {
-    where = {
-      OR: {
-        sendDepotId: Number(auth.depotId),
-        receiveDepotId: Number(auth.depotId),
-      },
-    };
-  }
 
-  return prisma.order.findMany({
-    where,
+  const results = await prisma.order.findMany({
     include: {
       sender: true,
-      senderAddress: true,
-      receiverAddress: true,
       receiver: true,
+      driver: true,
+      logs: true,
     },
+  });
+
+  return results.map((order) => {
+    const [receiveLat, receiveLng] = order.receiveLatLng.split(",").map(Number);
+    const [sendLat, sendLng] = order.sendLatLng.split(",").map(Number);
+
+    return {
+      ...order,
+      receiveLatLng: { latitude: receiveLat, longitude: receiveLng },
+      sendLatLng: { latitude: sendLat, longitude: sendLng },
+    };
   });
 }
 
-export default { users, user, me, addresses, districts, coordinates, orders };
+export default { users, user, me, orders };
