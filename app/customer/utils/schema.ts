@@ -63,9 +63,15 @@ export const schema = {
             phone
           }
           sendAddress
-          sendLatLng
+          sendLatLng {
+            latitude
+            longitude
+          }
           receiveAddress
-          receiveLatLng
+          receiveLatLng {
+            latitude
+            longitude
+          }
           status
           comments
         }
@@ -94,9 +100,15 @@ export const schema = {
             phone
           }
           sendAddress
-          sendLatLng
+          sendLatLng {
+            latitude
+            longitude
+          }
           receiveAddress
-          receiveLatLng
+          receiveLatLng {
+            latitude
+            longitude
+          }
           status
           comments
         }

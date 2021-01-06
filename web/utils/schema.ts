@@ -44,9 +44,15 @@ export const graphql = {
           phone
         }
         sendAddress
-        sendLatLng
+        sendLatLng {
+          latitude
+          longitude
+        }
         receiveAddress
-        receiveLatLng
+        receiveLatLng {
+          latitude
+          longitude
+        }
         status
         comments
       }
@@ -75,9 +81,15 @@ export const graphql = {
           lastName
         }
         sendAddress
-        sendLatLng
+        sendLatLng {
+          latitude
+          longitude
+        }
         receiveAddress
-        receiveLatLng
+        receiveLatLng {
+          latitude
+          longitude
+        }
         status
         comments
       }

@@ -25,6 +25,7 @@ type User {
   lastName: String
   email: String
   username: String
+  phone: String
   role: String
   receiveOrders: [Order]
   sendOrders: [Order]
