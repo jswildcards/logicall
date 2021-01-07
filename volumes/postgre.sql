@@ -46,6 +46,7 @@ CREATE TABLE "Job" (
   "driverId"    INTEGER NOT NULL REFERENCES "User"("userId"),
   "orderId"     VARCHAR(255) NOT NULL REFERENCES "Order"("orderId"),
   "status"      JOB_STATUS NULL,
+  "polyline"    TEXT NULL,
   "createdAt"   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updatedAt"   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "deletedAt"   TIMESTAMP NULL

@@ -26,6 +26,7 @@ import schema from "../utils/schema";
 import NoData from "../components/NoData";
 import FixedContainer from "../components/FixedContainer";
 import AvatarItem from "../components/AvatarItem";
+import QRCodeComponent from "../components/QRCode";
 
 const styles = StyleSheet.create({
   col: {
@@ -103,6 +104,7 @@ function Page() {
                   <Text note>
                     {`created ${moment.tz(parseInt(order.createdAt), "Asia/Hong_Kong").format("YYYY-MM-DD HH:mm")}`}
                   </Text>
+                  <QRCodeComponent />
                 </Body>
               </CardItem>
             </Card>
@@ -117,6 +119,7 @@ function Page() {
                   <Text note>
                     {`created ${moment.tz(parseInt(order.createdAt), "Asia/Hong_Kong").format("YYYY-MM-DD HH:mm")}`}
                   </Text>
+                  <QRCodeComponent />
                 </Body>
               </CardItem>
             </Card>

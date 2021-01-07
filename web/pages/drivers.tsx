@@ -1,5 +1,5 @@
-import { Container } from "@chakra-ui/react";
-import React from "react";
+import { Container, Text } from "@chakra-ui/react";
+import React, { useMemo } from "react";
 import { useQuery, useMutation } from "react-apollo";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
@@ -11,9 +11,14 @@ export default function Drivers() {
   const router = useRouter();
   const { data: me, loading, error } = useQuery(schema.query.me);
   const [signOut] = useMutation(schema.mutation.signOut);
-  const MapWithNoSSR = dynamic(() => import("../components/map"), {
-    ssr: false
-  });
+  const Map = useMemo(
+    () =>
+      dynamic(() => import("../components/map"), {
+        loading: () => <Text>Loading</Text>,
+        ssr: false,
+      }),
+    []
+  );
 
   if (loading) {
     return <></>;
@@ -35,9 +40,9 @@ export default function Drivers() {
           });
         }}
       />
-      
-      <Container maxW="6xl" h="3xl" py="3">
-        <MapWithNoSSR />
+
+      <Container maxW="full" p="0" style={{ height: "calc(100vh - 100.8px)" }}>
+        <Map markers={[{ latitude: 22.4, longitude: 114.1 }]} />
       </Container>
     </>
   );

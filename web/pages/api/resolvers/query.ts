@@ -105,15 +105,4 @@ export async function orders(
   });
 }
 
-export async function route(
-  _parent: any,
-  { origin, destination }: { origin: string; destination: string }
-) {
-  const result = (await Axios.get(
-    `https://router.hereapi.com/v8/routes?transportMode=car&origin=${origin}&destination=${destination}&return=polyline,summary&apiKey=${HereApiKey}`
-  )).data;
-
-  return JSON.stringify(result.routes[0]);
-}
-
-export default { users, user, me, orders, route };
+export default { users, user, me, orders };

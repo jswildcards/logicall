@@ -19,6 +19,7 @@ import HomePage from "./pages/Home";
 import ProfilePage from "./pages/Profile";
 import SignInPage from "./pages/SignIn";
 import MapPage from "./pages/Map";
+import ScannerPage from "./pages/Scanner";
 import Tab from "./components/Tab";
 
 import { client } from "./utils/schema";
@@ -73,6 +74,15 @@ function App() {
                 tabBarStyle={styles.tabs}
                 showLabel={false}
               >
+                <Scene
+                  key="scanner"
+                  icon={Tab}
+                  iconName="camera"
+                  iosIconName="ios-camera"
+                  component={ScannerPage}
+                  title="Scanner"
+                  hideNavBar
+                />
                 <Scene
                   key="home"
                   icon={Tab}

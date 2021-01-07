@@ -5,11 +5,13 @@ import { encrypt } from "../utils/crypto";
 import token from "../utils/token";
 import { Context } from "../utils/types";
 import { setCookie } from "../utils/cookies";
+import Axios from "axios";
+import {HereApiKey} from '../utils/config'
 
 export async function signUp(
   _: any,
   { input }: { input: User },
-  { prisma, response }: Context
+  { prisma, response }: Context,
 ) {
   const data = { ...input, password: encrypt(input.password) };
   const user = await prisma.user.create({ data });
@@ -23,7 +25,7 @@ export async function signUp(
 export async function signIn(
   _: any,
   { input }: { input: User },
-  { prisma, response }: Context
+  { prisma, response }: Context,
 ) {
   const encryptedPassword = encrypt(input.password);
   const user = await prisma.user.findUnique({
@@ -53,7 +55,7 @@ export async function signOut(_parent: any, _args: any, { response }: Context) {
 export async function createOrder(
   _: any,
   { input }: { input: Order },
-  { auth, response, prisma }: Context
+  { auth, response, prisma }: Context,
 ) {
   if (!auth?.userId) {
     response.status(401);
@@ -70,9 +72,9 @@ export async function createOrder(
 
   return prisma.order.create({
     data: {
-      orderId: `${new Date().valueOf().toString(36)}-${
-        auth.userId
-      }-${receiverId}`.toUpperCase(),
+      orderId: `${
+        new Date().valueOf().toString(36)
+      }-${auth.userId}-${receiverId}`.toUpperCase(),
       sender: { connect: { userId: auth.userId } },
       receiver: { connect: { userId: receiverId } },
       receiveAddress,
@@ -96,7 +98,7 @@ export async function updateOrderStatus(
       comments: string;
     };
   },
-  { prisma }: Context
+  { prisma }: Context,
 ) {
   return prisma.order.update({
     where: { orderId },
@@ -104,7 +106,11 @@ export async function updateOrderStatus(
   });
 }
 
-export async function createJob(_, _args, { prisma, auth, response }: Context) {
+export async function createJob(
+  _: any,
+  { origin }: { origin: string },
+  { prisma, auth, response }: Context,
+) {
   if (!auth?.userId || auth?.role !== "driver") {
     response.status(401);
     throw new Error("Unathorized");
@@ -120,11 +126,18 @@ export async function createJob(_, _args, { prisma, auth, response }: Context) {
     data: { status: "Assigned", comments: `Assigned to @${auth.username}` },
   });
 
+  const { polyline } = (
+    await Axios.get(
+      `https://router.hereapi.com/v8/routes?transportMode=car&origin=${origin}&via=${order.sendLatLng}&destination=${order.receiveLatLng}&return=polyline,summary&apiKey=${HereApiKey}`,
+    )
+  ).data.routes[0].sections[0];
+
   return prisma.job.create({
     data: {
       order: { connect: { orderId: order.orderId } },
       driver: { connect: { userId: auth.userId } },
       status: "Created",
+      polyline,
     },
   });
 }

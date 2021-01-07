@@ -16,11 +16,6 @@ export const client = new ApolloClient({
 
 export const schema = {
   query: {
-    route: gql`
-      query ($origin: String, $destination: String) {
-        route(origin: $origin, destination: $destination)
-      }
-    `,
     me: gql`
       {
         me {
@@ -33,6 +28,7 @@ export const schema = {
           username
           jobs {
             status
+            polyline
             order {
               orderId
               sender {
@@ -121,9 +117,10 @@ export const schema = {
   },
   mutation: {
     createJob: gql`
-      mutation {
-        createJob {
+      mutation($origin: String) {
+        createJob(origin: $origin) {
           jobId
+          polyline
           order {
             orderId
             sender {
