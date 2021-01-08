@@ -8,8 +8,10 @@ case $1 in
       [ -f "$dir/.env" ] && echo "Created: $dir/.env"
     done
     ;;
-  dev)
-    docker-compose -p dev -f docker-compose.yml -f docker-compose.dev.yml up -d db adminer
+  db)
+    docker kill db
+    docker rm db
+    docker-compose -p test -f docker-compose.yml -f docker-compose.test.yml up -d db
     ;;
   test)
     docker-compose -p test -f docker-compose.yml -f docker-compose.test.yml build --force-rm --compress --no-cache db web
@@ -31,7 +33,7 @@ Usage: sh ./build.sh COMMAND
 
 Commands:
   init        initialize each app environment variables
-  dev         build docker development-stage database
+  db          build docker development-stage database
   test        build docker environment for testing the whole web app (including APIs)
   prod        build deploy docker containers using docker swarm
   exit-prod   exit production mode

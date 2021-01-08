@@ -1,15 +1,15 @@
 import { Container, Content } from "native-base";
 import React from "react";
-import { StatusBar } from "react-native";
+import { StatusBar, View } from "react-native";
 import QRScanner from "../components/QRScanner";
 
 function Page() {
   return (
     <Container>
       <StatusBar />
-      <Content>
+      <View style={{ flex: 1 }}>
         <QRScanner />
-      </Content>
+      </View>
     </Container>
   );
 }

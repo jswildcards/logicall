@@ -1,4 +1,5 @@
 import { PrismaClient, User } from "@prisma/client";
+import { PubSub } from "graphql-subscriptions";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export interface Context {
@@ -6,4 +7,5 @@ export interface Context {
   prisma: PrismaClient;
   request: NextApiRequest;
   response: NextApiResponse;
+  pubsub: PubSub;
 }

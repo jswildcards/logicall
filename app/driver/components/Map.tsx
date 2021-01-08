@@ -1,7 +1,6 @@
 import React from "react";
-import * as Location from "expo-location";
+// import * as Location from "expo-location";
 import MapView, { Marker, Polyline } from "react-native-maps";
-import { Text } from "native-base";
 import { decode } from "../utils/here-polyline";
 
 class Map extends React.Component {
@@ -52,46 +51,43 @@ class Map extends React.Component {
     const { latitude: cLat, longitude: cLng } = this.state.currentLocation;
 
     return (
-      <>
-        <Text>{`${cLat}, ${cLng}`}</Text>
-        <MapView
-          style={{ width: "100%", height: 550 }}
-          region={{
+      <MapView
+        style={{ flex: 1 }}
+        region={{
+          latitude: cLat,
+          longitude: cLng,
+          latitudeDelta: 0.0421,
+          longitudeDelta: 0.0421,
+        }}
+      >
+        <Marker
+          key="send"
+          coordinate={{
+            latitude: sLat,
+            longitude: sLng,
+          }}
+        />
+        <Marker
+          key="receive"
+          coordinate={{
+            latitude: rLat,
+            longitude: rLng,
+          }}
+        />
+        <Marker
+          key="current"
+          coordinate={{
             latitude: cLat,
             longitude: cLng,
-            latitudeDelta: 0.0421,
-            longitudeDelta: 0.0421,
           }}
-        >
-          <Marker
-            key="send"
-            coordinate={{
-              latitude: sLat,
-              longitude: sLng,
-            }}
-          />
-          <Marker
-            key="receive"
-            coordinate={{
-              latitude: rLat,
-              longitude: rLng,
-            }}
-          />
-          <Marker
-            key="current"
-            coordinate={{
-              latitude: cLat,
-              longitude: cLng,
-            }}
-          />
-          <Polyline
-            coordinates={this.state.polyline}
-            strokeColor="#B24112"
-            strokeWidth={4}
-          />
-          {/* <Polyline coordinates={paths} strokeColor="#238C23" strokeWidth={4} /> */}
-        </MapView>
-      </>
+        />
+        <Polyline
+          coordinates={this.state.polyline}
+          strokeColor="#B24112"
+          strokeWidth={4}
+        />
+        {/* <Polyline coordinates={paths} strokeColor="#238C23" strokeWidth={4} /> */}
+      </MapView>
     );
   }
 }

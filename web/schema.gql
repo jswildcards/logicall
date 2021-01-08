@@ -14,6 +14,19 @@ type Mutation {
   updateOrderStatus(input: UpdateOrderStatusInput): Order
 
   createJob(origin: String): Job
+
+  requestCurrentLocation: String
+  responseCurrentLocation(input: LatLngInput): ResponseCurrentLocation
+}
+
+type Subscription {
+  currentLocationRequested: String
+  currentLocationResponsed: ResponseCurrentLocation
+}
+
+type ResponseCurrentLocation {
+  user: User
+  latLng: LatLng
 }
 
 type LatLng {
@@ -101,4 +114,9 @@ input UpdateOrderStatusInput {
   orderId: String
   status: String
   comments: String
+}
+
+input LatLngInput {
+  latitude: Float
+  longitude: Float
 }

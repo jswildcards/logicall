@@ -93,14 +93,12 @@ export class ExpoScanner extends Component {
       return <Text>No access to camera</Text>;
     }
     return (
-      <View style={styles.container}>
-        <View style={{ flex: 1 }}>
-          <BarCodeScanner
-            onBarCodeScanned={this.onBarCodeRead}
-            style={StyleSheet.absoluteFill}
-          />
-          {this.renderMessage()}
-        </View>
+      <View style={{ flex: 1 }}>
+        <BarCodeScanner
+          onBarCodeScanned={this.onBarCodeRead}
+          style={{ flex: 1 }}
+        />
+        {this.renderMessage()}
       </View>
     );
   }

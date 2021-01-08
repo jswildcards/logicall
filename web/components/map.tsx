@@ -11,7 +11,7 @@ export default function Map({ markers }) {
       center={[22.4, 114.1]}
       zoom={11}
       scrollWheelZoom={false}
-      style={{ height: "100%", width: "100%" }}
+      style={{ height: "100%", width: "100%", zIndex: 0 }}
     >
       <TileLayer
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

@@ -1,6 +1,3 @@
-import { UserWhereUniqueInput } from "@prisma/client";
-import Axios from "axios";
-import { HereApiKey } from "../utils/config";
 import { Context } from "../utils/types";
 
 export async function users(
@@ -19,7 +16,7 @@ export async function users(
 
 export async function user(
   _parent: any,
-  { userId }: UserWhereUniqueInput,
+  { userId }: { userId: number },
   { prisma }: Context
 ) {
   return prisma.user.findUnique({ where: { userId } });
