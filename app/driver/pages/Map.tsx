@@ -5,7 +5,7 @@ import HeaderNav from "../components/HeaderNav";
 import Map from "../components/Map";
 
 function Page({ job }) {
-  const { order, polyline } = job;
+  const { order, polylines } = job;
 
   return (
     <Container>
@@ -15,7 +15,7 @@ function Page({ job }) {
         <Map
           sendLatLng={order.sendLatLng}
           receiveLatLng={order.receiveLatLng}
-          polyline={polyline}
+          polylines={polylines}
         />
       </View>
     </Container>

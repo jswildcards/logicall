@@ -102,9 +102,17 @@ function Page() {
                 <Body>
                   <Text>{order.status}</Text>
                   <Text note>
-                    {`created ${moment.tz(parseInt(order.createdAt), "Asia/Hong_Kong").format("YYYY-MM-DD HH:mm")}`}
+                    {`created ${moment
+                      .tz(parseInt(order.createdAt), "Asia/Hong_Kong")
+                      .format("YYYY-MM-DD HH:mm")}`}
                   </Text>
-                  <QRCodeComponent />
+                  <QRCodeComponent
+                    data={{
+                      orderId: order.orderId,
+                      status: "Delivered",
+                      comments: `Delivered to @${data.me.username} by`
+                    }}
+                  />
                 </Body>
               </CardItem>
             </Card>
@@ -117,16 +125,23 @@ function Page() {
                 <Body>
                   <Text>{order.status}</Text>
                   <Text note>
-                    {`created ${moment.tz(parseInt(order.createdAt), "Asia/Hong_Kong").format("YYYY-MM-DD HH:mm")}`}
+                    {`created ${moment
+                      .tz(parseInt(order.createdAt), "Asia/Hong_Kong")
+                      .format("YYYY-MM-DD HH:mm")}`}
                   </Text>
-                  <QRCodeComponent />
+                  <QRCodeComponent
+                    data={{
+                      orderId: order.orderId,
+                      status: "Delivering",
+                      comments: `Received from @${data.me.username} by`
+                    }}
+                  />
                 </Body>
               </CardItem>
             </Card>
           ))}
 
           {/* <Fab /> */}
-          {/* <Text>{JSON.stringify(data.me.receiveOrders)}</Text> */}
         </FixedContainer>
       </Content>
     </Container>

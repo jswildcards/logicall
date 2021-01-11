@@ -8,7 +8,12 @@ class Map extends React.Component {
 
   constructor(props) {
     super(props);
-    const polyline = decode(props.polyline).polyline.map(([latitude, longitude]) => ({ latitude, longitude }));
+    const polyline = JSON.parse(props.polylines).flatMap((polyline) =>
+      decode(polyline).polyline.map(([latitude, longitude]) => ({
+        latitude,
+        longitude,
+      }))
+    );
     // console.log(decode(props.polyline))
 
     this.state = {
@@ -16,7 +21,7 @@ class Map extends React.Component {
         latitude: 22.4,
         longitude: 114.1,
       },
-      polyline
+      polyline,
     };
   }
 
@@ -25,7 +30,6 @@ class Map extends React.Component {
     // const { coords: {latitude, longitude }} = await Location.getCurrentPositionAsync();
     // console.log(`${latitude}, ${longitude}`);
     // this.setState({ currentLocation: { latitude, longitude } });
-
     // this.watchID = Location.watchPositionAsync(
     //   {
     //     accuracy: Location.Accuracy.Balanced,
@@ -48,7 +52,10 @@ class Map extends React.Component {
   render() {
     const { latitude: sLat, longitude: sLng } = this.props.sendLatLng;
     const { latitude: rLat, longitude: rLng } = this.props.receiveLatLng;
-    const { latitude: cLat, longitude: cLng } = this.state.currentLocation;
+    const {
+      polyline,
+      currentLocation: { latitude: cLat, longitude: cLng },
+    } = this.state;
 
     return (
       <MapView
@@ -82,7 +89,7 @@ class Map extends React.Component {
           }}
         />
         <Polyline
-          coordinates={this.state.polyline}
+          coordinates={polyline}
           strokeColor="#B24112"
           strokeWidth={4}
         />

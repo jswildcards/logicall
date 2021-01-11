@@ -20,6 +20,7 @@ import ProfilePage from "./pages/Profile";
 import SignInPage from "./pages/SignIn";
 import MapPage from "./pages/Map";
 import ScannerPage from "./pages/Scanner";
+import ScannResultPage from "./pages/ScanResult";
 import Tab from "./components/Tab";
 
 import { client } from "./utils/schema";
@@ -65,6 +66,12 @@ function App() {
                 key="map"
                 component={MapPage}
                 title="Map"
+                hideNavBar
+              />
+              <Scene
+                key="scanResult"
+                component={ScannResultPage}
+                title="Scan Result"
                 hideNavBar
               />
               <Scene

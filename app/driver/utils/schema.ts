@@ -28,7 +28,7 @@ export const schema = {
           username
           jobs {
             status
-            polyline
+            polylines
             order {
               orderId
               sender {
@@ -116,11 +116,46 @@ export const schema = {
     `,
   },
   mutation: {
+    updateOrderStatus: gql`
+      mutation($input: UpdateOrderStatusInput) {
+        updateOrderStatus(input: $input) {
+          orderId
+          sender {
+            userId
+            username
+            firstName
+            lastName
+            email
+            phone
+          }
+          receiver {
+            userId
+            username
+            firstName
+            lastName
+            email
+            phone
+          }
+          sendAddress
+          sendLatLng {
+            latitude
+            longitude
+          }
+          receiveAddress
+          receiveLatLng {
+            latitude
+            longitude
+          }
+          status
+          comments
+        }
+      }
+    `,
     createJob: gql`
       mutation($origin: String) {
         createJob(origin: $origin) {
           jobId
-          polyline
+          polylines
           order {
             orderId
             sender {

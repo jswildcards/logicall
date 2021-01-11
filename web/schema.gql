@@ -73,7 +73,7 @@ type Job {
   driver: User
   order: Order
   status: String
-  polyline: String
+  polylines: String
 }
 
 type OrderLog {

@@ -1,5 +1,5 @@
 CREATE TYPE role AS ENUM ('customer', 'admin', 'driver');
-CREATE TYPE status AS ENUM('Pending', 'Approved', 'Rejected', 'Cancelled', 'Assigned', 'Collecting', 'Collected', 'Delivering', 'Delivered');
+CREATE TYPE status AS ENUM('Pending', 'Approved', 'Rejected', 'Cancelled', 'Collecting', 'Delivering', 'Delivered');
 CREATE TYPE job_status AS ENUM('Created', 'Processing', 'Finished');
 
 CREATE TABLE "User" (
@@ -46,7 +46,7 @@ CREATE TABLE "Job" (
   "driverId"    INTEGER NOT NULL REFERENCES "User"("userId"),
   "orderId"     VARCHAR(255) NOT NULL REFERENCES "Order"("orderId"),
   "status"      JOB_STATUS NULL,
-  "polyline"    TEXT NULL,
+  "polylines"   TEXT NULL,
   "createdAt"   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updatedAt"   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "deletedAt"   TIMESTAMP NULL

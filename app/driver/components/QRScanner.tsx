@@ -3,14 +3,11 @@ import { Alert, View, Text, Vibration, StyleSheet } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { Camera } from "expo-camera";
 import * as Permissions from "expo-permissions";
+import { Actions } from "react-native-router-flux";
 
 export class ExpoScanner extends Component {
   constructor(props) {
     super(props);
-
-    this.onBarCodeRead = this.onBarCodeRead.bind(this);
-    this.renderMessage = this.renderMessage.bind(this);
-    this.scannedCode = null;
 
     this.state = {
       hasCameraPermission: null,
@@ -20,85 +17,29 @@ export class ExpoScanner extends Component {
 
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    await this.setState({ hasCameraPermission: status === "granted" });
-    await this.resetScanner();
-  }
-
-  onBarCodeRead({ type, data }) {
-    if (
-      (type === this.state.scannedItem.type &&
-        data === this.state.scannedItem.data) ||
-      data === null
-    ) {
-      return;
-    }
-
-    Vibration.vibrate();
-    this.setState({ scannedItem: { data, type } });
-
-    if (type.startsWith("org.gs1.EAN")) {
-      // Do something for EAN
-      console.log(`EAN scanned: ${data}`);
-      this.resetScanner();
-      this.props.navigation.navigate("YOUR_NEXT_SCREEN", { ean: data });
-    } else if (type.startsWith("org.iso.QRCode")) {
-      // Do samething for QRCode
-      console.log(`QRCode scanned: ${data}`);
-      this.resetScanner();
-    } else {
-      this.renderAlert("This barcode is not supported.", `${type} : ${data}`);
-    }
-  }
-
-  resetScanner() {
-    this.scannedCode = null;
-    this.setState({
-      scannedItem: {
-        type: null,
-        data: null,
-      },
-    });
-  }
-
-  renderMessage() {
-    if (this.state.scannedItem && this.state.scannedItem.type) {
-      const { type, data } = this.state.scannedItem;
-      return (
-        <Text style={styles.scanScreenMessage}>
-          {`Scanned \n ${type} \n ${data}`}
-        </Text>
-      );
-    }
-    return (
-      <Text style={styles.scanScreenMessage}>Focus the barcode to scan.</Text>
-    );
-  }
-
-  renderAlert(title, message) {
-    Alert.alert(
-      title,
-      message,
-      [{ text: "OK", onPress: () => this.resetScanner() }],
-      { cancelable: true }
-    );
+    this.setState({ hasCameraPermission: status === "granted" });
   }
 
   render() {
     const { hasCameraPermission } = this.state;
 
     if (hasCameraPermission === null) {
-      return <Text>Requesting for camera permission</Text>;
+      return (
+        <View style={styles.container}>
+          <Text>Requesting for camera permission</Text>
+        </View>
+      );
     }
     if (hasCameraPermission === false) {
       return <Text>No access to camera</Text>;
     }
+
     return (
       <View style={{ flex: 1 }}>
         <BarCodeScanner
-          onBarCodeScanned={this.onBarCodeRead}
+          onBarCodeScanned={this.props.onBarCodeRead}
           style={{ flex: 1 }}
         />
-        {this.renderMessage()}
       </View>
     );
   }
@@ -107,16 +48,11 @@ export class ExpoScanner extends Component {
 export default ExpoScanner;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    height: 550,
-  },
-  scanScreenMessage: {
+  contsiner: {
     fontSize: 20,
-    color: "white",
     textAlign: "center",
     alignItems: "center",
     justifyContent: "center",
+    flex: 1,
   },
 });

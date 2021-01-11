@@ -59,7 +59,7 @@ model Job {
   driverId  Int
   orderId   String
   status    job_status?
-  polyline  String?
+  polylines String?
   createdAt DateTime    @default(now())
   updatedAt DateTime    @default(now())
   deletedAt DateTime?
@@ -78,9 +78,7 @@ enum status {
   Approved
   Rejected
   Cancelled
-  Assigned
   Collecting
-  Collected
   Delivering
   Delivered
 }
