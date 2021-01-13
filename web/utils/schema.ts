@@ -74,7 +74,7 @@ export const graphql = {
           firstName
           lastName
         }
-        jobs{
+        jobs {
           driver {
             userId
             username
