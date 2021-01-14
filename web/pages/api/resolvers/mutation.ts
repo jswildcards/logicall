@@ -7,6 +7,7 @@ import token from "../utils/token";
 import { Context } from "../utils/types";
 import { setCookie } from "../utils/cookies";
 import {
+  CREATE_ORDER,
   REQUEST_CURRENT_LOCATION,
   RESPONSE_CURRENT_LOCATION,
 } from "../utils/subscription-types";
@@ -14,7 +15,7 @@ import {
 export async function signUp(
   _: any,
   { input }: { input: User },
-  { prisma, response }: Context,
+  { prisma, response }: Context
 ) {
   const data = { ...input, password: encrypt(input.password) };
   const user = await prisma.user.create({ data });
@@ -28,7 +29,7 @@ export async function signUp(
 export async function signIn(
   _: any,
   { input }: { input: User },
-  { prisma, response }: Context,
+  { prisma, response }: Context
 ) {
   const encryptedPassword = encrypt(input.password);
   const user = await prisma.user.findUnique({
@@ -58,7 +59,7 @@ export async function signOut(_parent: any, _args: any, { response }: Context) {
 export async function createOrder(
   _: any,
   { input }: { input: Order },
-  { auth, response, prisma }: Context,
+  { auth, response, prisma, pubsub }: Context
 ) {
   if (!auth?.userId) {
     response.status(401);
@@ -73,11 +74,11 @@ export async function createOrder(
     sendAddress,
   } = input;
 
-  return prisma.order.create({
+  const order = await prisma.order.create({
     data: {
-      orderId: `${
-        new Date().valueOf().toString(36)
-      }-${auth.userId}-${receiverId}`.toUpperCase(),
+      orderId: `${new Date().valueOf().toString(36)}-${
+        auth.userId
+      }-${receiverId}`.toUpperCase(),
       sender: { connect: { userId: auth.userId } },
       receiver: { connect: { userId: receiverId } },
       receiveAddress,
@@ -87,7 +88,22 @@ export async function createOrder(
       status: "Pending",
       comments: `Created by @${auth.username}`,
     },
+    include: {
+      sender: true,
+      receiver: true
+    }
   });
+
+  const [receiveLat, receiveLng] = order.receiveLatLng.split(",").map(Number);
+  const [sendLat, sendLng] = order.sendLatLng.split(",").map(Number);
+  const result = {
+    ...order,
+    receiveLatLng: { latitude: receiveLat, longitude: receiveLng },
+    sendLatLng: { latitude: sendLat, longitude: sendLng },
+  }; 
+
+  pubsub.publish(CREATE_ORDER, { orderCreated: result });
+  return result;
 }
 
 export async function updateOrderStatus(
@@ -101,12 +117,8 @@ export async function updateOrderStatus(
       comments: string;
     };
   },
-  { prisma }: Context,
+  { prisma }: Context
 ) {
-  console.log(orderId);
-  console.log(status);
-  console.log(comments);
-
   return prisma.order.update({
     where: { orderId },
     data: { status, comments },
@@ -116,7 +128,7 @@ export async function updateOrderStatus(
 export async function createJob(
   _: any,
   { origin }: { origin: string },
-  { prisma, auth, response }: Context,
+  { prisma, auth, response }: Context
 ) {
   if (!auth?.userId || auth?.role !== "driver") {
     response.status(401);
@@ -133,11 +145,13 @@ export async function createJob(
     data: { status: "Collecting", comments: `Assigned to @${auth.username}` },
   });
 
-  const polylines = JSON.stringify((
-    await Axios.get(
-      `https://router.hereapi.com/v8/routes?transportMode=car&origin=${origin}&via=${order.sendLatLng}&destination=${order.receiveLatLng}&return=polyline,summary&apiKey=${HereApiKey}`,
-    )
-  ).data.routes[0].sections.map(({ polyline }) => polyline));
+  const polylines = JSON.stringify(
+    (
+      await Axios.get(
+        `https://router.hereapi.com/v8/routes?transportMode=car&origin=${origin}&via=${order.sendLatLng}&destination=${order.receiveLatLng}&return=polyline,summary&apiKey=${HereApiKey}`
+      )
+    ).data.routes[0].sections.map(({ polyline }) => polyline)
+  );
 
   return prisma.job.create({
     data: {
@@ -157,9 +171,9 @@ export function requestCurrentLocation(_parent, _args, { pubsub }: Context) {
 }
 
 export function responseCurrentLocation(
-  _parent,
+  _parent: any,
   { input: { latitude, longitude } },
-  { pubsub, auth, response }: Context,
+  { pubsub, auth, response }: Context
 ) {
   if (!auth?.userId) {
     response.status(401);

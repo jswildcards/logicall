@@ -41,7 +41,7 @@ export default function Drivers() {
         }}
       />
 
-      <Container maxW="full" p="0" style={{ height: "calc(100vh - 100.8px)" }}>
+      <Container maxW="full" h="100vh" p="0" pt="100.8px">
         <Map markers={[{ latitude: 22.4, longitude: 114.1 }]} />
       </Container>
     </>

@@ -24,37 +24,40 @@ export const graphql = {
         username
       }
     }`,
-    orders: gql `{
-      orders {
-        orderId
-        sender {
-          userId
-          username
-          firstName
-          lastName
-          email
-          phone
+    orders: gql `query($input: OrdersInput) {
+      orders(input: $input) {
+        orders {
+          orderId
+          sender {
+            userId
+            username
+            firstName
+            lastName
+            email
+            phone
+          }
+          receiver {
+            userId
+            username
+            firstName
+            lastName
+            email
+            phone
+          }
+          sendAddress
+          sendLatLng {
+            latitude
+            longitude
+          }
+          receiveAddress
+          receiveLatLng {
+            latitude
+            longitude
+          }
+          status
+          comments
         }
-        receiver {
-          userId
-          username
-          firstName
-          lastName
-          email
-          phone
-        }
-        sendAddress
-        sendLatLng {
-          latitude
-          longitude
-        }
-        receiveAddress
-        receiveLatLng {
-          latitude
-          longitude
-        }
-        status
-        comments
+        count
       }
     }`
   },
@@ -120,6 +123,45 @@ export const graphql = {
       signOut
     }`,
   },
+  subscription: {
+    orderCreated: gql`subscription {
+      orderCreated {
+        orderId
+        sender {
+          userId
+          username
+          firstName
+          lastName
+        }
+        receiver {
+          userId
+          username
+          firstName
+          lastName
+        }
+        jobs {
+          driver {
+            userId
+            username
+            firstName
+            lastName
+          }
+        }
+        sendAddress
+        sendLatLng {
+          latitude
+          longitude
+        }
+        receiveAddress
+        receiveLatLng {
+          latitude
+          longitude
+        }
+        status
+        comments
+      }
+    }`
+  }
 };
 
 export default graphql;

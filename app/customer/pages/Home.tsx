@@ -1,22 +1,16 @@
 import React from "react";
-import { StatusBar, StyleSheet } from "react-native";
+import { StatusBar } from "react-native";
 import {
   Container,
-  Grid,
   Text,
   Button,
-  Col,
-  Row,
-  H1,
   H3,
-  // Body,
-  View,
   Body,
   Card,
   CardItem,
   Content,
-  List,
   Fab,
+  Icon,
 } from "native-base";
 import { useQuery } from "react-apollo";
 import { Actions } from "react-native-router-flux";
@@ -28,31 +22,8 @@ import FixedContainer from "../components/FixedContainer";
 import AvatarItem from "../components/AvatarItem";
 import QRCodeComponent from "../components/QRCode";
 
-const styles = StyleSheet.create({
-  col: {
-    flex: 1,
-  },
-  row: {
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  body: {
-    alignSelf: "center",
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  header: {
-    marginTop: 8,
-    color: "#536DFE",
-  },
-  bold: {
-    fontWeight: "bold",
-  },
-});
-
 function Page() {
-  const { loading, error, data } = useQuery(schema.query.me);
+  const { loading, error, data } = useQuery(schema.query.me, { pollInterval: 500 });
 
   if (loading) {
     return (
@@ -103,14 +74,14 @@ function Page() {
                   <Text>{order.status}</Text>
                   <Text note>
                     {`created ${moment
-                      .tz(parseInt(order.createdAt), "Asia/Hong_Kong")
+                      .tz(Number(order.createdAt), "Asia/Hong_Kong")
                       .format("YYYY-MM-DD HH:mm")}`}
                   </Text>
                   <QRCodeComponent
                     data={{
                       orderId: order.orderId,
                       status: "Delivered",
-                      comments: `Delivered to @${data.me.username} by`
+                      comments: `Delivered to @${data.me.username} by`,
                     }}
                   />
                 </Body>
@@ -126,14 +97,14 @@ function Page() {
                   <Text>{order.status}</Text>
                   <Text note>
                     {`created ${moment
-                      .tz(parseInt(order.createdAt), "Asia/Hong_Kong")
+                      .tz(Number(order.createdAt), "Asia/Hong_Kong")
                       .format("YYYY-MM-DD HH:mm")}`}
                   </Text>
                   <QRCodeComponent
                     data={{
                       orderId: order.orderId,
                       status: "Delivering",
-                      comments: `Received from @${data.me.username} by`
+                      comments: `Received from @${data.me.username} by`,
                     }}
                   />
                 </Body>
@@ -141,9 +112,9 @@ function Page() {
             </Card>
           ))}
 
-          {/* <Fab /> */}
         </FixedContainer>
       </Content>
+      <Fab style={{ backgroundColor: '#5067FF' }} position="bottomRight" onPress={() => Actions.createOrder1SelectReceiver()}><Icon ios-name="ios-add" name="add" /></Fab>
     </Container>
   );
 }

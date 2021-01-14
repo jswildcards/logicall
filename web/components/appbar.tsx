@@ -34,6 +34,9 @@ function AppBar({ user, signOut }) {
       padding="1.5rem"
       bg="blue.500"
       color="white"
+      pos="fixed"
+      w="100%"
+      zIndex="1000"
     >
       <Flex align="center" direction="column" mr={5}>
         <Heading as="h1" size="lg">

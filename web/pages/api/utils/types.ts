@@ -9,3 +9,8 @@ export interface Context {
   response: NextApiResponse;
   pubsub: PubSub;
 }
+
+export interface Page {
+  page: number
+  size: number
+}

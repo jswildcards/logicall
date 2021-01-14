@@ -2,7 +2,7 @@ type Query {
   me: User
   users(search: String!): [User]
   user(userId: Int!): User
-  orders: [Order]
+  orders(input: OrdersInput): OrderQueryResult
 }
 
 type Mutation {
@@ -22,6 +22,12 @@ type Mutation {
 type Subscription {
   currentLocationRequested: String
   currentLocationResponsed: ResponseCurrentLocation
+  orderCreated: Order
+}
+
+type OrderQueryResult {
+  orders: [Order]
+  count: Int
 }
 
 type ResponseCurrentLocation {
@@ -119,4 +125,14 @@ input UpdateOrderStatusInput {
 input LatLngInput {
   latitude: Float
   longitude: Float
+}
+
+input PageInput {
+  size: Int
+  page: Int
+}
+
+input OrdersInput {
+  pagination: PageInput
+  status: String
 }

@@ -1,4 +1,5 @@
-import { Context } from "../utils/types";
+import { status as Status } from "@prisma/client";
+import { Context, Page } from "../utils/types";
 
 export async function users(
   _parent: any,
@@ -72,7 +73,9 @@ export async function me(
 
 export async function orders(
   _parent: any,
-  _args: any,
+  {
+    input: { pagination, status },
+  }: { input: { pagination: Page; status: Status } },
   { prisma, auth, response }: Context
 ) {
   if (!auth?.userId || auth?.role !== "admin") {
@@ -87,19 +90,33 @@ export async function orders(
       jobs: { include: { driver: true } },
       logs: true,
     },
+    where: {
+      status,
+    },
     orderBy: { orderId: "desc" },
+    skip: (pagination.page - 1) * pagination.size,
+    take: pagination.size,
   });
 
-  return results.map((order) => {
-    const [receiveLat, receiveLng] = order.receiveLatLng.split(",").map(Number);
-    const [sendLat, sendLng] = order.sendLatLng.split(",").map(Number);
+  const count = await prisma.order.count({ where: { status } });
 
-    return {
-      ...order,
-      receiveLatLng: { latitude: receiveLat, longitude: receiveLng },
-      sendLatLng: { latitude: sendLat, longitude: sendLng },
-    };
-  });
+  const result = {
+    orders: results.map((order) => {
+      const [receiveLat, receiveLng] = order.receiveLatLng
+        .split(",")
+        .map(Number);
+      const [sendLat, sendLng] = order.sendLatLng.split(",").map(Number);
+
+      return {
+        ...order,
+        receiveLatLng: { latitude: receiveLat, longitude: receiveLng },
+        sendLatLng: { latitude: sendLat, longitude: sendLng },
+      };
+    }),
+    count,
+  };
+
+  return result;
 }
 
 export default { users, user, me, orders };
