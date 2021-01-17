@@ -1,4 +1,5 @@
 import { status as Status } from "@prisma/client";
+import { mapStringToLatLng } from "../../../utils/convert";
 import { Context, Page } from "../utils/types";
 
 export async function users(
@@ -54,18 +55,9 @@ export async function me(
   return {
     ...result,
     jobs: result.jobs.map((job) => {
-      const [receiveLat, receiveLng] = job.order.receiveLatLng
-        .split(",")
-        .map(Number);
-      const [sendLat, sendLng] = job.order.sendLatLng.split(",").map(Number);
-
       return {
         ...job,
-        order: {
-          ...job.order,
-          receiveLatLng: { latitude: receiveLat, longitude: receiveLng },
-          sendLatLng: { latitude: sendLat, longitude: sendLng },
-        },
+        order: mapStringToLatLng(job.order),
       };
     }),
   };
@@ -73,9 +65,7 @@ export async function me(
 
 export async function orders(
   _parent: any,
-  {
-    input: { pagination, status },
-  }: { input: { pagination: Page; status: Status } },
+  _args: any,
   { prisma, auth, response }: Context
 ) {
   if (!auth?.userId || auth?.role !== "admin") {
@@ -83,40 +73,39 @@ export async function orders(
     throw new Error("Unathorized");
   }
 
-  const results = await prisma.order.findMany({
+  return prisma.order.findMany({
     include: {
       sender: true,
       receiver: true,
       jobs: { include: { driver: true } },
       logs: true,
     },
-    where: {
-      status,
-    },
     orderBy: { orderId: "desc" },
-    skip: (pagination.page - 1) * pagination.size,
-    take: pagination.size,
   });
-
-  const count = await prisma.order.count({ where: { status } });
-
-  const result = {
-    orders: results.map((order) => {
-      const [receiveLat, receiveLng] = order.receiveLatLng
-        .split(",")
-        .map(Number);
-      const [sendLat, sendLng] = order.sendLatLng.split(",").map(Number);
-
-      return {
-        ...order,
-        receiveLatLng: { latitude: receiveLat, longitude: receiveLng },
-        sendLatLng: { latitude: sendLat, longitude: sendLng },
-      };
-    }),
-    count,
-  };
-
-  return result;
 }
 
-export default { users, user, me, orders };
+export async function order(
+  _parent: any,
+  { orderId }: { orderId: string },
+  { prisma }: Context
+) {
+  const result = await prisma.order.findUnique({
+    where: { orderId },
+    include: {
+      sender: true,
+      receiver: true,
+      jobs: { include: { driver: true } },
+      logs: { orderBy: { orderLogId: "desc" } },
+    },
+  });
+
+  if ((result.jobs?.[0]?.status ?? false) === "Finished") {
+    result.duration =
+      Math.floor((result.logs.find((log) => log.status === "Delivered").createdAt.valueOf() -
+      result.logs.find((log) => log.status === "Collecting").createdAt.valueOf()) / 1000);
+  }
+
+  return mapStringToLatLng(result);
+}
+
+export default { users, user, me, orders, order };

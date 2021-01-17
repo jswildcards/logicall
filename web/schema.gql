@@ -2,7 +2,8 @@ type Query {
   me: User
   users(search: String!): [User]
   user(userId: Int!): User
-  orders(input: OrdersInput): OrderQueryResult
+  orders: [Order]
+  order(orderId: String): Order
 }
 
 type Mutation {
@@ -23,11 +24,7 @@ type Subscription {
   currentLocationRequested: String
   currentLocationResponsed: ResponseCurrentLocation
   orderCreated: Order
-}
-
-type OrderQueryResult {
-  orders: [Order]
-  count: Int
+  orderStatusUpdated: Order
 }
 
 type ResponseCurrentLocation {
@@ -65,6 +62,9 @@ type Order {
   receiver: User
   receiveAddress: String
   receiveLatLng: LatLng
+  suggestedPolylines: String
+  estimatedDuration: Int
+  duration: Int
   status: String
   comments: String
   logs: [OrderLog]
@@ -80,6 +80,7 @@ type Job {
   order: Order
   status: String
   polylines: String
+  duration: Int
 }
 
 type OrderLog {
@@ -134,5 +135,5 @@ input PageInput {
 
 input OrdersInput {
   pagination: PageInput
-  status: String
+  status: [String]
 }

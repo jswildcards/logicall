@@ -10,8 +10,10 @@
     "svg": "react-native-expo-svg"
   },
   "dependencies": {
+    "@apollo/client": "^3.3.7",
     "@react-native-community/masked-view": "^0.1.10",
     "apollo-boost": "^0.4.9",
+    "apollo-link-ws": "^1.0.20",
     "dotenv": "^8.2.0",
     "eslint-config-prettier": "^6.15.0",
     "expo": "~38.0.8",
@@ -40,7 +42,8 @@
     "react-native-screens": "~2.9.0",
     "react-native-skeleton-placeholder": "^3.0.1",
     "react-native-svg": "^12.1.0",
-    "react-native-web": "~0.11.7"
+    "react-native-web": "~0.11.7",
+    "subscriptions-transport-ws": "^0.9.18"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",

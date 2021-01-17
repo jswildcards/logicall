@@ -1,6 +1,6 @@
 CREATE TYPE role AS ENUM ('customer', 'admin', 'driver');
 CREATE TYPE status AS ENUM('Pending', 'Approved', 'Rejected', 'Cancelled', 'Collecting', 'Delivering', 'Delivered');
-CREATE TYPE job_status AS ENUM('Created', 'Processing', 'Finished');
+CREATE TYPE job_status AS ENUM('Processing', 'Finished');
 
 CREATE TABLE "User" (
   "userId"    SERIAL PRIMARY KEY NOT NULL,
@@ -17,18 +17,20 @@ CREATE TABLE "User" (
 );
 
 CREATE TABLE "Order" (
-  "orderId"           VARCHAR(255) PRIMARY KEY NOT NULL,
-  "senderId"          INTEGER NOT NULL REFERENCES "User"("userId"),
-  "sendAddress"       TEXT NULL,
-  "sendLatLng"        TEXT NULL,
-  "receiverId"        INTEGER NOT NULL REFERENCES "User"("userId"),
-  "receiveAddress"    TEXT NULL,
-  "receiveLatLng"     TEXT NULL,
-  "status"            STATUS NULL,
-  "comments"          TEXT NULL,
-  "createdAt"         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  "updatedAt"         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  "deletedAt"         TIMESTAMP NULL
+  "orderId"             VARCHAR(255) PRIMARY KEY NOT NULL,
+  "senderId"            INTEGER NOT NULL REFERENCES "User"("userId"),
+  "sendAddress"         TEXT NULL,
+  "sendLatLng"          TEXT NULL,
+  "receiverId"          INTEGER NOT NULL REFERENCES "User"("userId"),
+  "receiveAddress"      TEXT NULL,
+  "receiveLatLng"       TEXT NULL,
+  "suggestedPolylines"  TEXT NULL,
+  "status"              STATUS NULL,
+  "comments"            TEXT NULL,
+  "estimatedDuration"   INTEGER NULL,
+  "createdAt"           TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt"           TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "deletedAt"           TIMESTAMP NULL
 );
 
 CREATE TABLE "OrderLog" (
@@ -47,6 +49,7 @@ CREATE TABLE "Job" (
   "orderId"     VARCHAR(255) NOT NULL REFERENCES "Order"("orderId"),
   "status"      JOB_STATUS NULL,
   "polylines"   TEXT NULL,
+  "duration"    INTEGER NULL,
   "createdAt"   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updatedAt"   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "deletedAt"   TIMESTAMP NULL

@@ -18,7 +18,8 @@ function Page() {
       <StatusBar />
       <View style={{ flex: 1 }}>
         <QRScanner
-          onBarCodeRead={({ data }) => {data = JSON.parse(data)
+          onBarCodeRead={({ data }) => {
+            data = JSON.parse(data);
             console.log({
               input: {
                 ...data,

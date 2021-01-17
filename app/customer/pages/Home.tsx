@@ -23,7 +23,9 @@ import AvatarItem from "../components/AvatarItem";
 import QRCodeComponent from "../components/QRCode";
 
 function Page() {
-  const { loading, error, data } = useQuery(schema.query.me, { pollInterval: 500 });
+  const { loading, error, data } = useQuery(schema.query.me, {
+    pollInterval: 500,
+  });
 
   if (loading) {
     return (
@@ -51,11 +53,11 @@ function Page() {
           icon={<EmptyIcon height="30%" />}
           title="No Orders Here!"
           subtitle="Do you want to create an order now?"
-          button={(
+          button={
             <Button onPress={() => Actions.createOrder1SelectReceiver()}>
               <Text>Create Order</Text>
             </Button>
-          )}
+          }
         />
       </Container>
     );
@@ -111,10 +113,15 @@ function Page() {
               </CardItem>
             </Card>
           ))}
-
         </FixedContainer>
       </Content>
-      <Fab style={{ backgroundColor: '#5067FF' }} position="bottomRight" onPress={() => Actions.createOrder1SelectReceiver()}><Icon ios-name="ios-add" name="add" /></Fab>
+      <Fab
+        style={{ backgroundColor: "#5067FF" }}
+        position="bottomRight"
+        onPress={() => Actions.createOrder1SelectReceiver()}
+      >
+        <Icon ios-name="ios-add" name="add" />
+      </Fab>
     </Container>
   );
 }

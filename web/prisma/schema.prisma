@@ -8,22 +8,24 @@ datasource db {
 }
 
 model Order {
-  orderId        String     @id
-  senderId       Int
-  sendAddress    String?
-  sendLatLng     String?
-  receiverId     Int
-  receiveAddress String?
-  receiveLatLng  String?
-  status         status?
-  comments       String?
-  createdAt      DateTime   @default(now())
-  updatedAt      DateTime   @default(now())
-  deletedAt      DateTime?
-  receiver       User       @relation("Order_receiverIdToUser", fields: [receiverId], references: [userId])
-  sender         User       @relation("Order_senderIdToUser", fields: [senderId], references: [userId])
-  jobs           Job[]
-  logs           OrderLog[]
+  orderId            String     @id
+  senderId           Int
+  sendAddress        String?
+  sendLatLng         String?
+  receiverId         Int
+  receiveAddress     String?
+  receiveLatLng      String?
+  suggestedPolylines String?
+  status             status?
+  comments           String?
+  estimatedDuration  Int?
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @default(now())
+  deletedAt          DateTime?
+  receiver           User       @relation("Order_receiverIdToUser", fields: [receiverId], references: [userId])
+  sender             User       @relation("Order_senderIdToUser", fields: [senderId], references: [userId])
+  jobs               Job[]
+  logs               OrderLog[]
 }
 
 model OrderLog {
@@ -60,6 +62,7 @@ model Job {
   orderId   String
   status    job_status?
   polylines String?
+  duration  Int?
   createdAt DateTime    @default(now())
   updatedAt DateTime    @default(now())
   deletedAt DateTime?
@@ -84,7 +87,6 @@ enum status {
 }
 
 enum job_status {
-  Created
   Processing
   Finished
 }

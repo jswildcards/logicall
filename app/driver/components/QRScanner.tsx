@@ -1,9 +1,13 @@
 import React, { Component } from "react";
-import { Alert, View, Text, Vibration, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import { Camera } from "expo-camera";
 import * as Permissions from "expo-permissions";
-import { Actions } from "react-native-router-flux";
+
+function delay(time: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, time);
+  });
+}
 
 export class ExpoScanner extends Component {
   constructor(props) {
@@ -11,7 +15,7 @@ export class ExpoScanner extends Component {
 
     this.state = {
       hasCameraPermission: null,
-      type: Camera.Constants.Type.back,
+      data: null,
     };
   }
 
@@ -20,8 +24,16 @@ export class ExpoScanner extends Component {
     this.setState({ hasCameraPermission: status === "granted" });
   }
 
+  async onBarCodeRead({ data }) {
+    await delay(500);
+    if (this.state.data == data) return;
+    this.setState({ data });
+    return {data};
+  }
+
   render() {
     const { hasCameraPermission } = this.state;
+    const { onBarCodeRead } = this.props;
 
     if (hasCameraPermission === null) {
       return (
@@ -37,7 +49,9 @@ export class ExpoScanner extends Component {
     return (
       <View style={{ flex: 1 }}>
         <BarCodeScanner
-          onBarCodeScanned={this.props.onBarCodeRead}
+          onBarCodeScanned={({ data }) => {
+            this.onBarCodeRead({ data }).then(onBarCodeRead);
+          }}
           style={{ flex: 1 }}
         />
       </View>
@@ -48,7 +62,7 @@ export class ExpoScanner extends Component {
 export default ExpoScanner;
 
 const styles = StyleSheet.create({
-  contsiner: {
+  container: {
     fontSize: 20,
     textAlign: "center",
     alignItems: "center",

@@ -17,7 +17,7 @@ function Page() {
       <StatusBar />
       <HeaderNav title="Scan Result" />
       <Content>
-        <Text>{JSON.stringify(me.jobs[0].order)}</Text>
+        <Text>{JSON.stringify(me.me.jobs[0].order)}</Text>
       </Content>
     </Container>
   );

@@ -2,6 +2,7 @@ import {
   REQUEST_CURRENT_LOCATION,
   RESPONSE_CURRENT_LOCATION,
   CREATE_ORDER,
+  UPDATE_ORDER_STATUS,
 } from "../utils/subscription-types";
 import { Context } from "../utils/types";
 
@@ -23,4 +24,10 @@ export const orderCreated = {
   },
 };
 
-export default { currentLocationRequested, currentLocationResponsed, orderCreated };
+export const orderStatusUpdated = {
+  subscribe: (_parent: any, _args: any, { pubsub }: Context) => {
+    return pubsub.asyncIterator([UPDATE_ORDER_STATUS]);
+  },
+};
+
+export default { currentLocationRequested, currentLocationResponsed, orderCreated, orderStatusUpdated };

@@ -11,6 +11,8 @@ import {
   REQUEST_CURRENT_LOCATION,
   RESPONSE_CURRENT_LOCATION,
 } from "../utils/subscription-types";
+import { mapStringToLatLng } from "../../../utils/convert";
+import { mapDataToPolylinesAndDuration } from "../utils/convert";
 
 export async function signUp(
   _: any,
@@ -74,6 +76,12 @@ export async function createOrder(
     sendAddress,
   } = input;
 
+  const { polylines, duration } = mapDataToPolylinesAndDuration(
+    await Axios.get(
+      `https://router.hereapi.com/v8/routes?transportMode=car&origin=${sendLatLng}&destination=${receiveLatLng}&return=polyline,summary&apiKey=${HereApiKey}`
+    )
+  );
+
   const order = await prisma.order.create({
     data: {
       orderId: `${new Date().valueOf().toString(36)}-${
@@ -87,21 +95,16 @@ export async function createOrder(
       sendLatLng,
       status: "Pending",
       comments: `Created by @${auth.username}`,
+      suggestedPolylines: polylines,
+      estimatedDuration: duration,
     },
     include: {
       sender: true,
-      receiver: true
-    }
+      receiver: true,
+    },
   });
 
-  const [receiveLat, receiveLng] = order.receiveLatLng.split(",").map(Number);
-  const [sendLat, sendLng] = order.sendLatLng.split(",").map(Number);
-  const result = {
-    ...order,
-    receiveLatLng: { latitude: receiveLat, longitude: receiveLng },
-    sendLatLng: { latitude: sendLat, longitude: sendLng },
-  }; 
-
+  const result = mapStringToLatLng(order);
   pubsub.publish(CREATE_ORDER, { orderCreated: result });
   return result;
 }
@@ -117,12 +120,30 @@ export async function updateOrderStatus(
       comments: string;
     };
   },
-  { prisma }: Context
+  { prisma, pubsub }: Context
 ) {
-  return prisma.order.update({
+  const result = await prisma.order.update({
     where: { orderId },
     data: { status, comments },
+    include: { jobs: true },
   });
+
+  if (status === "Delivered") {
+    await prisma.job.update({
+      where: {
+        jobId: result.jobs[0].jobId,
+      },
+      data: {
+        status: "Finished",
+      },
+    });
+  }
+
+  pubsub.publish(RESPONSE_CURRENT_LOCATION, {
+    orderStatusUpdated: { ...result },
+  });
+
+  return result;
 }
 
 export async function createJob(
@@ -145,20 +166,19 @@ export async function createJob(
     data: { status: "Collecting", comments: `Assigned to @${auth.username}` },
   });
 
-  const polylines = JSON.stringify(
-    (
-      await Axios.get(
-        `https://router.hereapi.com/v8/routes?transportMode=car&origin=${origin}&via=${order.sendLatLng}&destination=${order.receiveLatLng}&return=polyline,summary&apiKey=${HereApiKey}`
-      )
-    ).data.routes[0].sections.map(({ polyline }) => polyline)
+  const { polylines, duration } = mapDataToPolylinesAndDuration(
+    await Axios.get(
+      `https://router.hereapi.com/v8/routes?transportMode=car&origin=${origin}&via=${order.sendLatLng}&destination=${order.receiveLatLng}&return=polyline,summary&apiKey=${HereApiKey}`
+    )
   );
 
   return prisma.job.create({
     data: {
       order: { connect: { orderId: order.orderId } },
       driver: { connect: { userId: auth.userId } },
-      status: "Created",
+      status: "Processing",
       polylines,
+      duration,
     },
   });
 }

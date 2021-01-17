@@ -3,14 +3,36 @@ import { ApolloClient } from "apollo-client";
 import { createHttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import Constants from "expo-constants";
+import { WebSocketLink } from "apollo-link-ws";
+import { split, ApolloLink } from "apollo-boost";
+import { getMainDefinition } from "apollo-utilities";
 
-const httpLink = createHttpLink(
-  { uri: `${Constants.manifest.extra.host}/api`, credentials: "include" }
-  // { uri, credentials: 'include' }
+const wsLink = new WebSocketLink({
+  uri: `ws://${Constants.manifest.extra.host}/api`,
+  options: {
+    reconnect: true,
+  },
+});
+
+const httpLink = createHttpLink({
+  uri: `http://${Constants.manifest.extra.host}/api`,
+  credentials: "include",
+});
+
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === "OperationDefinition" &&
+      definition.operation === "subscription"
+    );
+  },
+  wsLink,
+  httpLink
 );
 
 export const client = new ApolloClient({
-  link: httpLink,
+  link: ApolloLink.from([splitLink]),
   cache: new InMemoryCache(),
 });
 
@@ -219,6 +241,23 @@ export const schema = {
     signOut: gql`
       mutation {
         signOut
+      }
+    `,
+    responseCurrentLocation: gql`
+      mutation($input: LatLngInput) {
+        responseCurrentLocation(input: $input) {
+          latLng {
+            latitude
+            longitude
+          }
+        }
+      }
+    `,
+  },
+  subscription: {
+    currentLocationRequested: gql`
+      subscription {
+        currentLocationRequested
       }
     `,
   },

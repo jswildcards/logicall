@@ -1,5 +1,5 @@
 import React from "react";
-import { StatusBar, StyleSheet } from "react-native";
+import { StatusBar } from "react-native";
 import {
   Body,
   Button,
@@ -7,7 +7,6 @@ import {
   CardItem,
   Container,
   Content,
-  Fab,
   H3,
   Icon,
   Text,
@@ -25,13 +24,13 @@ import HeavyBoxIcon from "../components/icons/HeavyBoxIcon";
 function Page() {
   const { loading, error, data, refetch } = useQuery(schema.query.me);
   const [createJob] = useMutation(schema.mutation.createJob);
-  
+
   const getJob = async () => {
     // await Location.requestPermissionsAsync();
     // const { coords: {latitude, longitude }} = await Location.getCurrentPositionAsync();
-    
-    createJob({ variables: { origin: '22.4,114.1' } }).then(refetch)
-  }
+
+    createJob({ variables: { origin: "22.4,114.1" } }).then(refetch);
+  };
 
   if (loading) {
     return (
@@ -108,9 +107,6 @@ function Page() {
                 </CardItem>
               </Card>
             ))}
-
-          {/* <Fab /> */}
-          {/* <Text>{JSON.stringify(data.me.receiveOrders)}</Text> */}
         </FixedContainer>
       </Content>
     </Container>

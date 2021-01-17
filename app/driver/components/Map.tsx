@@ -1,6 +1,7 @@
 import React from "react";
 // import * as Location from "expo-location";
 import MapView, { Marker, Polyline } from "react-native-maps";
+import { mapStringToPolylines } from "../utils/convert";
 import { decode } from "../utils/here-polyline";
 
 class Map extends React.Component {
@@ -8,12 +9,9 @@ class Map extends React.Component {
 
   constructor(props) {
     super(props);
-    const polyline = JSON.parse(props.polylines).flatMap((polyline) =>
-      decode(polyline).polyline.map(([latitude, longitude]) => ({
-        latitude,
-        longitude,
-      }))
-    );
+    const polyline = mapStringToPolylines(
+      props.polylines
+    ).map(([latitude, longitude]) => ({ latitude, longitude }));
     // console.log(decode(props.polyline))
 
     this.state = {
