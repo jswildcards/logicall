@@ -25,6 +25,13 @@ function Page({ job }) {
     }
   };
 
+  const getCurrentLatLng = () => {
+    const [latitude, longitude] =
+      polylineLatLngs[visitedLatLng] ??
+      polylineLatLngs[polylineLatLngs.length - 1];
+    return { latitude, longitude };
+  };
+
   const {
     data: currentLocationRequested,
     loading: subloading,
@@ -40,6 +47,7 @@ function Page({ job }) {
         <Map
           sendLatLng={order.sendLatLng}
           receiveLatLng={order.receiveLatLng}
+          currentLatLng={getCurrentLatLng()}
           polylines={polylines}
         />
       </View>

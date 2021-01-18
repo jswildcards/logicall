@@ -26,7 +26,7 @@ export class ExpoScanner extends Component {
 
   async onBarCodeRead({ data }) {
     await delay(500);
-    if (this.state.data == data) return;
+    if (this.state.data === data) return new Promise((_, rej) => rej());
     this.setState({ data });
     return {data};
   }

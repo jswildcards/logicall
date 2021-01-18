@@ -35,7 +35,8 @@ function Page() {
               },
             })
               .then(refetch)
-              .then(Actions.scanResult);
+              .then(Actions.scanResult)
+              .catch();
           }}
         />
       </View>

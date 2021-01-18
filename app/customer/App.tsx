@@ -20,8 +20,8 @@ import ProfilePage from "./pages/Profile";
 import SignInPage from "./pages/SignIn";
 import SignUpPage from "./pages/SignUp";
 import CreateOrder1SelectReceiverPage from "./pages/create-order/1-SelectReceiver";
-import createOrder2SelectReceiverAddressPage from "./pages/create-order/2-SelectReceiverAddress";
-import createOrder3SelectSenderAddressPage from "./pages/create-order/3-SelectSendAddress";
+import createOrder2SelectSenderAddressPage from "./pages/create-order/2-SelectSendAddress";
+import createOrder3SelectReceiverAddressPage from "./pages/create-order/3-SelectReceiverAddress";
 import createOrder4FinishPage from "./pages/create-order/4-Finish";
 import Tab from "./components/Tab";
 
@@ -78,16 +78,16 @@ function App() {
                 clone
               />
               <Scene
-                key="createOrder2SelectAddress"
-                component={createOrder2SelectReceiverAddressPage}
-                title="Create Order - Select Receiver Address"
+                key="createOrder2SelectSendAddress"
+                component={createOrder2SelectSenderAddressPage}
+                title="Create Order - Sender Address"
                 hideNavBar
                 clone
               />
               <Scene
-                key="createOrder3SelectSendAddress"
-                component={createOrder3SelectSenderAddressPage}
-                title="Create Order - Sender Address"
+                key="createOrder3SelectReceiveAddress"
+                component={createOrder3SelectReceiverAddressPage}
+                title="Create Order - Select Receiver Address"
                 hideNavBar
                 clone
               />

@@ -10,6 +10,7 @@ import {
   CREATE_ORDER,
   REQUEST_CURRENT_LOCATION,
   RESPONSE_CURRENT_LOCATION,
+  UPDATE_ORDER_STATUS,
 } from "../utils/subscription-types";
 import { mapStringToLatLng } from "../../../utils/convert";
 import { mapDataToPolylinesAndDuration } from "../utils/convert";
@@ -139,7 +140,7 @@ export async function updateOrderStatus(
     });
   }
 
-  pubsub.publish(RESPONSE_CURRENT_LOCATION, {
+  pubsub.publish(UPDATE_ORDER_STATUS, {
     orderStatusUpdated: { ...result },
   });
 

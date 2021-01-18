@@ -56,9 +56,7 @@ function AppBar() {
       padding="1.5rem"
       bg="blue.500"
       color="white"
-      pos="fixed"
       w="100%"
-      zIndex="1000"
     >
       <Flex align="center" direction="column" mr={5}>
         <Heading as="h1" size="lg">
@@ -74,8 +72,8 @@ function AppBar() {
       </Box>
 
       <Box
-        display={{ sm: show ? "block" : "none", md: "flex" }}
-        width={{ sm: "full", md: "auto" }}
+        display={{ base: show ? "block" : "none", md: "flex" }}
+        width={{ base: "full", md: "auto" }}
         alignItems="center"
         flexGrow={1}
       >
@@ -102,7 +100,7 @@ function AppBar() {
         </MenuItems>
       </Box>
 
-      <Box display={{ sm: show ? "block" : "none", md: "flex" }}>
+      <Box display={{ base: show ? "block" : "none", md: "flex" }}>
         <Menu>
           <MenuButton
             as={Button}

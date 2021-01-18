@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function Page({ receiver }) {
+function Page({ receiver, sendLatLng, sendAddress }) {
   const [receiveAddress, setReceiveAddress] = useState({
     address: "",
     latitude: null,
@@ -35,8 +35,10 @@ function Page({ receiver }) {
           receiveAddress?.latitude && (
             <Button
               onPress={() =>
-                Actions.createOrder3SelectSendAddress({
+                Actions.createOrder4Finish({
                   receiver,
+                  sendAddress,
+                  sendLatLng,
                   receiveAddress: receiveAddress.address,
                   receiveLatLng: `${receiveAddress.latitude},${receiveAddress.longitude}`,
                 })}

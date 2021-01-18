@@ -1,7 +1,5 @@
 import {
-  Button,
   Container,
-  SimpleGrid,
   Stack,
   Text,
   Image,
@@ -24,10 +22,10 @@ export default function Home() {
     <>
       <AppBar />
 
-      <Container maxW="6xl" pt="100.8px">
+      <Container maxW="6xl">
         <Stack p="3" spacing="4">
           <Text fontSize="3xl" color="gray.600">
-            Welcome, @{me.me.username}.
+            Welcome, @{me?.me?.username}.
           </Text>
           <Text color="gray.600">
             Click on the following boxes to get started.

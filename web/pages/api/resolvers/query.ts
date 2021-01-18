@@ -39,15 +39,18 @@ export async function me(
     include: {
       receiveOrders: {
         include: { sender: true, receiver: true },
+        orderBy: { orderId: "desc" }
       },
       sendOrders: {
         include: { sender: true, receiver: true },
+        orderBy: { orderId: "desc" }
       },
       jobs: {
         include: {
           driver: true,
           order: { include: { sender: true, receiver: true } },
         },
+        orderBy: { jobId: "desc" }
       },
     },
   });

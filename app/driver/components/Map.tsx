@@ -2,7 +2,6 @@ import React from "react";
 // import * as Location from "expo-location";
 import MapView, { Marker, Polyline } from "react-native-maps";
 import { mapStringToPolylines } from "../utils/convert";
-import { decode } from "../utils/here-polyline";
 
 class Map extends React.Component {
   watchID: Promise<{ remove(): void }> | undefined;
@@ -15,10 +14,6 @@ class Map extends React.Component {
     // console.log(decode(props.polyline))
 
     this.state = {
-      currentLocation: {
-        latitude: 22.4,
-        longitude: 114.1,
-      },
       polyline,
     };
   }
@@ -50,10 +45,8 @@ class Map extends React.Component {
   render() {
     const { latitude: sLat, longitude: sLng } = this.props.sendLatLng;
     const { latitude: rLat, longitude: rLng } = this.props.receiveLatLng;
-    const {
-      polyline,
-      currentLocation: { latitude: cLat, longitude: cLng },
-    } = this.state;
+    const { latitude: cLat, longitude: cLng } = this.props.currentLatLng;
+    const { polyline } = this.state;
 
     return (
       <MapView

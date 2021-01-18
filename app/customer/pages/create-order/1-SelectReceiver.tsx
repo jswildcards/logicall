@@ -101,7 +101,7 @@ function Page() {
         right={
           receiver && (
             <Button
-              onPress={() => Actions.createOrder2SelectAddress({ receiver })}
+              onPress={() => Actions.createOrder2SelectSendAddress({ receiver })}
               transparent
             >
               <Text>Next</Text>

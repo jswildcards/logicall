@@ -24,7 +24,12 @@ import {
 import React, { useState } from "react";
 import { useQuery, useMutation, Subscription } from "react-apollo";
 import { useRouter } from "next/router";
-import { ArrowForwardIcon, EditIcon, ViewIcon } from "@chakra-ui/icons";
+import {
+  ArrowForwardIcon,
+  EditIcon,
+  RepeatIcon,
+  ViewIcon,
+} from "@chakra-ui/icons";
 import schema from "../../utils/schema";
 import AppBar from "../../components/appbar";
 import DisplayName from "../../components/display-name";
@@ -34,6 +39,7 @@ export default function Orders() {
   const router = useRouter();
   const toast = useToast();
   const [keywords, setKeywords] = useState("");
+  const [isRefetching, setRefetching] = useState(false);
   // const [ordersSelected, setOrdersSelected] = useState({});
   const statuses = [
     "Pending",
@@ -59,6 +65,18 @@ export default function Orders() {
   //     Object.values(ordersSelected).every(Boolean)
   //   );
   // };
+  const ordersRefetch = async () => {
+    setRefetching(true);
+    await refetch();
+    setRefetching(false);
+    toast({
+      position: "bottom-right",
+      title: "Refetch Completed!",
+      status: "success",
+      duration: null,
+      isClosable: true,
+    });
+  }
 
   const { orders } = data;
   const orderDesc = (orderId) => {
@@ -79,16 +97,26 @@ export default function Orders() {
   return (
     <>
       <AppBar />
-      <Container maxW="full" pt="100.8px">
-        <Stack spacing={3} p="3">
-          <Breadcrumb>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem isCurrentPage>
-              <BreadcrumbLink href="/orders">Orders</BreadcrumbLink>
-            </BreadcrumbItem>
-          </Breadcrumb>
+      <Container maxW="full" h="calc(100vh - 100.8px)" p="0">
+        <Stack spacing={3} h="100%" p="3">
+          <Flex justify="space-between" align="center">
+            <Breadcrumb>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbItem isCurrentPage>
+                <BreadcrumbLink href="/orders">Orders</BreadcrumbLink>
+              </BreadcrumbItem>
+            </Breadcrumb>
+
+            <IconButton
+              aria-label="Refetch Orders"
+              onClick={ordersRefetch}
+              isLoading={isRefetching}
+              variant="ghost"
+              icon={<RepeatIcon />}
+            />
+          </Flex>
           <Grid maxW="full" h="100%" gap={3} templateColumns="repeat(5,1fr)">
             <GridItem colSpan={1}>
               <Stack>
@@ -122,7 +150,7 @@ export default function Orders() {
                 })}
               </Stack>
             </GridItem>
-            <GridItem overflow="scroll" colSpan={4}>
+            <GridItem overflow="auto" colSpan={4}>
               <Table variant="simple">
                 <Thead>
                   <Tr>
@@ -146,11 +174,11 @@ export default function Orders() {
                 />
               </Th> */}
                     <Th>Order ID</Th>
+                    <Th>Status</Th>
                     <Th>Sender</Th>
                     <Th>Send Address</Th>
                     <Th>Receiver</Th>
                     <Th>Receive Address</Th>
-                    <Th>Status</Th>
                     <Th />
                   </Tr>
                 </Thead>
@@ -182,6 +210,13 @@ export default function Orders() {
                 </Td> */}
                         <Td>{order.orderId}</Td>
                         <Td>
+                          <Flex>
+                            <Badge colorScheme={mapStatusToColor(order.status)}>
+                              {order.status}
+                            </Badge>
+                          </Flex>
+                        </Td>
+                        <Td>
                           <DisplayName user={order.sender} />
                         </Td>
                         <Td>
@@ -192,13 +227,6 @@ export default function Orders() {
                         </Td>
                         <Td>
                           <Text>{order.receiveAddress}</Text>
-                        </Td>
-                        <Td>
-                          <Flex>
-                            <Badge colorScheme={mapStatusToColor(order.status)}>
-                              {order.status}
-                            </Badge>
-                          </Flex>
                         </Td>
                         <Td>
                           <IconButton

@@ -5,7 +5,7 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import Constants from "expo-constants";
 
 const httpLink = createHttpLink(
-  { uri: `${Constants.manifest.extra.host}/api`, credentials: "include" }
+  { uri: `http://${Constants.manifest.extra.host}/api`, credentials: "include" }
   // { uri, credentials: 'include' }
 );
 
@@ -145,6 +145,41 @@ export const schema = {
     `,
   },
   mutation: {
+    updateOrderStatus: gql`
+      mutation updateOrderStatus($input: UpdateOrderStatusInput) {
+        updateOrderStatus(input: $input) {
+          orderId
+          sender {
+            userId
+            username
+            firstName
+            lastName
+            email
+            phone
+          }
+          receiver {
+            userId
+            username
+            firstName
+            lastName
+            email
+            phone
+          }
+          sendAddress
+          sendLatLng {
+            latitude
+            longitude
+          }
+          receiveAddress
+          receiveLatLng {
+            latitude
+            longitude
+          }
+          status
+          comments
+        }
+      }
+    `,
     createOrder: gql`
       mutation createOrder($input: CreateOrderInput) {
         createOrder(input: $input) {

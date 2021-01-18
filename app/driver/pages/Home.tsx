@@ -29,7 +29,7 @@ function Page() {
     // await Location.requestPermissionsAsync();
     // const { coords: {latitude, longitude }} = await Location.getCurrentPositionAsync();
 
-    createJob({ variables: { origin: "22.4,114.1" } }).then(refetch);
+    createJob({ variables: { origin: "22.4,114.2" } }).then(refetch);
   };
 
   if (loading) {

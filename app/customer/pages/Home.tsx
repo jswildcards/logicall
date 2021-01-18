@@ -12,7 +12,7 @@ import {
   Fab,
   Icon,
 } from "native-base";
-import { useQuery } from "react-apollo";
+import { useMutation, useQuery } from "react-apollo";
 import { Actions } from "react-native-router-flux";
 import moment from "moment-timezone";
 import EmptyIcon from "../components/icons/EmptyIcon";
@@ -23,8 +23,11 @@ import AvatarItem from "../components/AvatarItem";
 import QRCodeComponent from "../components/QRCode";
 
 function Page() {
-  const { loading, error, data } = useQuery(schema.query.me, {
+  const { loading, error, data, refetch } = useQuery(schema.query.me, {
     pollInterval: 500,
+  });
+  const [updateOrderStatus] = useMutation(schema.mutation.updateOrderStatus, {
+    onCompleted: refetch,
   });
 
   if (loading) {
@@ -109,6 +112,25 @@ function Page() {
                       comments: `Received from @${data.me.username} by`,
                     }}
                   />
+                  {order.status === "Pending" && (
+                    <Button
+                      danger
+                      style={{marginTop:12}}
+                      onPress={() => {
+                        updateOrderStatus({
+                          variables: {
+                            input: {
+                              orderId: order.orderId,
+                              status: "Cancelled",
+                              comments: `Cancelled by @${data.me.username}`,
+                            },
+                          },
+                        });
+                      }}
+                    >
+                      <Text>Cancel</Text>
+                    </Button>
+                  )}
                 </Body>
               </CardItem>
             </Card>

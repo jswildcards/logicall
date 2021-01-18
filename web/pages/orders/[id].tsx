@@ -35,10 +35,12 @@ import {
   ModalHeader,
   ModalOverlay,
   useDisclosure,
+  IconButton,
+  useToast,
 } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import moment from "moment-timezone";
-import { ArrowDownIcon, SmallCloseIcon } from "@chakra-ui/icons";
+import { ArrowDownIcon, RepeatIcon, SmallCloseIcon } from "@chakra-ui/icons";
 import { MdMap } from "react-icons/md";
 import schema from "../../utils/schema";
 import AppBar from "../../components/appbar";
@@ -51,7 +53,9 @@ export default function Post() {
   const [getOrder, { data, loading: orderLoading, refetch }] = useLazyQuery(
     schema.query.order
   );
+  const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isRefetching, setRefetching] = useState(false);
   const [updateOrderStatus] = useMutation(schema.mutation.updateOrderStatus, {
     onCompleted: () => {
       refetch();
@@ -96,6 +100,7 @@ export default function Post() {
     });
     onOpen();
   };
+
   const onReject = () => {
     setOrderActions({
       action: "Reject",
@@ -104,24 +109,49 @@ export default function Post() {
     onOpen();
   };
 
+  const orderRefetch = async () => {
+    setRefetching(true);
+    await refetch();
+    setRefetching(false);
+    toast({
+      position: "bottom-right",
+      title: "Refetch Completed!",
+      status: "success",
+      duration: null,
+      isClosable: true,
+    });
+  };
+
   return (
     <>
       <AppBar />
-      <Container maxW="full" h="100vh" p="0" pt="100.8px">
+      <Container maxW="full" p="0" h="calc(100vh - 100.8px)">
         <Grid maxW="full" h="100%" templateColumns="repeat(3,1fr)">
-          <GridItem overflow="scroll" p="3" colSpan={1}>
+          <GridItem overflow="auto" p="3" colSpan={1}>
             <Stack spacing="4">
-              <Breadcrumb>
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="/">Home</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="/orders">Orders</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbItem isCurrentPage>
-                  <BreadcrumbLink href={`/orders/${order.orderId}`}>{order.orderId}</BreadcrumbLink>
-                </BreadcrumbItem>
-              </Breadcrumb>
+              <Flex justify="space-between" align="center">
+                <Breadcrumb>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="/orders">Orders</BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbItem isCurrentPage>
+                    <BreadcrumbLink href={`/orders/${order.orderId}`}>
+                      {order.orderId}
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                </Breadcrumb>
+
+                <IconButton
+                  aria-label="Refetch Orders"
+                  onClick={orderRefetch}
+                  isLoading={isRefetching}
+                  variant="ghost"
+                  icon={<RepeatIcon />}
+                />
+              </Flex>
 
               <Divider />
 
