@@ -110,7 +110,7 @@ function AppBar() {
             <DisplayName user={user.me} secondColor="gray.300" />
           </MenuButton>
           <MenuList>
-            <MenuItem color="red.500" onClick={signOut}>
+            <MenuItem color="red.500" onClick={() => signOut()}>
               Sign Out
             </MenuItem>
           </MenuList>

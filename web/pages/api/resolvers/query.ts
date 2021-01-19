@@ -102,13 +102,15 @@ export async function order(
     },
   });
 
+  const final = { ...result, duration: null };
+
   if ((result.jobs?.[0]?.status ?? false) === "Finished") {
-    result.duration =
+    final.duration =
       Math.floor((result.logs.find((log) => log.status === "Delivered").createdAt.valueOf() -
       result.logs.find((log) => log.status === "Collecting").createdAt.valueOf()) / 1000);
   }
 
-  return mapStringToLatLng(result);
+  return mapStringToLatLng(final);
 }
 
 export default { users, user, me, orders, order };

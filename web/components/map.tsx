@@ -11,7 +11,7 @@ import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import "leaflet-defaulticon-compatibility";
 import { Box } from "@chakra-ui/react";
 
-export default function Map({ markers, polylines }) {
+export default function Map({ markers = [], polylines = [] }) {
   return (
     <MapContainer
       center={[22.4, 114.1]}
