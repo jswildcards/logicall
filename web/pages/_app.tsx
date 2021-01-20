@@ -11,7 +11,7 @@ import { ApolloLink, split } from "apollo-boost";
 
 const wsLink = process.browser
   ? new WebSocketLink(
-      new SubscriptionClient(`ws://${process.env.NEXT_PUBLIC_SERVER_HOST}/api`, {
+      new SubscriptionClient(`ws://${process.env.SERVER_HOST}/api`, {
         reconnect: true,
       })
     )
