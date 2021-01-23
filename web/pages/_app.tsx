@@ -1,4 +1,5 @@
 import React from "react";
+import Head from 'next/head'
 import { ApolloProvider } from "react-apollo";
 import { ApolloClient } from "apollo-client";
 import { createHttpLink } from "apollo-link-http";
@@ -44,6 +45,9 @@ function MyApp({ Component, pageProps }) {
   return (
     <ApolloProvider client={client}>
       <ChakraProvider>
+        <Head>
+          <title>LogiCall</title>
+        </Head>
         <Component {...pageProps} />
       </ChakraProvider>
     </ApolloProvider>
