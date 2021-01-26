@@ -127,13 +127,3 @@ input LatLngInput {
   latitude: Float
   longitude: Float
 }
-
-input PageInput {
-  size: Int
-  page: Int
-}
-
-input OrdersInput {
-  pagination: PageInput
-  status: [String]
-}
