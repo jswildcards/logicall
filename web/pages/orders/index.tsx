@@ -76,7 +76,7 @@ export default function Orders() {
       duration: null,
       isClosable: true,
     });
-  }
+  };
 
   const { orders } = data;
   const orderDesc = (orderId) => {
@@ -242,6 +242,20 @@ export default function Orders() {
                     ))}
                 </Tbody>
               </Table>
+              {orders?.filter(
+                (order) =>
+                  selectedStatuses.includes(order.status) &&
+                  order.orderId.includes(keywords)
+              ).length <= 0 && (
+                <Text
+                  p="3"
+                  textAlign="center"
+                  color="gray.600"
+                  fontWeight="bold"
+                >
+                  No Orders Here.
+                </Text>
+              )}
               {/* <Button
                 onClick={() =>
                   toast({
