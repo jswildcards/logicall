@@ -9,9 +9,9 @@ case $1 in
     done
     ;;
   db)
-    docker kill db
-    docker rm db
-    docker-compose -p test -f docker-compose.yml -f docker-compose.test.yml up -d db
+    docker kill db redis
+    docker rm db redus
+    docker-compose -p test -f docker-compose.yml -f docker-compose.test.yml up -d db redis
     ;;
   test)
     docker-compose -p test -f docker-compose.yml -f docker-compose.test.yml build --force-rm --compress --no-cache db web

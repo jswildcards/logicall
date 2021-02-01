@@ -18,6 +18,8 @@ type Mutation {
 
   requestCurrentLocation: String
   responseCurrentLocation(input: LatLngInput): ResponseCurrentLocation
+
+  responseOrderInformation: String
 }
 
 type Subscription {
@@ -25,6 +27,7 @@ type Subscription {
   currentLocationResponsed: ResponseCurrentLocation
   orderCreated: Order
   orderStatusUpdated: Order
+  orderInformationRequested: String
 }
 
 type ResponseCurrentLocation {

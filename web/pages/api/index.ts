@@ -1,14 +1,12 @@
-import { PrismaClient, User as UserModel } from "@prisma/client";
+import { User as UserModel } from "@prisma/client";
 import { ApolloServer } from "apollo-server-micro";
 import fs from "fs";
-import { PubSub } from "graphql-subscriptions";
 import resolvers from "./resolvers/root";
 import { Cookie as CookieConfig } from "./utils/config";
 import jwt from "./utils/token";
+import { prisma, pubsub, redis } from "./utils/init";
 
 const typeDefs = fs.readFileSync("schema.gql", "utf8");
-const prisma = new PrismaClient();
-const pubsub = new PubSub();
 
 export const config = {
   api: {
@@ -21,7 +19,7 @@ const apolloServer = new ApolloServer({
   resolvers,
   context: async ({ req, res, connection }) => {
     if (connection) {
-      return { context: connection.context, pubsub };
+      return { context: connection.context, pubsub, redis };
     }
 
     let auth: UserModel;
@@ -35,6 +33,7 @@ const apolloServer = new ApolloServer({
       response: res,
       prisma,
       pubsub,
+      redis,
       auth,
     };
   },

@@ -7,6 +7,9 @@ services:
     volumes:
       - ./volumes/:/docker-entrypoint-initdb.d/
 
+  redis:
+    image: redis:6.0.10-alpine
+
   web:
     image: logicall_web:latest
     env_file: .env
