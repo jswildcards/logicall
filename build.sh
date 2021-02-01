@@ -14,8 +14,8 @@ case $1 in
     docker-compose -p test -f docker-compose.yml -f docker-compose.test.yml up -d db redis
     ;;
   test)
-    docker-compose -p test -f docker-compose.yml -f docker-compose.test.yml build --force-rm --compress --no-cache db web
-    docker-compose -p test -f docker-compose.yml -f docker-compose.test.yml up -d db web
+    docker-compose -p test -f docker-compose.yml -f docker-compose.test.yml build --force-rm --compress --no-cache db redis web
+    docker-compose -p test -f docker-compose.yml -f docker-compose.test.yml up -d db redis web
     ;;
   prod)
     docker kill db web
