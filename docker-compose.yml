@@ -15,5 +15,6 @@ services:
     env_file: .env
     depends_on:
       - "db"
+      - "redis"
     ports:
       - "80:3000"
