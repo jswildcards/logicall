@@ -1,6 +1,6 @@
 import { Container, Fab, Icon } from "native-base";
 import React, { useState } from "react";
-import { useMutation, useSubscription } from "react-apollo";
+import { useMutation } from "react-apollo";
 import { StatusBar, View } from "react-native";
 import HeaderNav from "../components/HeaderNav";
 import Map from "../components/Map";
@@ -11,14 +11,14 @@ function Page({ job }) {
   const { order, polylines } = job;
   const [visitedLatLng, setVisitedLatLng] = useState(0);
   const polylineLatLngs = mapStringToPolylines(polylines);
-  const [responseCurrentLocation] = useMutation(
-    schema.mutation.responseCurrentLocation
+  const [updateCurrentLocation] = useMutation(
+    schema.mutation.updateCurrentLocation
   );
 
   const move = () => {
     if (visitedLatLng < polylineLatLngs.length) {
       const [latitude, longitude] = polylineLatLngs[visitedLatLng];
-      responseCurrentLocation({
+      updateCurrentLocation({
         variables: { input: { latitude, longitude } },
       });
       setVisitedLatLng(visitedLatLng + Math.floor(polylineLatLngs.length / 10));
@@ -31,13 +31,6 @@ function Page({ job }) {
       polylineLatLngs[polylineLatLngs.length - 1];
     return { latitude, longitude };
   };
-
-  const {
-    data: currentLocationRequested,
-    loading: subloading,
-  } = useSubscription(schema.subscription.currentLocationRequested, {
-    onSubscriptionData: move,
-  });
 
   return (
     <Container>

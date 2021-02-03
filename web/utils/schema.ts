@@ -122,6 +122,22 @@ export const schema = {
         status
         comments
       }
+    }`,
+    currentLocations: gql`{
+      currentLocations {
+        user {
+          userId
+          username
+          firstName
+          lastName
+          email
+          phone
+        }
+        latLng {
+          latitude
+          longitude
+        }
+      }
     }`
   },
   mutation: {
@@ -189,14 +205,11 @@ export const schema = {
     }`,
     signOut: gql`mutation {
       signOut
-    }`,
-    requestCurrentLocation: gql`mutation {
-      requestCurrentLocation
     }`
   },
   subscription: {
-    currentLocationResponsed: gql`subscription {
-      currentLocationResponsed {
+    currentLocationUpdated: gql`subscription {
+      currentLocationUpdated {
         user {
           userId
           firstName

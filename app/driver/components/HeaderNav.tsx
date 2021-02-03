@@ -7,7 +7,6 @@ import {
   Left,
   Right,
   Subtitle,
-  Text,
   Title,
 } from "native-base";
 import { Actions } from "react-native-router-flux";

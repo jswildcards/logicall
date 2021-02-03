@@ -1,10 +1,10 @@
 import { PrismaClient } from "@prisma/client";
 import { PubSub } from "graphql-subscriptions";
-import redisClient from "redis";
+import Redis from "ioredis";
 import { redisHost as host } from "./config";
 
 export const prisma = new PrismaClient();
 export const pubsub = new PubSub();
-export const redis = redisClient.createClient({ host });
+export const redis = new Redis({ host });
 
 export default { prisma, pubsub, redis };

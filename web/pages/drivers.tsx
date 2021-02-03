@@ -12,19 +12,20 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
-import { useMutation, useSubscription } from "react-apollo";
+import { useQuery, useSubscription } from "react-apollo";
 import { RepeatIcon } from "@chakra-ui/icons";
 import moment from "moment-timezone";
 import AppBar from "../components/appbar";
 import schema from "../utils/schema";
 
 export default function Drivers() {
-  const [markers, setMarkers] = useState([]);
-  const [requestCurrentLocation] = useMutation(
-    schema.mutation.requestCurrentLocation
-  );
+  const {
+    data: locations,
+    loading: locationsLoading,
+    refetch: refetchCurrentLocations,
+  } = useQuery(schema.query.currentLocations);
   const toast = useToast();
   const [isRefetching, setRefetching] = useState(false);
   const Map = useMemo(
@@ -35,31 +36,17 @@ export default function Drivers() {
       }),
     []
   );
-  const [logs, setLogs] = useState([]);
-  const {
-    data: currentLocationResponsed,
-    loading: subloading,
-  } = useSubscription(schema.subscription.currentLocationResponsed, {
-    onSubscriptionData: ({ subscriptionData }) => {
-      const { user, latLng } = subscriptionData.data.currentLocationResponsed;
-      const m = markers.filter(
-        (marker) => marker.user.username !== user.username
-      );
-      setLogs([
-        `${moment
-          .tz(new Date().valueOf(), "Asia/Hong_Kong")
-          .format("YYYY-MM-DD HH:mm")}: @${user.username} at ${
-          latLng.latitude
-        }, ${latLng.longitude}`,
-        ...logs,
-      ]);
-      setMarkers([...m, { ...latLng, message: [`@${user.username}`], user }]);
+  useSubscription(schema.subscription.currentLocationUpdated, {
+    onSubscriptionData: async () => {
+      setRefetching(true);
+      await refetchCurrentLocations();
+      setRefetching(false);
     },
   });
 
   const makeRequestCurrentLocation = async () => {
     setRefetching(true);
-    await requestCurrentLocation();
+    await refetchCurrentLocations();
     setRefetching(false);
     toast({
       position: "bottom-right",
@@ -69,6 +56,10 @@ export default function Drivers() {
       isClosable: true,
     });
   };
+
+  if (locationsLoading) {
+    return <></>;
+  }
 
   return (
     <>
@@ -99,18 +90,32 @@ export default function Drivers() {
               <Text fontSize="2xl" color="gray.500">
                 Logs
               </Text>
-              <Divider />
 
-              {logs.map((log) => (
-                <>
-                  <Text>{log}</Text>
-                  <Divider />
-                </>
+              <Text color="gray.500">
+                at
+                {" "}
+                {moment
+                  .tz(new Date().valueOf(), "Asia/Hong_Kong")
+                  .format("YYYY-MM-DD HH:mm:ss")}
+              </Text>
+
+              <Divider />
+              {locations?.currentLocations?.map(({ user, latLng }) => (
+                <Text>
+                  {`@${user.username} at ${latLng.latitude}, ${latLng.longitude}`}
+                </Text>
               ))}
             </Stack>
           </GridItem>
           <GridItem colSpan={2}>
-            <Map markers={[...markers]} />
+            <Map
+              markers={locations?.currentLocations?.map(
+                ({ user, latLng }) => ({
+                  ...latLng,
+                  message: `@${user.username}`,
+                })
+              )}
+            />
           </GridItem>
         </Grid>
       </Container>

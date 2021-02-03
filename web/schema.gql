@@ -4,6 +4,7 @@ type Query {
   user(userId: Int!): User
   orders: [Order]
   order(orderId: String): Order
+  currentLocations: [UpdateCurrentLocation]
 }
 
 type Mutation {
@@ -15,22 +16,16 @@ type Mutation {
   updateOrderStatus(input: UpdateOrderStatusInput): Order
 
   createJob(origin: String): Job
-
-  requestCurrentLocation: String
-  responseCurrentLocation(input: LatLngInput): ResponseCurrentLocation
-
-  responseOrderInformation: String
+  updateCurrentLocation(input: LatLngInput): UpdateCurrentLocation
 }
 
 type Subscription {
-  currentLocationRequested: String
-  currentLocationResponsed: ResponseCurrentLocation
+  currentLocationUpdated: UpdateCurrentLocation
   orderCreated: Order
   orderStatusUpdated: Order
-  orderInformationRequested: String
 }
 
-type ResponseCurrentLocation {
+type UpdateCurrentLocation {
   user: User
   latLng: LatLng
 }

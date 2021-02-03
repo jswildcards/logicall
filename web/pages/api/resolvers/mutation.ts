@@ -8,8 +8,7 @@ import { Context } from "../utils/types";
 import { setCookie } from "../utils/cookies";
 import {
   CREATE_ORDER,
-  REQUEST_CURRENT_LOCATION,
-  RESPONSE_CURRENT_LOCATION,
+  UPDATE_CURRENT_LOCATION,
   UPDATE_ORDER_STATUS,
 } from "../utils/subscription-types";
 import { mapStringToLatLng } from "../../../utils/convert";
@@ -184,26 +183,26 @@ export async function createJob(
   });
 }
 
-export function requestCurrentLocation(_parent, _args, { pubsub }: Context) {
-  pubsub.publish(REQUEST_CURRENT_LOCATION, {
-    currentLocationRequested: "true",
-  });
-  return "true";
-}
-
-export function responseCurrentLocation(
+export async function updateCurrentLocation(
   _parent: any,
   { input: { latitude, longitude } },
-  { pubsub, auth, response }: Context
+  { auth, response, redis, pubsub }: Context
 ) {
   if (!auth?.userId) {
     response.status(401);
     throw new Error("Unathorized");
   }
 
-  pubsub.publish(RESPONSE_CURRENT_LOCATION, {
+  await redis.hset(
+    "location",
+    auth.username,
+    JSON.stringify({ latLng: { latitude, longitude }, user: auth })
+  );
+
+  pubsub.publish(UPDATE_CURRENT_LOCATION, {
     currentLocationResponsed: { user: auth, latLng: { latitude, longitude } },
   });
+  
   return { user: auth, latLng: { latitude, longitude } };
 }
 
@@ -214,6 +213,5 @@ export default {
   createOrder,
   updateOrderStatus,
   createJob,
-  requestCurrentLocation,
-  responseCurrentLocation,
+  updateCurrentLocation,
 };

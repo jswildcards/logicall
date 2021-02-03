@@ -243,9 +243,9 @@ export const schema = {
         signOut
       }
     `,
-    responseCurrentLocation: gql`
+    updateCurrentLocation: gql`
       mutation($input: LatLngInput) {
-        responseCurrentLocation(input: $input) {
+        updateCurrentLocation(input: $input) {
           latLng {
             latitude
             longitude

@@ -1,6 +1,5 @@
-import { status as Status } from "@prisma/client";
 import { mapStringToLatLng } from "../../../utils/convert";
-import { Context, Page } from "../utils/types";
+import { Context } from "../utils/types";
 
 export async function users(
   _parent: any,
@@ -39,18 +38,18 @@ export async function me(
     include: {
       receiveOrders: {
         include: { sender: true, receiver: true },
-        orderBy: { orderId: "desc" }
+        orderBy: { orderId: "desc" },
       },
       sendOrders: {
         include: { sender: true, receiver: true },
-        orderBy: { orderId: "desc" }
+        orderBy: { orderId: "desc" },
       },
       jobs: {
         include: {
           driver: true,
           order: { include: { sender: true, receiver: true } },
         },
-        orderBy: { jobId: "desc" }
+        orderBy: { jobId: "desc" },
       },
     },
   });
@@ -105,12 +104,58 @@ export async function order(
   const final = { ...result, duration: null };
 
   if ((result.jobs?.[0]?.status ?? false) === "Finished") {
-    final.duration =
-      Math.floor((result.logs.find((log) => log.status === "Delivered").createdAt.valueOf() -
-      result.logs.find((log) => log.status === "Collecting").createdAt.valueOf()) / 1000);
+    final.duration = Math.floor(
+      (result.logs
+        .find((log) => log.status === "Delivered")
+        .createdAt.valueOf() -
+        result.logs
+          .find((log) => log.status === "Collecting")
+          .createdAt.valueOf()) /
+        1000
+    );
   }
 
   return mapStringToLatLng(final);
 }
 
-export default { users, user, me, orders, order };
+export async function currentLocations(_parent, _args, { redis }: Context) {
+  // const getHashMapValue = (setname, key) => {
+  //   return new Promise((resolve, reject) => {
+  //     redis.hget(setname, key, (error, result) => {
+  //       if (error) reject(error);
+  //       resolve(result);
+  //     });
+  //   });
+  // };
+
+  // const reduceTwoArraysToObjects = (array, mapper) =>
+  //   array[0].reduce((prev, cur, i) => [...prev, mapper(array[1], cur, i)], []);
+
+  // const locations = await new Promise((resolve, reject) =>
+  //   redis.hkeys("location", async (error, keys) => {
+  //     if (error) reject(error);
+
+  //     const result = await Promise.all(
+  //       keys.map((key) => getHashMapValue("location", key))
+  //     )
+  //       .then((val) => {
+  //         return reduceTwoArraysToObjects([val, keys], (array, cur, i) => ({
+  //           latLng: JSON.parse(cur),
+  //           username: array[i],
+  //         }));
+  //       })
+  //       .catch((err) => reject(err));
+
+  //     resolve(result);
+  //   })
+  // ).catch((error) => {
+  //   throw error;
+  // });
+
+  const locations = await redis
+    .hgetall("location")
+    .then((res) => Object.values(res).map((el) => JSON.parse(el)));
+  return locations;
+}
+
+export default { users, user, me, orders, order, currentLocations };
