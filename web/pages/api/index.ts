@@ -25,7 +25,7 @@ const apolloServer = new ApolloServer({
     let auth: UserModel;
     const token = req?.cookies?.[CookieConfig.token];
     if (token) {
-      auth = (await jwt.verify(token)) as UserModel;
+      auth = (await jwt.verify(token).catch(() => null)) as UserModel;
     }
 
     return {
