@@ -1,5 +1,5 @@
 import { useMutation } from "react-apollo";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Actions } from "react-native-router-flux";
 import { StatusBar, StyleSheet } from "react-native";
 import {
@@ -18,6 +18,7 @@ import {
 } from "native-base";
 import { ApolloError } from "apollo-boost";
 import { Headline } from "react-native-paper";
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import schema from "../utils/schema";
 import logo from "../assets/icon.png";
 import FixedContainer from "../components/FixedContainer";
@@ -46,22 +47,26 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
     // paddingTop: 12
-  }
+  },
 });
 
 function Page() {
   const [user, setUser] = useState({
-    username: "sadduck219",
-    password: "password",
+    username: "",
+    password: "",
     role: "customer",
   });
+  const { getItem: getStoredUser, setItem: setStoredUser } = useAsyncStorage(
+    "customerUser"
+  );
   const [isPasswordVisible, setPasswordVisible] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const signInCallBack = () => {
+  const signInCallBack = async () => {
     setLoading(false);
     setError("");
+    await setStoredUser(JSON.stringify(user));
     Actions.home();
   };
 
@@ -76,6 +81,17 @@ function Page() {
     onCompleted: signInCallBack,
     onError: signInErrorHandler,
   });
+
+  const readUserFromStorage = async () => {
+    const { username, password } = JSON.parse(
+      (await getStoredUser()) ?? '{"username":"","password":""}'
+    );
+    setUser({ ...user, username, password });
+  };
+
+  useEffect(() => {
+    readUserFromStorage();
+  }, []);
 
   return (
     <Container>
