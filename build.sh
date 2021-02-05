@@ -10,7 +10,7 @@ case $1 in
     ;;
   db)
     docker kill db redis
-    docker rm db redus
+    docker rm db redis
     docker-compose -p test -f docker-compose.yml -f docker-compose.test.yml up -d db redis
     ;;
   test)
