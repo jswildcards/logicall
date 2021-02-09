@@ -15,6 +15,10 @@ import {
   // View,
   Thumbnail,
   Toast,
+  Body,
+  CheckBox,
+  ListItem,
+  Picker,
 } from "native-base";
 import { ApolloError } from "apollo-boost";
 import { Headline, Subheading } from "react-native-paper";
@@ -64,9 +68,14 @@ function Page() {
     password: "",
     role: "driver",
   });
-  const { getItem: getStoredUser, setItem: setStoredUser } = useAsyncStorage(
+  const [testMode, setTestMode] = useState(false);
+  const { getItem: globalUser, setItem: setGlobalUser } = useAsyncStorage(
     "driverUser"
   );
+  const {
+    getItem: globalTestMode,
+    setItem: setGlobalTestMode,
+  } = useAsyncStorage("testMode");
   const [isPasswordVisible, setPasswordVisible] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -74,7 +83,8 @@ function Page() {
   const signInCallBack = async () => {
     setLoading(false);
     setError("");
-    await setStoredUser(JSON.stringify(user));
+    await setGlobalUser(JSON.stringify(user));
+    await setGlobalTestMode(JSON.stringify(testMode));
     Actions.home();
   };
 
@@ -90,15 +100,16 @@ function Page() {
     onError: signInErrorHandler,
   });
 
-  const readUserFromStorage = async () => {
+  const readGlobalData = async () => {
     const { username, password } = JSON.parse(
-      (await getStoredUser()) ?? '{"username":"","password":""}'
+      (await globalUser()) ?? '{"username":"","password":""}'
     );
     setUser({ ...user, username, password });
+    setTestMode(((await globalTestMode()) ?? "false") === "true");
   };
 
   useEffect(() => {
-    readUserFromStorage();
+    readGlobalData();
   }, []);
 
   return (
@@ -137,6 +148,30 @@ function Page() {
             {/* <Button danger transparent>
             <Text>{error}</Text>
           </Button> */}
+            <ListItem>
+              <CheckBox
+                checked={testMode}
+                onPress={() => setTestMode(!testMode)}
+              />
+              <Body>
+                <Text>Test Mode</Text>
+              </Body>
+            </ListItem>
+            {testMode && (
+              <Picker
+                note
+                mode="dropdown"
+                style={{ width: 120 }}
+                selectedValue={this.state.selected}
+                onValueChange={this.onValueChange.bind(this)}
+              >
+                <Picker.Item label="Wallet" value="key0" />
+                <Picker.Item label="ATM Card" value="key1" />
+                <Picker.Item label="Debit Card" value="key2" />
+                <Picker.Item label="Credit Card" value="key3" />
+                <Picker.Item label="Net Banking" value="key4" />
+              </Picker>
+            )}
             <Button
               style={styles.textSignUp}
               disabled={isLoading}

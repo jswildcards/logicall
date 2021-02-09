@@ -19,6 +19,7 @@ import { RepeatIcon } from "@chakra-ui/icons";
 import moment from "moment-timezone";
 import AppBar from "../components/appbar";
 import schema from "../utils/schema";
+import DisplayName from "../components/display-name";
 
 export default function Drivers() {
   const {
@@ -112,7 +113,7 @@ export default function Drivers() {
               markers={locations?.currentLocations?.map(
                 ({ user, latLng }) => ({
                   ...latLng,
-                  message: `@${user.username}`,
+                  message: <DisplayName user={user} />,
                 })
               )}
             />

@@ -120,7 +120,7 @@ export async function updateOrderStatus(
       comments: string;
     };
   },
-  { prisma, pubsub }: Context
+  { prisma, pubsub, redis }: Context
 ) {
   const result = await prisma.order.update({
     where: { orderId },
@@ -137,6 +137,12 @@ export async function updateOrderStatus(
         status: "Finished",
       },
     });
+  }
+
+  if (status === "Approved") {
+    const locations = await redis
+      .hgetall("location")
+      .then((res) => Object.values(res).map((el: string) => JSON.parse(el)));
   }
 
   pubsub.publish(UPDATE_ORDER_STATUS, {
@@ -202,7 +208,7 @@ export async function updateCurrentLocation(
   pubsub.publish(UPDATE_CURRENT_LOCATION, {
     currentLocationResponsed: { user: auth, latLng: { latitude, longitude } },
   });
-  
+
   return { user: auth, latLng: { latitude, longitude } };
 }
 

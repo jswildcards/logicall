@@ -56,7 +56,7 @@ function Page() {
     password: "",
     role: "customer",
   });
-  const { getItem: getStoredUser, setItem: setStoredUser } = useAsyncStorage(
+  const { getItem: storedUser, setItem: setStoredUser } = useAsyncStorage(
     "customerUser"
   );
   const [isPasswordVisible, setPasswordVisible] = useState(false);
@@ -84,7 +84,7 @@ function Page() {
 
   const readUserFromStorage = async () => {
     const { username, password } = JSON.parse(
-      (await getStoredUser()) ?? '{"username":"","password":""}'
+      (await storedUser()) ?? '{"username":"","password":""}'
     );
     setUser({ ...user, username, password });
   };

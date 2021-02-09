@@ -154,7 +154,7 @@ export async function currentLocations(_parent, _args, { redis }: Context) {
 
   const locations = await redis
     .hgetall("location")
-    .then((res) => Object.values(res).map((el) => JSON.parse(el)));
+    .then((res) => Object.values(res).map((el: string) => JSON.parse(el)));
   return locations;
 }
 
