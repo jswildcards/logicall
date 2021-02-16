@@ -21,6 +21,7 @@ import SignInPage from "./pages/SignIn";
 import MapPage from "./pages/Map";
 import ScannerPage from "./pages/Scanner";
 import ScannResultPage from "./pages/ScanResult";
+import JobRequestPage from "./pages/JobRequest";
 import Tab from "./components/Tab";
 
 import { client } from "./utils/schema";
@@ -88,6 +89,15 @@ function App() {
                   iosIconName="ios-camera"
                   component={ScannerPage}
                   title="Scanner"
+                  hideNavBar
+                />
+                <Scene
+                  key="jobRequest"
+                  icon={Tab}
+                  iconName="download"
+                  iosIconName="ios-download"
+                  component={JobRequestPage}
+                  title="Job Request"
                   hideNavBar
                 />
                 <Scene

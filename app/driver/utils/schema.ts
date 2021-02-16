@@ -85,6 +85,43 @@ export const schema = {
               updatedAt
             }
           }
+          currentJobs {
+            status
+            polylines
+            order {
+              orderId
+              sender {
+                userId
+                username
+                firstName
+                lastName
+                email
+                phone
+              }
+              receiver {
+                userId
+                username
+                firstName
+                lastName
+                email
+                phone
+              }
+              sendAddress
+              sendLatLng {
+                latitude
+                longitude
+              }
+              receiveAddress
+              receiveLatLng {
+                latitude
+                longitude
+              }
+              status
+              comments
+              createdAt
+              updatedAt
+            }
+          }
         }
       }
     `,

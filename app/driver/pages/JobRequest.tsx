@@ -15,7 +15,6 @@ import { useMutation, useQuery } from "react-apollo";
 import { Actions } from "react-native-router-flux";
 // import * as Location from 'expo-location';
 import moment from "moment-timezone";
-import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import schema from "../utils/schema";
 import NoData from "../components/NoData";
 import FixedContainer from "../components/FixedContainer";
@@ -24,16 +23,6 @@ import HeavyBoxIcon from "../components/icons/HeavyBoxIcon";
 
 function Page() {
   const { loading, error, data } = useQuery(schema.query.me);
-  const [updateCurrentLocation] = useMutation(
-    schema.mutation.updateCurrentLocation
-  );
-  const {
-    getItem: globalCurrentLocation,
-    setItem: setGlobalCurrentLocation,
-  } = useAsyncStorage("currentLocation");
-  useEffect(() => {
-    updateCurrentLocation({ variables: { ...globalCurrentLocation } });
-  }, []);
 
   if (loading) {
     return (

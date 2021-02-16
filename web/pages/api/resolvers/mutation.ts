@@ -1,13 +1,18 @@
 import type { status as Status } from "@prisma/client";
 import { Order, User } from "@prisma/client";
 import Axios from "axios";
-import { Cookie as CookieConfig, HereApiKey } from "../utils/config";
+import {
+  Cookie as CookieConfig,
+  DurationLimit,
+  HereApiKey,
+} from "../utils/config";
 import { encrypt } from "../utils/crypto";
 import token from "../utils/token";
 import { Context } from "../utils/types";
 import { setCookie } from "../utils/cookies";
 import {
   CREATE_ORDER,
+  REQUEST_NEW_JOB,
   UPDATE_CURRENT_LOCATION,
   UPDATE_ORDER_STATUS,
 } from "../utils/subscription-types";
@@ -140,9 +145,82 @@ export async function updateOrderStatus(
   }
 
   if (status === "Approved") {
+    let driverDurationMapper = {};
+
     const locations = await redis
       .hgetall("location")
       .then((res) => Object.values(res).map((el: string) => JSON.parse(el)));
+
+    locations.forEach(async (location) => {
+      const me = await prisma.user.findUnique({
+        where: location.user.userId,
+        include: {
+          jobs: {
+            where: { status: "Processing" },
+            include: { order: true },
+            orderBy: { jobId: "asc" },
+          },
+        },
+      });
+
+      if (me.jobs.length > 0) {
+        const firstOrder = me.jobs[0].order;
+        const lastOrder = me.jobs[me.jobs.length - 1].order;
+        const { duration: firstDuration } = mapDataToPolylinesAndDuration(
+          await Axios.get(
+            `https://router.hereapi.com/v8/routes?transportMode=car&origin=${Object.values(
+              location.latLng
+            ).join(",")}${
+              firstOrder.status === "Collecting"
+                ? `&via=${firstOrder.sendLatLng}`
+                : ""
+            }&destination=${
+              firstOrder.receiveLatLng
+            }&return=polyline,summary&apiKey=${HereApiKey}`
+          )
+        );
+        const { duration: lastDuration } = mapDataToPolylinesAndDuration(
+          await Axios.get(
+            `https://router.hereapi.com/v8/routes?transportMode=car&origin=${lastOrder.receiveAddress}&destination=${result.sendLatLng}&return=polyline,summary&apiKey=${HereApiKey}`
+          )
+        );
+        me.jobs.shift();
+        const duration =
+          me.jobs.reduce((prev, cur) => prev + cur.duration, 0) + firstDuration + lastDuration;
+
+        // TODO: minutes to second/ms??
+        if (duration < DurationLimit) {
+          driverDurationMapper = {
+            ...driverDurationMapper,
+            [me.userId]: duration,
+          };
+        }
+      } else {
+        const { duration } = mapDataToPolylinesAndDuration(
+          await Axios.get(
+            `https://router.hereapi.com/v8/routes?transportMode=car&origin=${Object.values(
+              location.latLng
+            ).join(",")}&destination=${
+              result.sendLatLng
+            }&return=polyline,summary&apiKey=${HereApiKey}`
+          )
+        );
+
+        // TODO: minutes to second/ms??
+        if (duration < DurationLimit) {
+          driverDurationMapper = {
+            ...driverDurationMapper,
+            [me.userId]: duration,
+          };
+        }
+      }
+    });
+
+    // TODO: Publish the calculated result and recommandation to driver (what parameters???)
+    pubsub.publish(REQUEST_NEW_JOB, {});
+    // TODO: setup 1 minute timer
+    await new Promise((resolve) => setTimeout(resolve, 60000));
+    // TODO: redis: find which drivers have accept the job, find the shortest duration and assign to him
   }
 
   pubsub.publish(UPDATE_ORDER_STATUS, {

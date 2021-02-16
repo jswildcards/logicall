@@ -30,8 +30,19 @@ const Cookie = {
   token: "LOGICALL_JWT",
 };
 
-const HereApiKey = HERE_API_KEY;
-const redisHost = REDIS_HOST;
+// 15 minutes -> second
+const DurationLimit = 15 * 60;
 
-export { Cookie, Crypto, Jwt, Page, HereApiKey, redisHost };
-export default { Crypto, Page, Jwt, Cookie, HereApiKey, redisHost };
+const HereApiKey = HERE_API_KEY;
+const RedisHost = REDIS_HOST;
+
+export { Cookie, Crypto, Jwt, Page, HereApiKey, RedisHost, DurationLimit };
+export default {
+  Crypto,
+  Page,
+  Jwt,
+  Cookie,
+  HereApiKey,
+  RedisHost,
+  DurationLimit,
+};

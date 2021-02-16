@@ -54,7 +54,7 @@ export async function me(
     },
   });
 
-  return {
+  const userMe = {
     ...result,
     jobs: result.jobs.map((job) => {
       return {
@@ -62,6 +62,11 @@ export async function me(
         order: mapStringToLatLng(job.order),
       };
     }),
+  };
+
+  return {
+    ...userMe,
+    currentJobs: userMe?.jobs?.filter((job) => job?.status === "Processing"),
   };
 }
 
@@ -119,39 +124,6 @@ export async function order(
 }
 
 export async function currentLocations(_parent, _args, { redis }: Context) {
-  // const getHashMapValue = (setname, key) => {
-  //   return new Promise((resolve, reject) => {
-  //     redis.hget(setname, key, (error, result) => {
-  //       if (error) reject(error);
-  //       resolve(result);
-  //     });
-  //   });
-  // };
-
-  // const reduceTwoArraysToObjects = (array, mapper) =>
-  //   array[0].reduce((prev, cur, i) => [...prev, mapper(array[1], cur, i)], []);
-
-  // const locations = await new Promise((resolve, reject) =>
-  //   redis.hkeys("location", async (error, keys) => {
-  //     if (error) reject(error);
-
-  //     const result = await Promise.all(
-  //       keys.map((key) => getHashMapValue("location", key))
-  //     )
-  //       .then((val) => {
-  //         return reduceTwoArraysToObjects([val, keys], (array, cur, i) => ({
-  //           latLng: JSON.parse(cur),
-  //           username: array[i],
-  //         }));
-  //       })
-  //       .catch((err) => reject(err));
-
-  //     resolve(result);
-  //   })
-  // ).catch((error) => {
-  //   throw error;
-  // });
-
   const locations = await redis
     .hgetall("location")
     .then((res) => Object.values(res).map((el: string) => JSON.parse(el)));

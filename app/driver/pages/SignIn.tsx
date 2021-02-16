@@ -12,13 +12,11 @@ import {
   Label,
   Button,
   Text,
-  // View,
   Thumbnail,
   Toast,
   Body,
   CheckBox,
   ListItem,
-  Picker,
 } from "native-base";
 import { ApolloError } from "apollo-boost";
 import { Headline, Subheading } from "react-native-paper";
@@ -69,6 +67,15 @@ function Page() {
     role: "driver",
   });
   const [testMode, setTestMode] = useState(false);
+  const [currentLocation, setCurrentLocation] = useState({
+    latitude: "",
+    longitude: "",
+  });
+  const [lastCurrentLocation, setLastCurrentLocation] = useState({
+    latitude: "",
+    longitude: "",
+    use: false,
+  });
   const { getItem: globalUser, setItem: setGlobalUser } = useAsyncStorage(
     "driverUser"
   );
@@ -76,23 +83,38 @@ function Page() {
     getItem: globalTestMode,
     setItem: setGlobalTestMode,
   } = useAsyncStorage("testMode");
+  const {
+    getItem: globalCurrentLocation,
+    setItem: setGlobalCurrentLocation,
+  } = useAsyncStorage("currentLocation");
   const [isPasswordVisible, setPasswordVisible] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const signInCallBack = async () => {
     setLoading(false);
-    setError("");
     await setGlobalUser(JSON.stringify(user));
+    if (testMode === true) {
+      if (!currentLocation.latitude || !currentLocation.longitude) {
+        const text =
+          "You should enter all location information required for test mode!";
+        Toast.show({
+          text,
+          buttonText: "OK",
+          type: "danger",
+          duration: 6000,
+        });
+        return;
+      }
+      await setGlobalCurrentLocation(JSON.stringify(currentLocation));
+    }
     await setGlobalTestMode(JSON.stringify(testMode));
     Actions.home();
   };
 
   const signInErrorHandler = (err: ApolloError) => {
     setLoading(false);
-    const msg = err.message;
-    setError(msg);
-    Toast.show({ text: msg, buttonText: "OK", type: "danger", duration: 6000 });
+    const text = err.message;
+    Toast.show({ text, buttonText: "OK", type: "danger", duration: 6000 });
   };
 
   const [signIn] = useMutation(schema.mutation.signIn, {
@@ -104,8 +126,12 @@ function Page() {
     const { username, password } = JSON.parse(
       (await globalUser()) ?? '{"username":"","password":""}'
     );
+    const { latitude, longitude } = JSON.parse(
+      (await globalCurrentLocation()) ?? '{"latitude":"","longitude":""}'
+    );
     setUser({ ...user, username, password });
     setTestMode(((await globalTestMode()) ?? "false") === "true");
+    setLastCurrentLocation({ latitude, longitude, use: false });
   };
 
   useEffect(() => {
@@ -130,7 +156,7 @@ function Page() {
                 onChangeText={(username) => setUser({ ...user, username })}
               />
             </Item>
-            <Item floatingLabel last error={error.length > 0}>
+            <Item floatingLabel last>
               <Icon ios="ios-lock" name="lock" />
               <Label>Password</Label>
               <Input
@@ -145,9 +171,6 @@ function Page() {
                 onPress={() => setPasswordVisible(!isPasswordVisible)}
               />
             </Item>
-            {/* <Button danger transparent>
-            <Text>{error}</Text>
-          </Button> */}
             <ListItem>
               <CheckBox
                 checked={testMode}
@@ -158,19 +181,57 @@ function Page() {
               </Body>
             </ListItem>
             {testMode && (
-              <Picker
-                note
-                mode="dropdown"
-                style={{ width: 120 }}
-                selectedValue={this.state.selected}
-                onValueChange={this.onValueChange.bind(this)}
-              >
-                <Picker.Item label="Wallet" value="key0" />
-                <Picker.Item label="ATM Card" value="key1" />
-                <Picker.Item label="Debit Card" value="key2" />
-                <Picker.Item label="Credit Card" value="key3" />
-                <Picker.Item label="Net Banking" value="key4" />
-              </Picker>
+              <>
+                {lastCurrentLocation.latitude !== "" && (
+                  <ListItem>
+                    <CheckBox
+                      checked={lastCurrentLocation.use}
+                      onPress={() => {
+                        setCurrentLocation(
+                          !lastCurrentLocation.use
+                            ? lastCurrentLocation
+                            : { latitude: "", longitude: "" }
+                        );
+                        setLastCurrentLocation({
+                          ...lastCurrentLocation,
+                          use: !lastCurrentLocation.use,
+                        });
+                      }}
+                    />
+                    <Body>
+                      <Text>Use Last Location</Text>
+                    </Body>
+                  </ListItem>
+                )}
+                <Form>
+                  <Item floatingLabel last>
+                    <Label>New current latitude</Label>
+                    <Input
+                      value={currentLocation.latitude ?? ""}
+                      onChangeText={(latitude) => {
+                        setLastCurrentLocation({
+                          ...lastCurrentLocation,
+                          use: false,
+                        });
+                        setCurrentLocation({ ...currentLocation, latitude });
+                      }}
+                    />
+                  </Item>
+                  <Item floatingLabel last>
+                    <Label>New current longitude</Label>
+                    <Input
+                      value={currentLocation.longitude ?? ""}
+                      onChangeText={(longitude) => {
+                        setLastCurrentLocation({
+                          ...lastCurrentLocation,
+                          use: false,
+                        });
+                        setCurrentLocation({ ...currentLocation, longitude });
+                      }}
+                    />
+                  </Item>
+                </Form>
+              </>
             )}
             <Button
               style={styles.textSignUp}
