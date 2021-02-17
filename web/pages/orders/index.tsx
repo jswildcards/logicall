@@ -22,14 +22,9 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { useQuery, useMutation, Subscription } from "react-apollo";
+import { useQuery, useSubscription } from "react-apollo";
 import { useRouter } from "next/router";
-import {
-  ArrowForwardIcon,
-  EditIcon,
-  RepeatIcon,
-  ViewIcon,
-} from "@chakra-ui/icons";
+import { ArrowForwardIcon, RepeatIcon } from "@chakra-ui/icons";
 import schema from "../../utils/schema";
 import AppBar from "../../components/appbar";
 import DisplayName from "../../components/display-name";
@@ -40,7 +35,6 @@ export default function Orders() {
   const toast = useToast();
   const [keywords, setKeywords] = useState("");
   const [isRefetching, setRefetching] = useState(false);
-  // const [ordersSelected, setOrdersSelected] = useState({});
   const statuses = [
     "Pending",
     "Approved",
@@ -57,14 +51,6 @@ export default function Orders() {
     return <></>;
   }
 
-  // const allOrdersSelected = () => {
-  //   return (
-  //     Object.keys(ordersSelected).length > 0 &&
-  //     Object.keys(ordersSelected).length ===
-  //       (orders?.orders?.orders?.length ?? false) &&
-  //     Object.values(ordersSelected).every(Boolean)
-  //   );
-  // };
   const ordersRefetch = async () => {
     setRefetching(true);
     await refetch();
@@ -93,6 +79,36 @@ export default function Orders() {
       </>
     );
   };
+
+  useSubscription(schema.subscription.orderCreated, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      refetch().then(() => {
+        toast({
+          position: "bottom-right",
+          title: "A New Order is Coming!",
+          description: orderDesc(subscriptionData.orderCreated.orderId),
+          status: "warning",
+          duration: null,
+          isClosable: true,
+        });
+      });
+    },
+  });
+
+  useSubscription(schema.subscription.orderStatusUpdated, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      refetch().then(() => {
+        toast({
+          position: "bottom-right",
+          title: "An Order Status is Updated!",
+          description: orderDesc(subscriptionData.orderStatusUpdated.orderId),
+          status: "warning",
+          duration: null,
+          isClosable: true,
+        });
+      });
+    },
+  });
 
   return (
     <>
@@ -154,25 +170,6 @@ export default function Orders() {
               <Table variant="simple">
                 <Thead>
                   <Tr>
-                    {/* <Th>
-                <Checkbox
-                  isChecked={allOrdersSelected()}
-                  isIndeterminate={
-                    Object.values(ordersSelected).some(Boolean) &&
-                    !allOrdersSelected()
-                  }
-                  onChange={() => {
-                    setOrdersSelected(
-                      orders?.orders?.orders?.reduce((prev, cur) => {
-                        return {
-                          ...prev,
-                          [cur.orderId]: allOrdersSelected() !== true,
-                        };
-                      }, {})
-                    );
-                  }}
-                />
-              </Th> */}
                     <Th>Order ID</Th>
                     <Th>Status</Th>
                     <Th>Sender</Th>
@@ -195,19 +192,6 @@ export default function Orders() {
                         _hover={{ background: "gray.100" }}
                         onClick={() => router.push(`/orders/${order.orderId}`)}
                       >
-                        {/* <Td>
-                  <Checkbox
-                    isChecked={ordersSelected[order.orderId] === true}
-                    onChange={() => {
-                      setOrdersSelected({
-                        ...ordersSelected,
-                        [order.orderId]: !(
-                          ordersSelected[order.orderId] ?? false
-                        ),
-                      });
-                    }}
-                  />
-                </Td> */}
                         <Td>{order.orderId}</Td>
                         <Td>
                           <Flex>
@@ -234,8 +218,7 @@ export default function Orders() {
                             variant="link"
                             icon={<ArrowForwardIcon />}
                             onClick={() =>
-                              router.push(`/orders/${order.orderId}`)
-                            }
+                              router.push(`/orders/${order.orderId}`)}
                           />
                         </Td>
                       </Tr>
@@ -256,91 +239,8 @@ export default function Orders() {
                   No Orders Here.
                 </Text>
               )}
-              {/* <Button
-                onClick={() =>
-                  toast({
-                    description: (
-                      <Button
-                        onClick={() => router.push("/drivers")}
-                        colorScheme="blue"
-                      >
-                        ASD
-                      </Button>
-                    ),
-                  })
-                }
-              >
-                1
-              </Button> */}
             </GridItem>
           </Grid>
-          <Subscription subscription={schema.subscription.orderCreated}>
-            {({ data: subData, loading: subLoading }) => {
-              if (subLoading || !subData) return <></>;
-
-              toast({
-                position: "bottom-right",
-                title: "A New Order is Coming!",
-                description: orderDesc(subData.orderCreated.orderId),
-                status: "warning",
-                duration: null,
-                isClosable: true,
-              });
-              refetch();
-              return <></>;
-            }}
-          </Subscription>
-          <Subscription subscription={schema.subscription.orderStatusUpdated}>
-            {({ data: subData, loading: subLoading }) => {
-              if (subLoading || !subData) return <></>;
-
-              toast({
-                position: "bottom-right",
-                title: "An Order Status is Updated!",
-                description: orderDesc(subData.orderStatusUpdated.orderId),
-                status: "warning",
-                duration: null,
-                isClosable: true,
-              });
-              refetch();
-              return <></>;
-            }}
-          </Subscription>
-          {/* <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>
-              {`${orderActions.action} ${orderActions.orderId}?`}
-            </ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              {`Do you want to ${orderActions.action?.toLowerCase()} order ${
-                orderActions.orderId
-              }?`}
-            </ModalBody>
-            <ModalFooter>
-              <Button bg="white" variant="ghost" mr="3" onClick={onClose}>
-                Back
-              </Button>
-              <Button
-                colorScheme={orderActions.action === "Reject" ? "red" : "green"}
-                onClick={() =>
-                  updateOrderStatus({
-                    variables: {
-                      input: {
-                        orderId: orderActions.orderId,
-                        status: orderActions.status,
-                        comments: `${orderActions.action} by @${me.me.username}`,
-                      },
-                    },
-                  })
-                }
-              >
-                {orderActions.action}
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal> */}
         </Stack>
       </Container>
     </>

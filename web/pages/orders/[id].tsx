@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import {
-  Subscription,
   useLazyQuery,
   useMutation,
   useQuery,
+  useSubscription,
 } from "react-apollo";
 import {
   Badge,
@@ -56,12 +56,12 @@ export default function Post() {
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isRefetching, setRefetching] = useState(false);
-  const [updateOrderStatus] = useMutation(schema.mutation.updateOrderStatus, {
-    onCompleted: () => {
-      refetch();
-      onClose();
-    },
+  const [updateOrderStatus] = useMutation(schema.mutation.updateOrderStatus);
+
+  useSubscription(schema.subscription.orderStatusUpdated, {
+    onSubscriptionData: refetch,
   });
+  
   const [orderActions, setOrderActions] = useState({
     action: null,
     status: null,
@@ -310,7 +310,8 @@ export default function Post() {
               </Button>
               <Button
                 colorScheme={orderActions.action === "Reject" ? "red" : "green"}
-                onClick={() =>
+                onClick={() => {
+                  onClose();
                   updateOrderStatus({
                     variables: {
                       input: {
@@ -319,20 +320,14 @@ export default function Post() {
                         comments: `${orderActions.action} by @${me.me.username}`,
                       },
                     },
-                  })
-                }
+                  });
+                }}
               >
                 {orderActions.action}
               </Button>
             </ModalFooter>
           </ModalContent>
         </Modal>
-        <Subscription subscription={schema.subscription.orderStatusUpdated}>
-          {() => {
-            refetch();
-            return <></>;
-          }}
-        </Subscription>
       </Container>
     </>
   );
