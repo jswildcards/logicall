@@ -1,8 +1,10 @@
+/* eslint-disable no-loop-func */
 import type { status as Status } from "@prisma/client";
 import { Order, User } from "@prisma/client";
 import {
   Cookie as CookieConfig,
-  DurationLimit,
+  InitialDurationLimit,
+  ExtraDurationLimit,
 } from "../utils/config";
 import { encrypt } from "../utils/crypto";
 import token from "../utils/token";
@@ -11,6 +13,7 @@ import { setCookie } from "../utils/cookies";
 import {
   CREATE_ORDER,
   REQUEST_NEW_JOB,
+  RESPONSE_NEW_JOB,
   UPDATE_CURRENT_LOCATION,
   UPDATE_ORDER_STATUS,
 } from "../utils/subscription-types";
@@ -121,7 +124,7 @@ export async function updateOrderStatus(
   },
   { prisma, pubsub, redis }: Context
 ) {
-  const result = await prisma.order.update({
+  const nextOrder = await prisma.order.update({
     where: { orderId },
     data: { status, comments },
     include: { jobs: true },
@@ -130,7 +133,7 @@ export async function updateOrderStatus(
   if (status === "Delivered") {
     await prisma.job.update({
       where: {
-        jobId: result.jobs[0].jobId,
+        jobId: nextOrder.jobs[0].jobId,
       },
       data: {
         status: "Finished",
@@ -138,14 +141,21 @@ export async function updateOrderStatus(
     });
   }
 
-  if (status === "Approved") {
-    let driverDurationMapper = {};
+  pubsub.publish(UPDATE_ORDER_STATUS, {
+    orderStatusUpdated: { ...nextOrder },
+  });
 
+  if (status === "Approved") {
+    let initialDriverRouteMapper = [];
+    let driverRouteMapper = [];
+
+    // get all online driver and their current location
     const locations = await redis
       .hgetall("location")
       .then((res) => Object.values(res).map((el: string) => JSON.parse(el)));
 
     locations.forEach(async (location) => {
+      // find all processing jobs for the driver
       const me = await prisma.user.findUnique({
         where: location.user.userId,
         include: {
@@ -161,15 +171,18 @@ export async function updateOrderStatus(
         const firstOrder = me.jobs[0].order;
         const lastOrder = me.jobs[me.jobs.length - 1].order;
 
+        // find the duration from current location to first order receive location
+        // if the order is collecting, add the intermediate point for first order send location
         const { duration: firstDuration } = hereApi.routing(
           Object.values(location.latLng).join(","),
           firstOrder.receiveLatLng,
           firstOrder.status === "Collecting" ? [firstOrder.sendLatLng] : []
         );
 
-        const { duration: lastDuration } = hereApi.routing(
+        // find the duration from last order receive location to current order send location
+        const { polylines, duration: lastDuration } = hereApi.routing(
           lastOrder.receiveAddress,
-          result.sendLatLng
+          nextOrder.sendLatLng
         );
 
         me.jobs.shift();
@@ -178,76 +191,139 @@ export async function updateOrderStatus(
           firstDuration +
           lastDuration;
 
-        // TODO: minutes to second/ms??
-        if (duration < DurationLimit) {
-          driverDurationMapper = {
-            ...driverDurationMapper,
-            [me.userId]: duration,
-          };
-        }
+        initialDriverRouteMapper = [
+          ...initialDriverRouteMapper,
+          { me, polylines, duration },
+        ];
       } else {
-        const { duration } = hereApi.routing(
+        // find the duration of current location to current order send location
+        const { polylines, duration } = hereApi.routing(
           Object.values(location.latLng).join(","),
-          result.sendLatLng
+          nextOrder.sendLatLng
         );
 
-        // TODO: minutes to second/ms??
-        if (duration < DurationLimit) {
-          driverDurationMapper = {
-            ...driverDurationMapper,
-            [me.userId]: duration,
-          };
-        }
+        initialDriverRouteMapper = [
+          ...initialDriverRouteMapper,
+          { me, polylines, duration },
+        ];
       }
     });
 
+    // find all drivers whose duration within the limit
+    // if there are none, add extra time limit and find again.
+    for (
+      let durationLimit = InitialDurationLimit;
+      driverRouteMapper.length <= 0;
+      durationLimit += ExtraDurationLimit
+    ) {
+      driverRouteMapper = initialDriverRouteMapper.filter(
+        ({ duration }) => duration <= durationLimit
+      );
+    }
+
     // TODO: Publish the calculated result and recommandation to driver (what parameters???)
-    pubsub.publish(REQUEST_NEW_JOB, {});
-    // TODO: setup 1 minute timer
+    pubsub.publish(REQUEST_NEW_JOB, {
+      newJobRequested: {
+        driverIds: driverRouteMapper.map(({ me: { userId } }) => userId),
+        order: nextOrder,
+        driverRouteMapper,
+      },
+    });
+
+    // TODO: setup 1 minute timer for driver to consider accept the job or not
     await new Promise((resolve) => setTimeout(resolve, 60000));
+
     // TODO: redis: find which drivers have accept the job, find the shortest duration and assign to him
+    // accepting the order using "responseNewJob" mutation
+    const { success, failed } = await redis
+      .hget("order", nextOrder.orderId)
+      .then((res) => JSON.parse(res));
+
+    const {
+      user,
+      polylines: suggestedPolylines,
+      duration: estimatedDuration,
+    } = success;
+
+    // update order status to "Collecting"
+    const updatedOrder = await prisma.order.update({
+      where: { orderId },
+      data: {
+        status: "Collecting",
+        comments: `Assigned to @${user.username}`,
+      },
+    });
+
+    // create a new job for this order
+    await prisma.job.create({
+      data: {
+        order: { connect: { orderId } },
+        driver: { connect: { userId: user.userId } },
+        status: "Processing",
+        polylines: JSON.stringify([
+          suggestedPolylines,
+          nextOrder.suggestedPolylines,
+        ]),
+        duration: estimatedDuration + nextOrder.estimatedDuration,
+      },
+    });
+
+    // notify drivers who received and not received this job
+    pubsub.publish(RESPONSE_NEW_JOB, {
+      newJobResponsed: {
+        driverIds: [user.userId, ...failed],
+        success: user.userId,
+        order: nextOrder,
+      },
+    });
+
+    pubsub.publish(UPDATE_ORDER_STATUS, {
+      orderStatusUpdated: { ...updatedOrder },
+    });
   }
 
-  pubsub.publish(UPDATE_ORDER_STATUS, {
-    orderStatusUpdated: { ...result },
-  });
-
-  return result;
+  return nextOrder;
 }
 
-export async function createJob(
-  _: any,
-  { origin }: { origin: string },
-  { prisma, auth, response }: Context
+export async function responseNewJob(
+  _parent: any,
+  {
+    input: { duration, polylines, orderId },
+  }: {
+    input: { duration: number; polylines: string; orderId: string };
+  },
+  { redis, auth, response }: Context
 ) {
   if (!auth?.userId || auth?.role !== "driver") {
     response.status(401);
     throw new Error("Unathorized");
   }
 
-  const order = await prisma.order.findFirst({
-    where: { status: "Approved" },
-    orderBy: { createdAt: "asc" },
-  });
+  const result = await redis
+    .hget("order", orderId)
+    .then((res) => JSON.parse(res || "{}"));
 
-  await prisma.order.update({
-    where: { orderId: order.orderId },
-    data: { status: "Collecting", comments: `Assigned to @${auth.username}` },
-  });
+  let value = null;
 
-  const { polylines, duration } = hereApi.routing(origin, order.sendLatLng, [
-    order.receiveLatLng,
-  ]);
+  if (duration < result.success?.duration) {
+    const failed = [
+      ...(result.failed ?? []),
+      result.success?.user?.userId,
+    ].filter(Boolean);
+    value = {
+      success: { user: auth, duration, polylines },
+      failed,
+    };
+  } else {
+    const failed = [...result.failed, auth.userId];
+    value = {
+      success: result.success,
+      failed,
+    };
+  }
 
-  return prisma.job.create({
-    data: {
-      order: { connect: { orderId: order.orderId } },
-      driver: { connect: { userId: auth.userId } },
-      status: "Processing",
-      polylines,
-      duration,
-    },
-  });
+  await redis.hset("order", orderId, JSON.stringify(value));
+  return "true";
 }
 
 export async function updateCurrentLocation(
@@ -279,6 +355,6 @@ export default {
   signOut,
   createOrder,
   updateOrderStatus,
-  createJob,
+  responseNewJob,
   updateCurrentLocation,
 };

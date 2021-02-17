@@ -15,14 +15,35 @@ type Mutation {
   createOrder(input: CreateOrderInput): Order
   updateOrderStatus(input: UpdateOrderStatusInput): Order
 
-  createJob(origin: String): Job
   updateCurrentLocation(input: LatLngInput): UpdateCurrentLocation
+
+  responseNewJob(input: ResponseNewJobInput): String
 }
 
 type Subscription {
   currentLocationUpdated: UpdateCurrentLocation
   orderCreated: Order
   orderStatusUpdated: Order
+  newJobRequested(driverId: Int): NewJobRequestedSubscriptionResponse
+  newJobResponsed(driverId: Int): NewJobResponsedSubscriptionResponse
+}
+
+type NewJobRequestedSubscriptionResponse {
+  driverIds: [Int]
+  order: Order
+  driverRouteMapper: [DriverRouteMapper]
+}
+
+type NewJobResponsedSubscriptionResponse {
+  driverIds: [Int]
+  order: Order
+  success: Int
+}
+
+type DriverRouteMapper {
+  me: User
+  polylines: String
+  duration: Int
 }
 
 type UpdateCurrentLocation {
@@ -124,4 +145,10 @@ input UpdateOrderStatusInput {
 input LatLngInput {
   latitude: Float
   longitude: Float
+}
+
+input ResponseNewJobInput {
+  duration: Int
+  polylines: String
+  orderId: String
 }
