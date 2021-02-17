@@ -210,45 +210,6 @@ export const schema = {
         }
       }
     `,
-    createJob: gql`
-      mutation($origin: String) {
-        createJob(origin: $origin) {
-          jobId
-          polylines
-          order {
-            orderId
-            sender {
-              userId
-              username
-              firstName
-              lastName
-              email
-              phone
-            }
-            receiver {
-              userId
-              username
-              firstName
-              lastName
-              email
-              phone
-            }
-            sendAddress
-            sendLatLng {
-              latitude
-              longitude
-            }
-            receiveAddress
-            receiveLatLng {
-              latitude
-              longitude
-            }
-            status
-            comments
-          }
-        }
-      }
-    `,
     signIn: gql`
       mutation($input: SignInInput) {
         signIn(input: $input) {
