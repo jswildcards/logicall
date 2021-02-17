@@ -1,10 +1,8 @@
 import type { status as Status } from "@prisma/client";
 import { Order, User } from "@prisma/client";
-import Axios from "axios";
 import {
   Cookie as CookieConfig,
   DurationLimit,
-  HereApiKey,
 } from "../utils/config";
 import { encrypt } from "../utils/crypto";
 import token from "../utils/token";
@@ -17,7 +15,7 @@ import {
   UPDATE_ORDER_STATUS,
 } from "../utils/subscription-types";
 import { mapStringToLatLng } from "../../../utils/convert";
-import { mapDataToPolylinesAndDuration } from "../utils/convert";
+import hereApi from "../utils/here-api";
 
 export async function signUp(
   _: any,
@@ -81,11 +79,7 @@ export async function createOrder(
     sendAddress,
   } = input;
 
-  const { polylines, duration } = mapDataToPolylinesAndDuration(
-    await Axios.get(
-      `https://router.hereapi.com/v8/routes?transportMode=car&origin=${sendLatLng}&destination=${receiveLatLng}&return=polyline,summary&apiKey=${HereApiKey}`
-    )
-  );
+  const { polylines, duration } = hereApi.routing(sendLatLng, receiveLatLng);
 
   const order = await prisma.order.create({
     data: {
@@ -166,27 +160,23 @@ export async function updateOrderStatus(
       if (me.jobs.length > 0) {
         const firstOrder = me.jobs[0].order;
         const lastOrder = me.jobs[me.jobs.length - 1].order;
-        const { duration: firstDuration } = mapDataToPolylinesAndDuration(
-          await Axios.get(
-            `https://router.hereapi.com/v8/routes?transportMode=car&origin=${Object.values(
-              location.latLng
-            ).join(",")}${
-              firstOrder.status === "Collecting"
-                ? `&via=${firstOrder.sendLatLng}`
-                : ""
-            }&destination=${
-              firstOrder.receiveLatLng
-            }&return=polyline,summary&apiKey=${HereApiKey}`
-          )
+
+        const { duration: firstDuration } = hereApi.routing(
+          Object.values(location.latLng).join(","),
+          firstOrder.receiveLatLng,
+          firstOrder.status === "Collecting" ? [firstOrder.sendLatLng] : []
         );
-        const { duration: lastDuration } = mapDataToPolylinesAndDuration(
-          await Axios.get(
-            `https://router.hereapi.com/v8/routes?transportMode=car&origin=${lastOrder.receiveAddress}&destination=${result.sendLatLng}&return=polyline,summary&apiKey=${HereApiKey}`
-          )
+
+        const { duration: lastDuration } = hereApi.routing(
+          lastOrder.receiveAddress,
+          result.sendLatLng
         );
+
         me.jobs.shift();
         const duration =
-          me.jobs.reduce((prev, cur) => prev + cur.duration, 0) + firstDuration + lastDuration;
+          me.jobs.reduce((prev, cur) => prev + cur.duration, 0) +
+          firstDuration +
+          lastDuration;
 
         // TODO: minutes to second/ms??
         if (duration < DurationLimit) {
@@ -196,14 +186,9 @@ export async function updateOrderStatus(
           };
         }
       } else {
-        const { duration } = mapDataToPolylinesAndDuration(
-          await Axios.get(
-            `https://router.hereapi.com/v8/routes?transportMode=car&origin=${Object.values(
-              location.latLng
-            ).join(",")}&destination=${
-              result.sendLatLng
-            }&return=polyline,summary&apiKey=${HereApiKey}`
-          )
+        const { duration } = hereApi.routing(
+          Object.values(location.latLng).join(","),
+          result.sendLatLng
         );
 
         // TODO: minutes to second/ms??
@@ -250,11 +235,9 @@ export async function createJob(
     data: { status: "Collecting", comments: `Assigned to @${auth.username}` },
   });
 
-  const { polylines, duration } = mapDataToPolylinesAndDuration(
-    await Axios.get(
-      `https://router.hereapi.com/v8/routes?transportMode=car&origin=${origin}&via=${order.sendLatLng}&destination=${order.receiveLatLng}&return=polyline,summary&apiKey=${HereApiKey}`
-    )
-  );
+  const { polylines, duration } = hereApi.routing(origin, order.sendLatLng, [
+    order.receiveLatLng,
+  ]);
 
   return prisma.job.create({
     data: {
