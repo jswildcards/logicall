@@ -251,11 +251,95 @@ export const schema = {
         }
       }
     `,
+    responseNewJob: gql`
+      mutation($input: ResponseNewJobInput) {
+        responseNewJob(input: $input)
+      }
+    `
   },
   subscription: {
-    currentLocationRequested: gql`
-      subscription {
-        currentLocationRequested
+    newJobRequested: gql`
+      subscription($driverId: Int) {
+        newJobRequested(driverId: $driverId) {
+          order {
+            orderId
+            sender {
+              userId
+              username
+              firstName
+              lastName
+              email
+              phone
+            }
+            receiver {
+              userId
+              username
+              firstName
+              lastName
+              email
+              phone
+            }
+            sendAddress
+            sendLatLng {
+              latitude
+              longitude
+            }
+            receiveAddress
+            receiveLatLng {
+              latitude
+              longitude
+            }
+            status
+            comments
+            createdAt
+            updatedAt
+          }
+          driverRouteMapper {
+            me
+            polylines
+            duration
+          }
+        }
+      }
+    `,
+    newJobResponsed: gql`
+      subscription($driverId: Int) {
+        newJobRequested(driverId: $driverId) {
+          order {
+            orderId
+            sender {
+              userId
+              username
+              firstName
+              lastName
+              email
+              phone
+            }
+            receiver {
+              userId
+              username
+              firstName
+              lastName
+              email
+              phone
+            }
+            sendAddress
+            sendLatLng {
+              latitude
+              longitude
+            }
+            receiveAddress
+            receiveLatLng {
+              latitude
+              longitude
+            }
+            status
+            comments
+            createdAt
+            updatedAt
+          }
+          success
+        }
       }
     `,
   },
