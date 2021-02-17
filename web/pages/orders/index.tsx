@@ -80,16 +80,23 @@ export default function Orders() {
     );
   };
 
+  const makeToast = ({ title, description }) => {
+    toast({
+      position: "bottom-right",
+      title,
+      description,
+      status: "warning",
+      duration: null,
+      isClosable: true,
+    });
+  };
+
   useSubscription(schema.subscription.orderCreated, {
     onSubscriptionData: ({ subscriptionData }) => {
       refetch().then(() => {
-        toast({
-          position: "bottom-right",
+        makeToast({
           title: "A New Order is Coming!",
           description: orderDesc(subscriptionData.orderCreated.orderId),
-          status: "warning",
-          duration: null,
-          isClosable: true,
         });
       });
     },
@@ -98,13 +105,9 @@ export default function Orders() {
   useSubscription(schema.subscription.orderStatusUpdated, {
     onSubscriptionData: ({ subscriptionData }) => {
       refetch().then(() => {
-        toast({
-          position: "bottom-right",
+        makeToast({
           title: "An Order Status is Updated!",
           description: orderDesc(subscriptionData.orderStatusUpdated.orderId),
-          status: "warning",
-          duration: null,
-          isClosable: true,
         });
       });
     },
