@@ -11,32 +11,32 @@ const {
   REDIS_HOST,
 } = process.env;
 
-const Crypto = {
+export const Crypto = {
   algorithm: CRY_ALG ?? "sha256",
   secret: CRY_SECRET ?? "secret",
 };
 
-const Jwt = {
+export const Jwt = {
   algorithm: JWT_ALG ?? "HS256",
   secret: JWT_SECRET ?? "secret",
 };
 
-const Page = {
+export const Page = {
   number: 1,
   size: 20,
 };
 
-const Cookie = {
+export const Cookie = {
   token: "LOGICALL_JWT",
 };
 
 // 15 minutes -> second
-const DurationLimit = 15 * 60;
+export const InitialDurationLimit = 15 * 60;
+export const ExtraDurationLimit = 5 * 60;
 
-const HereApiKey = HERE_API_KEY;
-const RedisHost = REDIS_HOST;
+export const HereApiKey = HERE_API_KEY;
+export const RedisHost = REDIS_HOST;
 
-export { Cookie, Crypto, Jwt, Page, HereApiKey, RedisHost, DurationLimit };
 export default {
   Crypto,
   Page,
@@ -44,5 +44,6 @@ export default {
   Cookie,
   HereApiKey,
   RedisHost,
-  DurationLimit,
+  InitialDurationLimit,
+  ExtraDurationLimit,
 };
