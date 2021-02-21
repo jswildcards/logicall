@@ -4,7 +4,7 @@ type Query {
   user(userId: Int!): User
   orders: [Order]
   order(orderId: String): Order
-  currentLocations: [UpdateCurrentLocation]
+  currentLocations: [CurrentLocation]
 }
 
 type Mutation {
@@ -15,13 +15,13 @@ type Mutation {
   createOrder(input: CreateOrderInput): Order
   updateOrderStatus(input: UpdateOrderStatusInput): Order
 
-  updateCurrentLocation(input: LatLngInput): UpdateCurrentLocation
+  updateCurrentLocation(input: LatLngInput): CurrentLocation
 
   responseNewJob(input: ResponseNewJobInput): String
 }
 
 type Subscription {
-  currentLocationUpdated: UpdateCurrentLocation
+  currentLocationUpdated: CurrentLocation
   orderCreated: Order
   orderStatusUpdated: Order
   newJobRequested(driverId: Int): NewJobRequestedSubscriptionResponse
@@ -46,7 +46,7 @@ type DriverRouteMapper {
   duration: Int
 }
 
-type UpdateCurrentLocation {
+type CurrentLocation {
   user: User
   latLng: LatLng
 }
@@ -68,6 +68,7 @@ type User {
   sendOrders: [Order]
   driverOrders: [Order]
   jobs: [Job]
+  currentJobs: [Job]
   createdAt: String
   updatedAt: String
   deletedAt: String
