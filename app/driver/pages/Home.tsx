@@ -31,8 +31,16 @@ function Page() {
     getItem: globalCurrentLocation,
     setItem: setGlobalCurrentLocation,
   } = useAsyncStorage("currentLocation");
+
+  const updateLocation = async () => {
+    const { latitude, longitude } = JSON.parse(
+      (await globalCurrentLocation()) ?? '{"latitude":"","longitude":""}'
+    );
+    updateCurrentLocation({ variables: { input: { latitude: Number(latitude), longitude: Number(longitude) } } });
+  }
+
   useEffect(() => {
-    updateCurrentLocation({ variables: { ...globalCurrentLocation } });
+    updateLocation();
   }, []);
 
   if (loading) {
@@ -48,7 +56,7 @@ function Page() {
     return (
       <Container>
         <StatusBar />
-        <Text>error</Text>
+        <Text>{JSON.stringify(error)}</Text>
       </Container>
     );
   }
@@ -62,7 +70,7 @@ function Page() {
           title="No Jobs Now!"
           subtitle="Do you want to get a job now?"
           button={
-            <Button onPress={getJob}>
+            <Button onPress={() => Actions.jobRequest()}>
               <Text>Get a Job</Text>
             </Button>
           }
