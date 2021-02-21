@@ -343,7 +343,7 @@ export async function updateCurrentLocation(
   );
 
   pubsub.publish(UPDATE_CURRENT_LOCATION, {
-    currentLocationResponsed: { user: auth, latLng: { latitude, longitude } },
+    currentLocationUpdated: { user: auth, latLng: { latitude, longitude } },
   });
 
   return { user: auth, latLng: { latitude, longitude } };
