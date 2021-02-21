@@ -47,6 +47,28 @@ export default function Orders() {
   const [selectedStatuses, setSelectedStatuses] = useState([...statuses]);
   const { data, loading, refetch } = useQuery(schema.query.orders);
 
+  useSubscription(schema.subscription.orderCreated, {
+    onSubscriptionData: ({ subscriptionData: { data: { orderCreated } } }) => {
+      refetch().then(() => {
+        makeToast({
+          title: "A New Order is Coming!",
+          description: orderDesc(orderCreated.orderId),
+        });
+      });
+    },
+  });
+
+  useSubscription(schema.subscription.orderStatusUpdated, {
+    onSubscriptionData: ({ subscriptionData: { data: { orderStatusUpdated } } }) => {
+      refetch().then(() => {
+        makeToast({
+          title: "An Order Status is Updated!",
+          description: orderDesc(orderStatusUpdated.orderId),
+        });
+      });
+    },
+  });
+
   if (loading) {
     return <></>;
   }
@@ -90,28 +112,6 @@ export default function Orders() {
       isClosable: true,
     });
   };
-
-  useSubscription(schema.subscription.orderCreated, {
-    onSubscriptionData: ({ subscriptionData }) => {
-      refetch().then(() => {
-        makeToast({
-          title: "A New Order is Coming!",
-          description: orderDesc(subscriptionData.orderCreated.orderId),
-        });
-      });
-    },
-  });
-
-  useSubscription(schema.subscription.orderStatusUpdated, {
-    onSubscriptionData: ({ subscriptionData }) => {
-      refetch().then(() => {
-        makeToast({
-          title: "An Order Status is Updated!",
-          description: orderDesc(subscriptionData.orderStatusUpdated.orderId),
-        });
-      });
-    },
-  });
 
   return (
     <>
