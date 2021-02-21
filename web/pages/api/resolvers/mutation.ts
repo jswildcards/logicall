@@ -82,7 +82,7 @@ export async function createOrder(
     sendAddress,
   } = input;
 
-  const { polylines, duration } = hereApi.routing(sendLatLng, receiveLatLng);
+  const { polylines, duration } = await hereApi.routing(sendLatLng, receiveLatLng);
 
   const order = await prisma.order.create({
     data: {
@@ -173,14 +173,14 @@ export async function updateOrderStatus(
 
         // find the duration from current location to first order receive location
         // if the order is collecting, add the intermediate point for first order send location
-        const { duration: firstDuration } = hereApi.routing(
+        const { duration: firstDuration } = await hereApi.routing(
           Object.values(location.latLng).join(","),
           firstOrder.receiveLatLng,
           firstOrder.status === "Collecting" ? [firstOrder.sendLatLng] : []
         );
 
         // find the duration from last order receive location to current order send location
-        const { polylines, duration: lastDuration } = hereApi.routing(
+        const { polylines, duration: lastDuration } = await hereApi.routing(
           lastOrder.receiveAddress,
           nextOrder.sendLatLng
         );
@@ -197,7 +197,7 @@ export async function updateOrderStatus(
         ];
       } else {
         // find the duration of current location to current order send location
-        const { polylines, duration } = hereApi.routing(
+        const { polylines, duration } = await hereApi.routing(
           Object.values(location.latLng).join(","),
           nextOrder.sendLatLng
         );
