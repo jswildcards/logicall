@@ -82,7 +82,10 @@ export async function createOrder(
     sendAddress,
   } = input;
 
-  const { polylines, duration } = await hereApi.routing(sendLatLng, receiveLatLng);
+  const { polylines, duration } = await hereApi.routing(
+    sendLatLng,
+    receiveLatLng
+  );
 
   const order = await prisma.order.create({
     data: {
@@ -146,7 +149,6 @@ export async function updateOrderStatus(
   });
 
   if (status === "Approved") {
-    let initialDriverRouteMapper = [];
     let driverRouteMapper = [];
 
     // get all online driver and their current location
@@ -154,60 +156,56 @@ export async function updateOrderStatus(
       .hgetall("location")
       .then((res) => Object.values(res).map((el: string) => JSON.parse(el)));
 
-    locations.forEach(async (location) => {
-      // find all processing jobs for the driver
-      const me = await prisma.user.findUnique({
-        where: location.user.userId,
-        include: {
-          jobs: {
-            where: { status: "Processing" },
-            include: { order: true },
-            orderBy: { jobId: "asc" },
+    const initialDriverRouteMapper = await Promise.all(
+      locations.map(async (location) => {
+        // find all processing jobs for the driver
+        const me = await prisma.user.findUnique({
+          where: { userId: location.user.userId },
+          include: {
+            jobs: {
+              where: { status: "Processing" },
+              include: { order: true },
+              orderBy: { jobId: "asc" },
+            },
           },
-        },
-      });
+        });
 
-      if (me.jobs.length > 0) {
-        const firstOrder = me.jobs[0].order;
-        const lastOrder = me.jobs[me.jobs.length - 1].order;
+        if (me.jobs.length > 0) {
+          const firstOrder = me.jobs[0].order;
+          const lastOrder = me.jobs[me.jobs.length - 1].order;
+        
+          // find the duration from current location to first order receive location
+          // if the order is collecting, add the intermediate point for first order send location
+          const { duration: firstDuration } = await hereApi.routing(
+            Object.values(location.latLng).join(","),
+            firstOrder.receiveLatLng,
+            firstOrder.status === "Collecting" ? [firstOrder.sendLatLng] : []
+          );
 
-        // find the duration from current location to first order receive location
-        // if the order is collecting, add the intermediate point for first order send location
-        const { duration: firstDuration } = await hereApi.routing(
-          Object.values(location.latLng).join(","),
-          firstOrder.receiveLatLng,
-          firstOrder.status === "Collecting" ? [firstOrder.sendLatLng] : []
-        );
+          // find the duration from last order receive location to current order send location
+          const { polylines, duration: lastDuration } = await hereApi.routing(
+            lastOrder.receiveLatLng,
+            nextOrder.sendLatLng
+          );
 
-        // find the duration from last order receive location to current order send location
-        const { polylines, duration: lastDuration } = await hereApi.routing(
-          lastOrder.receiveAddress,
-          nextOrder.sendLatLng
-        );
+          me.jobs.shift();
+          const duration =
+            me.jobs.reduce((prev, cur) => prev + cur.duration, 0) +
+            firstDuration +
+            lastDuration;
 
-        me.jobs.shift();
-        const duration =
-          me.jobs.reduce((prev, cur) => prev + cur.duration, 0) +
-          firstDuration +
-          lastDuration;
+          return { me, polylines, duration };
+        }
 
-        initialDriverRouteMapper = [
-          ...initialDriverRouteMapper,
-          { me, polylines, duration },
-        ];
-      } else {
         // find the duration of current location to current order send location
         const { polylines, duration } = await hereApi.routing(
           Object.values(location.latLng).join(","),
           nextOrder.sendLatLng
         );
 
-        initialDriverRouteMapper = [
-          ...initialDriverRouteMapper,
-          { me, polylines, duration },
-        ];
-      }
-    });
+        return { me, polylines, duration };
+      })
+    );
 
     // find all drivers whose duration within the limit
     // if there are none, add extra time limit and find again.
@@ -305,7 +303,7 @@ export async function responseNewJob(
 
   let value = null;
 
-  if (duration < result.success?.duration) {
+  if (!result.success || duration < result.success.duration) {
     const failed = [
       ...(result.failed ?? []),
       result.success?.user?.userId,

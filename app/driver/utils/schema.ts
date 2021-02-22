@@ -291,11 +291,15 @@ export const schema = {
             }
             status
             comments
+            estimatedDuration
+            suggestedPolylines
             createdAt
             updatedAt
           }
           driverRouteMapper {
-            me
+            me {
+              userId
+            }
             polylines
             duration
           }
@@ -304,7 +308,7 @@ export const schema = {
     `,
     newJobResponsed: gql`
       subscription($driverId: Int) {
-        newJobRequested(driverId: $driverId) {
+        newJobResponsed(driverId: $driverId) {
           order {
             orderId
             sender {
