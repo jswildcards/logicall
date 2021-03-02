@@ -302,6 +302,7 @@ export const schema = {
             }
             polylines
             duration
+            lastDuration
           }
         }
       }

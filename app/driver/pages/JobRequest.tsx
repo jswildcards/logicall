@@ -8,6 +8,7 @@ import {
   List,
   ListItem,
   Text,
+  Toast,
 } from "native-base";
 import React, { useState } from "react";
 import { useMutation, useQuery, useSubscription } from "react-apollo";
@@ -19,7 +20,6 @@ import schema from "../utils/schema";
 function Page() {
   const { data } = useQuery(schema.query.me);
   const [jobs, setJobs] = useState<any[]>([]);
-  const [responses, setResponses] = useState<any[]>([]);
 
   // TODO: subscription variables
   useSubscription(schema.subscription.newJobRequested, {
@@ -31,7 +31,12 @@ function Page() {
   useSubscription(schema.subscription.newJobResponsed, {
     variables: { driverId: Number(data.me.userId) },
     onSubscriptionData: ({ subscriptionData }) => {
-      setResponses([...jobs, subscriptionData.data.newJobResponsed]);
+      const response = subscriptionData.data.newJobResponsed;
+
+      Toast.show({
+        text: `${response.order.orderId}: ${response.success == data.me.userId ? 'success' : 'fail'}`,
+        buttonText: "Okay",
+      });
     },
   });
 
@@ -57,7 +62,7 @@ function Page() {
                 ({ me: { userId } }) => userId === data.me.userId
               );
               const totalDuration =
-                job.order.estimatedDuration + myJob.duration;
+                job.order.estimatedDuration + myJob.lastDuration;
               return (
                 <Card transparent key={job.order.orderId}>
                   <CardItem>
@@ -87,10 +92,16 @@ function Page() {
                   <CardItem footer>
                     <Button
                       onPress={() => {
+                        setJobs([
+                          ...jobs.filter(
+                            (o) => o.order.orderId !== job.order.orderId
+                          ),
+                        ]);
                         responseNewJob({
                           variables: {
                             input: {
                               duration: myJob.duration,
+                              lastDuration: myJob.lastDuration,
                               polylines: myJob.polylines,
                               orderId: job.order.orderId,
                             },

@@ -194,7 +194,7 @@ export async function updateOrderStatus(
             firstDuration +
             lastDuration;
 
-          return { me, polylines, duration };
+          return { me, polylines, duration, lastDuration };
         }
 
         // find the duration of current location to current order send location
@@ -203,7 +203,7 @@ export async function updateOrderStatus(
           nextOrder.sendLatLng
         );
 
-        return { me, polylines, duration };
+        return { me, polylines, duration, lastDuration: duration };
       })
     );
 
@@ -240,7 +240,7 @@ export async function updateOrderStatus(
     const {
       user,
       polylines: suggestedPolylines,
-      duration: estimatedDuration,
+      lastDuration: estimatedDuration,
     } = success;
 
     // update order status to "Collecting"
@@ -259,8 +259,8 @@ export async function updateOrderStatus(
         driver: { connect: { userId: user.userId } },
         status: "Processing",
         polylines: JSON.stringify([
-          suggestedPolylines,
-          nextOrder.suggestedPolylines,
+          ...JSON.parse(suggestedPolylines),
+          ...JSON.parse(nextOrder.suggestedPolylines),
         ]),
         duration: estimatedDuration + nextOrder.estimatedDuration,
       },
@@ -286,9 +286,9 @@ export async function updateOrderStatus(
 export async function responseNewJob(
   _parent: any,
   {
-    input: { duration, polylines, orderId },
+    input: { lastDuration, duration, polylines, orderId },
   }: {
-    input: { duration: number; polylines: string; orderId: string };
+    input: { lastDuration: number; duration: number; polylines: string; orderId: string };
   },
   { redis, auth, response }: Context
 ) {
@@ -309,7 +309,7 @@ export async function responseNewJob(
       result.success?.user?.userId,
     ].filter(Boolean);
     value = {
-      success: { user: auth, duration, polylines },
+      success: { user: auth, duration, polylines, lastDuration },
       failed,
     };
   } else {
