@@ -93,6 +93,9 @@ function Page() {
               </CardItem>
             </Card>
           ))}
+          {data.me.receiveOrders.length === 0 && (
+            <Text>No receive orders yet.</Text>
+          )}
           <H3 style={{ paddingTop: 12 }}>Send Orders</H3>
           {data.me.sendOrders.map((order) => (
             <Card>
@@ -115,7 +118,7 @@ function Page() {
                   {order.status === "Pending" && (
                     <Button
                       danger
-                      style={{marginTop:12}}
+                      style={{ marginTop: 12 }}
                       onPress={() => {
                         updateOrderStatus({
                           variables: {
@@ -135,6 +138,9 @@ function Page() {
               </CardItem>
             </Card>
           ))}
+          {data.me.receiveOrders.length === 0 && (
+            <Text>No send orders yet.</Text>
+          )}
         </FixedContainer>
       </Content>
       <Fab

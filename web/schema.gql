@@ -2,9 +2,9 @@ type Query {
   me: User
   users(search: String!): [User]
   user(userId: Int!): User
+  drivers: [User]
   orders: [Order]
   order(orderId: String): Order
-  currentLocations: [CurrentLocation]
 }
 
 type Mutation {
@@ -48,8 +48,9 @@ type DriverRouteMapper {
 }
 
 type CurrentLocation {
-  user: User
+  at: Float
   latLng: LatLng
+  status: String
 }
 
 type LatLng {
@@ -68,6 +69,7 @@ type User {
   receiveOrders: [Order]
   sendOrders: [Order]
   driverOrders: [Order]
+  currentLocation: CurrentLocation
   jobs: [Job]
   currentJobs: [Job]
   createdAt: String

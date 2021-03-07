@@ -14,6 +14,8 @@ import React, { useState } from "react";
 import { useMutation, useQuery, useSubscription } from "react-apollo";
 import { StatusBar } from "react-native";
 import FixedContainer from "../components/FixedContainer";
+import EmptyIcon from "../components/icons/EmptyIcon";
+import NoData from "../components/NoData";
 import { mapSecondsToHoursFormat } from "../utils/convert";
 import schema from "../utils/schema";
 
@@ -34,7 +36,7 @@ function Page() {
       const response = subscriptionData.data.newJobResponsed;
 
       Toast.show({
-        text: `${response.order.orderId}: ${response.success == data.me.userId ? 'success' : 'fail'}`,
+        text: `${response.order.orderId}: ${Number(response.success) === Number(data.me.userId) ? 'success' : 'fail'}`,
         buttonText: "Okay",
       });
     },
@@ -44,9 +46,14 @@ function Page() {
 
   if (jobs.length <= 0) {
     return (
-      <>
-        <Text>byeeeeeee</Text>
-      </>
+      <Container>
+        <StatusBar />
+        <NoData
+          icon={<EmptyIcon height="30%" />}
+          title="No Job Request Currently"
+          subtitle="Please wait for new job request."
+        />
+      </Container>
     );
   }
 

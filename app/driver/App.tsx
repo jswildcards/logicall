@@ -97,7 +97,7 @@ function App() {
                   iconName="download"
                   iosIconName="ios-download"
                   component={JobRequestPage}
-                  title="Job Request"
+                  title="Request"
                   hideNavBar
                 />
                 <Scene

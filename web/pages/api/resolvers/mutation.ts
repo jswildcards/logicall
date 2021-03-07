@@ -173,7 +173,7 @@ export async function updateOrderStatus(
         if (me.jobs.length > 0) {
           const firstOrder = me.jobs[0].order;
           const lastOrder = me.jobs[me.jobs.length - 1].order;
-        
+
           // find the duration from current location to first order receive location
           // if the order is collecting, add the intermediate point for first order send location
           const { duration: firstDuration } = await hereApi.routing(
@@ -288,7 +288,12 @@ export async function responseNewJob(
   {
     input: { lastDuration, duration, polylines, orderId },
   }: {
-    input: { lastDuration: number; duration: number; polylines: string; orderId: string };
+    input: {
+      lastDuration: number;
+      duration: number;
+      polylines: string;
+      orderId: string;
+    };
   },
   { redis, auth, response }: Context
 ) {
@@ -334,17 +339,21 @@ export async function updateCurrentLocation(
     throw new Error("Unathorized");
   }
 
+  const currentLocationUpdated = {
+    latLng: { latitude, longitude },
+    user: auth,
+    at: new Date().valueOf(),
+  };
+
   await redis.hset(
     "location",
     auth.username,
-    JSON.stringify({ latLng: { latitude, longitude }, user: auth })
+    JSON.stringify(currentLocationUpdated)
   );
 
-  pubsub.publish(UPDATE_CURRENT_LOCATION, {
-    currentLocationUpdated: { user: auth, latLng: { latitude, longitude } },
-  });
+  pubsub.publish(UPDATE_CURRENT_LOCATION, { currentLocationUpdated });
 
-  return { user: auth, latLng: { latitude, longitude } };
+  return currentLocationUpdated;
 }
 
 export default {

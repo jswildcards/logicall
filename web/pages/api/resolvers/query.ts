@@ -15,6 +15,33 @@ export async function users(
   });
 }
 
+export async function drivers(
+  _parent: any,
+  _args: any,
+  { prisma, redis }: Context
+) {
+  const locations = await redis
+    .hgetall("location")
+    .then((res) => Object.values(res).map((el: string) => JSON.parse(el)));
+
+  return (await prisma.user.findMany({ where: { role: "driver" } })).map(
+    (driver) => {
+      const find = locations.find(
+        (location) => location.user?.userId === driver.userId
+      );
+
+      return {
+        ...driver,
+        currentLocation: {
+          status: find?.at ? "online" : "offline",
+          at: find?.at,
+          latLng: find?.latLng,
+        },
+      };
+    }
+  );
+}
+
 export async function user(
   _parent: any,
   { userId }: { userId: number },
@@ -123,11 +150,4 @@ export async function order(
   return mapStringToLatLng(final);
 }
 
-export async function currentLocations(_parent, _args, { redis }: Context) {
-  const locations = await redis
-    .hgetall("location")
-    .then((res) => Object.values(res).map((el: string) => JSON.parse(el)));
-  return locations;
-}
-
-export default { users, user, me, orders, order, currentLocations };
+export default { users, drivers, user, me, orders, order };

@@ -2,6 +2,25 @@ import gql from "graphql-tag";
 
 export const schema = {
   query: {
+    drivers: gql`{
+      drivers {
+        userId
+        firstName
+        lastName
+        email
+        role
+        phone
+        username
+        currentLocation {
+          at
+          status
+          latLng {
+            latitude
+            longitude
+          }
+        }
+      }
+    }`,
     me: gql`{
       me {
         userId
@@ -210,19 +229,7 @@ export const schema = {
   subscription: {
     currentLocationUpdated: gql`subscription {
       currentLocationUpdated {
-        user {
-          userId
-          firstName
-          lastName
-          email
-          role
-          phone
-          username
-        }
-        latLng {
-          latitude
-          longitude
-        }
+        at
       }
     }`,
     orderCreated: gql`subscription {
