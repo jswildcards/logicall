@@ -31,23 +31,23 @@ export default function Post() {
   const router = useRouter();
   const toast = useToast();
   const [isRefetching, setRefetching] = useState(false);
-  const [getDriver, { data, loading: driverLoading, refetch }] = useLazyQuery(
+  const [getCustomer, { data, loading: customerLoading, refetch }] = useLazyQuery(
     schema.query.user
   );
 
   useEffect(() => {
     if (router?.query) {
-      getDriver({
+      getCustomer({
         variables: { userId: Number(router.query.id) },
       });
     }
   }, [router]);
 
-  if (driverLoading || !data) {
+  if (customerLoading || !data) {
     return <></>;
   }
 
-  const driverRefetch = async () => {
+  const customerRefetch = async () => {
     setRefetching(true);
     await refetch();
     setRefetching(false);
@@ -71,10 +71,10 @@ export default function Post() {
                 <BreadcrumbLink href="/">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/drivers">Drivers</BreadcrumbLink>
+                <BreadcrumbLink href="/customers">Customers</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbItem isCurrentPage>
-                <BreadcrumbLink href={`/drivers/${router.query.id}`}>
+                <BreadcrumbLink href={`/customers/${router.query.id}`}>
                   {router.query.id}
                 </BreadcrumbLink>
               </BreadcrumbItem>
@@ -82,7 +82,7 @@ export default function Post() {
 
             <IconButton
               aria-label="Refetch Orders"
-              onClick={driverRefetch}
+              onClick={customerRefetch}
               isLoading={isRefetching}
               variant="ghost"
               icon={<RepeatIcon />}
@@ -100,59 +100,63 @@ export default function Post() {
           <Table variant="simple">
             <Thead>
               <Tr>
-                <Th>Job ID</Th>
-                <Th>Job Status</Th>
                 <Th>Order ID</Th>
-                <Th>Orde Status</Th>
+                <Th>Status</Th>
+                <Th>Sender</Th>
+                <Th>Send Address</Th>
+                <Th>Receiver</Th>
+                <Th>Receive Address</Th>
                 <Th />
               </Tr>
             </Thead>
             <Tbody>
-              {data.user.jobs.map((job) => (
+              {[
+                ...(data.user.sendOrders ?? []),
+                ...(data.user.receiveOrders ?? []),
+              ]?.map((order) => (
                 <Tr
-                  key={job.jobId}
+                  key={order.orderId}
                   _hover={{ background: "gray.100" }}
-                  onClick={() => router.push(`/orders/${job.order.orderId}`)}
+                  onClick={() => router.push(`/orders/${order.orderId}`)}
                 >
-                  <Td>{job.jobId}</Td>
+                  <Td>{order.orderId}</Td>
                   <Td>
                     <Flex>
-                      <Badge
-                        colorScheme={
-                          job.status === "Processing" ? "yellow" : "green"
-                        }
-                      >
-                        {job.status}
+                      <Badge colorScheme={mapStatusToColor(order.status)}>
+                        {order.status}
                       </Badge>
                     </Flex>
                   </Td>
-                  <Td>{job.order.orderId}</Td>
                   <Td>
-                    <Flex>
-                      <Badge colorScheme={mapStatusToColor(job.order.status)}>
-                        {job.order.status}
-                      </Badge>
-                    </Flex>
+                    <DisplayName user={order.sender} />
+                  </Td>
+                  <Td>
+                    <Text>{order.sendAddress}</Text>
+                  </Td>
+                  <Td>
+                    <DisplayName user={order.receiver} />
+                  </Td>
+                  <Td>
+                    <Text>{order.receiveAddress}</Text>
                   </Td>
                   <Td>
                     <IconButton
                       aria-label="View Order"
                       variant="link"
                       icon={<ArrowForwardIcon />}
-                      onClick={() =>
-                        router.push(`/orders/${job.order.orderId}`)
-                      }
+                      onClick={() => router.push(`/orders/${order.orderId}`)}
                     />
                   </Td>
                 </Tr>
               ))}
             </Tbody>
           </Table>
-          {data.user.jobs?.length <= 0 && (
-            <Text p="3" textAlign="center" color="gray.600" fontWeight="bold">
-              No Jobs Here.
-            </Text>
-          )}
+          {data.user.sendOrders?.length <= 0 &&
+            data.user.receiveOrders?.length <= 0 && (
+              <Text p="3" textAlign="center" color="gray.600" fontWeight="bold">
+                No Orders Here.
+              </Text>
+            )}
         </Stack>
       </Container>
     </>

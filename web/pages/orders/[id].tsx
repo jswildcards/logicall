@@ -58,10 +58,10 @@ export default function Post() {
   const [isRefetching, setRefetching] = useState(false);
   const [updateOrderStatus] = useMutation(schema.mutation.updateOrderStatus);
 
-  // useSubscription(schema.subscription.orderStatusUpdated, {
-  //   onSubscriptionData: refetch,
-  // });
-  
+  useSubscription(schema.subscription.orderStatusUpdated, {
+    onSubscriptionData: () => refetch({ orderId: router.query.id }),
+  });
+
   const [orderActions, setOrderActions] = useState({
     action: null,
     status: null,

@@ -43,8 +43,6 @@ function Page() {
     );
   }
 
-  // const { userId, firstName, lastName, username, followers, followees } = data.me;
-
   return (
     <Container>
       <StatusBar />

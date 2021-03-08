@@ -42,12 +42,26 @@ export async function drivers(
   );
 }
 
+export async function customers(_parent: any, _args: any, { prisma }: Context) {
+  return prisma.user.findMany({
+    where: { role: "customer" },
+    include: { sendOrders: true, receiveOrders: true },
+  });
+}
+
 export async function user(
   _parent: any,
   { userId }: { userId: number },
   { prisma }: Context
 ) {
-  return prisma.user.findUnique({ where: { userId } });
+  return prisma.user.findUnique({
+    where: { userId },
+    include: {
+      jobs: { include: { order: true } },
+      sendOrders: { include: { sender: true, receiver: true } },
+      receiveOrders: { include: { sender: true, receiver: true } },
+    },
+  });
 }
 
 export async function me(
@@ -64,11 +78,11 @@ export async function me(
     where: { userId: auth.userId },
     include: {
       receiveOrders: {
-        include: { sender: true, receiver: true },
+        include: { sender: true, receiver: true, creator: true },
         orderBy: { orderId: "desc" },
       },
       sendOrders: {
-        include: { sender: true, receiver: true },
+        include: { sender: true, receiver: true, creator: true },
         orderBy: { orderId: "desc" },
       },
       jobs: {
@@ -150,4 +164,4 @@ export async function order(
   return mapStringToLatLng(final);
 }
 
-export default { users, drivers, user, me, orders, order };
+export default { users, drivers, user, customers, me, orders, order };

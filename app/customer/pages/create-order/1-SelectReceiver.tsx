@@ -9,8 +9,11 @@ import {
   Icon,
   Input,
   Right,
+  ListItem,
+  Left,
+  Radio,
 } from "native-base";
-import { useLazyQuery, } from "react-apollo";
+import { useLazyQuery, useQuery } from "react-apollo";
 import { Actions } from "react-native-router-flux";
 import { Title } from "react-native-paper";
 import schema from "../../utils/schema";
@@ -62,8 +65,9 @@ const styles = StyleSheet.create({
   },
 });
 
-function Page() {
-  const [receiver, setReceiver] = useState(null);
+function Page({ me }) {
+  const [meRole, setMeRole] = useState("sender");
+  const [other, setOther] = useState(null);
   const [search, setSearch] = useState("");
   const [isRefreshing, setRefreshing] = useState(false);
   const [getUsers, { data: lazyData, refetch: lazyRefetch }] = useLazyQuery(
@@ -96,12 +100,16 @@ function Page() {
     <Container>
       <StatusBar />
       <HeaderNav
-        title="Receiver"
+        title="Sender & Receiver"
         subtitle="Create Order"
         right={
-          receiver && (
+          other && (
             <Button
-              onPress={() => Actions.createOrder2SelectSendAddress({ receiver })}
+              onPress={() =>
+                Actions.createOrder2SelectSendAddress({
+                  sender: meRole === "sender" ? me : other,
+                  receiver: meRole === "receiver" ? me : other,
+                })}
               transparent
             >
               <Text>Next</Text>
@@ -116,17 +124,17 @@ function Page() {
           <AvatarItem
             item={item}
             button
-            selected={item.userId === receiver?.userId}
-            onPress={() => setReceiver({ ...item })}
+            selected={item.userId === other?.userId}
+            onPress={() => setOther({ ...item })}
             right={
-            item.userId === receiver?.userId && (
-              <Right>
-                <Icon ios="ios-checkmark" name="checkmark" />
-              </Right>
-            )
-          }
+              item.userId === other?.userId && (
+                <Right>
+                  <Icon ios="ios-checkmark" name="checkmark" />
+                </Right>
+              )
+            }
           />
-      )}
+        )}
         renderSectionHeader={({ section }) => (
           <Title style={styles.sectionHeader}>{section.title}</Title>
         )}
@@ -139,12 +147,43 @@ function Page() {
         refreshing={isRefreshing}
         ListHeaderComponent={(
           <FixedContainer pad>
-            <H3 style={styles.bold}>First, Select a receiver...</H3>
+            <H3 style={styles.bold}>I am...</H3>
+            <ListItem>
+              <Left>
+                <Text>Sender</Text>
+              </Left>
+              <Right>
+                <Radio
+                  selected={meRole === "sender"}
+                  onPress={() => setMeRole("sender")}
+                />
+              </Right>
+            </ListItem>
+            <ListItem>
+              <Left>
+                <Text>Receiver</Text>
+              </Left>
+              <Right>
+                <Radio
+                  selected={meRole === "receiver"}
+                  onPress={() => setMeRole("receiver")}
+                />
+              </Right>
+            </ListItem>
+
+            <H3 style={styles.bold}>
+              Select a 
+              {' '}
+              {meRole === "sender" ? "receiver" : "sender"}
+              ...
+            </H3>
             <Item floatingLabel last>
               <Input
                 value={search}
                 onChangeText={userSearching}
-                placeholder="Search receiver..."
+                placeholder={`Search ${
+                  meRole === "sender" ? "receiver" : "sender"
+                }`}
               />
             </Item>
           </FixedContainer>

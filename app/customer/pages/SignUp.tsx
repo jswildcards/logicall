@@ -22,14 +22,14 @@ import FixedContainer from "../components/FixedContainer";
 
 function Page() {
   const [user, setUser] = useState({
-    firstName: "Tin Lok",
-    lastName: "Law",
-    username: "paniom",
-    email: "tinloklaw@example.com",
-    password: "Aa255300238",
-    role: "customer",
+    firstName: "",
+    lastName: "",
+    username: "",
+    email: "",
+    password: "",
+    role: "",
   });
-  const [confirmPassword, setConfirmPassword] = useState("Aa255300238");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [isPasswordVisible, setPasswordVisible] = useState([false, false]);
   const [signUp] = useMutation(schema.mutation.signUp, {

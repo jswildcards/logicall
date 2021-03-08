@@ -57,7 +57,11 @@ function Page() {
           title="No Orders Here!"
           subtitle="Do you want to create an order now?"
           button={
-            <Button onPress={() => Actions.createOrder1SelectReceiver()}>
+            <Button
+              onPress={() =>
+                Actions.createOrder1SelectReceiver({ me: data.me })
+              }
+            >
               <Text>Create Order</Text>
             </Button>
           }
@@ -89,6 +93,25 @@ function Page() {
                       comments: `Delivered to @${data.me.username} by`,
                     }}
                   />
+                  {order.status === "Pending" && order.creator.userId === data.me.userId && (
+                    <Button
+                      danger
+                      style={{ marginTop: 12 }}
+                      onPress={() => {
+                        updateOrderStatus({
+                          variables: {
+                            input: {
+                              orderId: order.orderId,
+                              status: "Cancelled",
+                              comments: `Cancelled by @${data.me.username}`,
+                            },
+                          },
+                        });
+                      }}
+                    >
+                      <Text>Cancel</Text>
+                    </Button>
+                  )}
                 </Body>
               </CardItem>
             </Card>
@@ -115,7 +138,7 @@ function Page() {
                       comments: `Received from @${data.me.username} by`,
                     }}
                   />
-                  {order.status === "Pending" && (
+                  {order.status === "Pending" && order.creator.userId === data.me.userId && (
                     <Button
                       danger
                       style={{ marginTop: 12 }}
@@ -138,7 +161,7 @@ function Page() {
               </CardItem>
             </Card>
           ))}
-          {data.me.receiveOrders.length === 0 && (
+          {data.me.sendOrders.length === 0 && (
             <Text>No send orders yet.</Text>
           )}
         </FixedContainer>
@@ -146,7 +169,7 @@ function Page() {
       <Fab
         style={{ backgroundColor: "#5067FF" }}
         position="bottomRight"
-        onPress={() => Actions.createOrder1SelectReceiver()}
+        onPress={() => Actions.createOrder1SelectReceiver({ me: data.me })}
       >
         <Icon ios-name="ios-add" name="add" />
       </Fab>

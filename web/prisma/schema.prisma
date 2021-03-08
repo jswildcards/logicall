@@ -9,6 +9,7 @@ datasource db {
 
 model Order {
   orderId            String     @id
+  creatorId          Int
   senderId           Int
   sendAddress        String?
   sendLatLng         String?
@@ -22,6 +23,7 @@ model Order {
   createdAt          DateTime   @default(now())
   updatedAt          DateTime   @default(now())
   deletedAt          DateTime?
+  creator            User       @relation("Order_creatorIdToUser", fields: [creatorId], references: [userId])
   receiver           User       @relation("Order_receiverIdToUser", fields: [receiverId], references: [userId])
   sender             User       @relation("Order_senderIdToUser", fields: [senderId], references: [userId])
   jobs               Job[]
@@ -52,6 +54,7 @@ model User {
   updatedAt     DateTime  @default(now())
   deletedAt     DateTime?
   jobs          Job[]
+  createOrders  Order[]   @relation("Order_creatorIdToUser")
   receiveOrders Order[]   @relation("Order_receiverIdToUser")
   sendOrders    Order[]   @relation("Order_senderIdToUser")
 }

@@ -3,6 +3,7 @@ type Query {
   users(search: String!): [User]
   user(userId: Int!): User
   drivers: [User]
+  customers: [User]
   orders: [Order]
   order(orderId: String): Order
 }
@@ -79,6 +80,7 @@ type User {
 
 type Order {
   orderId: ID!
+  creator: User
   sender: User
   sendAddress: String
   sendLatLng: LatLng
@@ -133,6 +135,7 @@ input SignInInput {
 }
 
 input CreateOrderInput {
+  senderId: Int
   receiverId: Int
   sendAddress: String
   sendLatLng: String

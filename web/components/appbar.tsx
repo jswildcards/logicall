@@ -98,6 +98,13 @@ function AppBar() {
             </Button>
           </Link>
         </MenuItems>
+        <MenuItems>
+          <Link href="/customers">
+            <Button variant="link" color="white">
+              Customers
+            </Button>
+          </Link>
+        </MenuItems>
       </Box>
 
       <Box display={{ base: show ? "block" : "none", md: "flex" }}>

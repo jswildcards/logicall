@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import MapView, { Marker } from "react-native-maps";
 import { Button, Container, Text, Textarea } from "native-base";
-import { StatusBar, StyleSheet } from "react-native";
+import { StatusBar, StyleSheet, View } from "react-native";
 import { Actions } from "react-native-router-flux";
-import { Title, Subheading } from "react-native-paper";
-import FixedContainer from "../../components/FixedContainer";
 import HeaderNav from "../../components/HeaderNav";
 
 const styles = StyleSheet.create({
   text: {
     color: "#434343",
   },
+  padding: {
+    padding: 12,
+  },
 });
 
-function Page({ receiver }) {
+function Page({ sender, receiver }) {
   const [sendAddress, setSendAddress] = useState({
     address: "",
     latitude: null,
@@ -25,6 +26,14 @@ function Page({ receiver }) {
     setSendAddress({ ...sendAddress, latitude, longitude });
   };
 
+  const isFormCompleted = () => {
+    return (
+      sendAddress?.latitude &&
+      sendAddress?.longitude &&
+      sendAddress?.address?.length > 0
+    );
+  };
+
   return (
     <Container>
       <StatusBar />
@@ -32,10 +41,11 @@ function Page({ receiver }) {
         title="Send Address"
         subtitle="Create Order"
         right={
-          sendAddress?.latitude && (
+          isFormCompleted() && (
             <Button
               onPress={() =>
                 Actions.createOrder3SelectReceiveAddress({
+                  sender,
                   receiver,
                   sendAddress: sendAddress.address,
                   sendLatLng: `${sendAddress.latitude},${sendAddress.longitude}`,
@@ -48,77 +58,37 @@ function Page({ receiver }) {
           )
         }
       />
-      <FixedContainer pad>
-        {/* <Item > */}
-        {/* <Icon name="compass" /> */}
-        <Title style={styles.text}>Address Detail</Title>
+      <View style={styles.padding}>
         <Textarea
-          // style={{marginBottom:12}}
-          // placeholder="Address"
-          rowSpan={5}
+          placeholder="Address Detail"
+          rowSpan={3}
           bordered
           underline={false}
-          value={sendAddress.address}
+          value={receiver}
           onChangeText={(address) =>
             setSendAddress({ ...sendAddress, address })
           }
         />
-        <Title style={styles.text}>Address Coordinates</Title>
-        <Subheading style={styles.text}>
-          Please click on the map to confirm address coordinates.
-        </Subheading>
-        {/* </Item> */}
-        {/* <Item picker>
-          <Left
-            style={{
-              flex: 1,
-              flexDirection: "row",
-              alignItems: "center",
+      </View>
+      <MapView
+        style={{ flex: 1 }}
+        initialRegion={{
+          latitude: 22.38131,
+          longitude: 114.168639,
+          latitudeDelta: 0.9,
+          longitudeDelta: 0.9,
+        }}
+        onPress={changeRoutingDestination}
+      >
+        {(sendAddress?.latitude ?? null) && (
+          <Marker
+            coordinate={{
+              latitude: sendAddress.latitude!,
+              longitude: sendAddress.longitude!,
             }}
-          >
-            <Icon ios="ios-locate" name="locate" style={{ marginRight: 8 }} />
-            <Text>District</Text>
-          </Left>
-          <Picker
-            mode="dropdown"
-            iosIcon={<Icon name="arrow-down" />}
-            placeholder="Select district"
-            placeholderStyle={{ color: "#bfc6ea" }}
-            placeholderIconColor="#007aff"
-            selectedValue={receiveAddress.district}
-            onValueChange={(district) =>
-              setReceiveAddress({ ...receiveAddress, district })}
-          >
-            {data.districts?.map((district) => (
-              <Picker.Item
-                key={district.districtId}
-                label={district.name}
-                value={district.districtId}
-              />
-            ))}
-          </Picker>
-        </Item> */}
-
-        <MapView
-          style={{ width: "100%", height: 350 }}
-          initialRegion={{
-            latitude: 22.38131,
-            longitude: 114.168639,
-            latitudeDelta: 0.9,
-            longitudeDelta: 0.9,
-          }}
-          onPress={changeRoutingDestination}
-        >
-          {(sendAddress?.latitude ?? null) && (
-            <Marker
-              coordinate={{
-                latitude: sendAddress.latitude!,
-                longitude: sendAddress.longitude!,
-              }}
-            />
-          )}
-        </MapView>
-      </FixedContainer>
+          />
+        )}
+      </MapView>
     </Container>
   );
 }

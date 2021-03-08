@@ -38,6 +38,7 @@ function Page() {
       Toast.show({
         text: `${response.order.orderId}: ${Number(response.success) === Number(data.me.userId) ? 'success' : 'fail'}`,
         buttonText: "Okay",
+        duration: 6000
       });
     },
   });

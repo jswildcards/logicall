@@ -78,6 +78,7 @@ export async function createOrder(
     receiverId,
     receiveAddress,
     receiveLatLng,
+    senderId,
     sendLatLng,
     sendAddress,
   } = input;
@@ -89,10 +90,11 @@ export async function createOrder(
 
   const order = await prisma.order.create({
     data: {
-      orderId: `${new Date().valueOf().toString(36)}-${
-        auth.userId
-      }-${receiverId}`.toUpperCase(),
-      sender: { connect: { userId: auth.userId } },
+      orderId: `${new Date()
+        .valueOf()
+        .toString(36)}-${senderId}-${receiverId}`.toUpperCase(),
+      creator: { connect: { userId: auth.userId } },
+      sender: { connect: { userId: senderId } },
       receiver: { connect: { userId: receiverId } },
       receiveAddress,
       receiveLatLng,

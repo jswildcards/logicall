@@ -18,6 +18,7 @@ CREATE TABLE "User" (
 
 CREATE TABLE "Order" (
   "orderId"             VARCHAR(255) PRIMARY KEY NOT NULL,
+  "creatorId"           INTEGER NOT NULL REFERENCES "User"("userId"),
   "senderId"            INTEGER NOT NULL REFERENCES "User"("userId"),
   "sendAddress"         TEXT NULL,
   "sendLatLng"          TEXT NULL,

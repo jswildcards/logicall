@@ -28,6 +28,9 @@ export const schema = {
           username
           sendOrders {
             orderId
+            creator {
+              userId
+            }
             sender {
               userId
               username
@@ -60,6 +63,9 @@ export const schema = {
             updatedAt
           }
           receiveOrders {
+            creator {
+              userId
+            }
             orderId
             sender {
               userId

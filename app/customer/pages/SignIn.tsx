@@ -46,7 +46,6 @@ const styles = StyleSheet.create({
   headline: {
     textAlign: "center",
     fontWeight: "bold",
-    // paddingTop: 12
   },
 });
 
@@ -125,9 +124,6 @@ function Page() {
                 onPress={() => setPasswordVisible(!isPasswordVisible)}
               />
             </Item>
-            {/* <Button danger transparent>
-            <Text>{error}</Text>
-          </Button> */}
             <Button
               style={styles.textSignUp}
               disabled={isLoading}
