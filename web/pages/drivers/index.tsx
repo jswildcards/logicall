@@ -9,6 +9,7 @@ import {
   Grid,
   GridItem,
   IconButton,
+  Input,
   Stack,
   Table,
   Tbody,
@@ -36,6 +37,7 @@ export default function Drivers() {
     loading: driversLoading,
     refetch: refetchDrivers,
   } = useQuery(schema.query.drivers);
+  const [keywords, setKeywords] = useState("");
   const toast = useToast();
   const [isRefetching, setRefetching] = useState(false);
   const Map = useMemo(
@@ -65,6 +67,22 @@ export default function Drivers() {
       duration: null,
       isClosable: true,
     });
+  };
+
+  const sortDrivers = (a: Record<string, any>, b: Record<string, any>) => {
+    if (
+      a.currentLocation.status === "offline" &&
+      b.currentLocation.status === "online"
+    )
+      return 1;
+
+    if (
+      a.currentLocation.status === "online" &&
+      b.currentLocation.status === "offline"
+    )
+      return -1;
+
+    return a.driverId - b.driverId;
   };
 
   if (driversLoading) {
@@ -97,18 +115,26 @@ export default function Drivers() {
             </Flex>
 
             <Stack>
-              <Text fontSize="2xl" color="gray.500">
-                Logs
+              <Text fontSize="xl" color="gray.500">
+                Filter Drivers
               </Text>
+              <Text color="gray.500">Keywords</Text>
+              <Input
+                value={keywords}
+                onChange={(e) => setKeywords(e.target.value)}
+                placeholder="Enter Keywords..."
+              />
 
+              <Divider />
               <Text color="gray.500">
-                at{" "}
+                Updated at{" "}
                 {moment
                   .tz(new Date().valueOf(), "Asia/Hong_Kong")
                   .format("YYYY-MM-DD HH:mm:ss")}
               </Text>
 
               <Divider />
+
               <Table variant="simple">
                 <Thead>
                   <Tr>
@@ -121,9 +147,8 @@ export default function Drivers() {
                 </Thead>
                 <Tbody>
                   {drivers?.drivers
-                    ?.sort((a, b) =>
-                      a.currentLocation.status === "offline" ? 1 : -1
-                    )
+                    ?.filter((driver) => driver.userId.includes(keywords))
+                    ?.sort(sortDrivers)
                     ?.map(
                       ({
                         userId,
