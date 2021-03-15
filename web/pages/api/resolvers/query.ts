@@ -8,7 +8,11 @@ export async function users(
 ) {
   return prisma.user.findMany({
     where: {
-      username: { contains: search, mode: "insensitive" },
+      OR: [
+        { username: { contains: search, mode: "insensitive" } },
+        { firstName: { contains: search, mode: "insensitive" } },
+        { lastName: { contains: search, mode: "insensitive" } },
+      ],
       role: "customer",
       userId: { not: auth.userId },
     },
@@ -78,19 +82,37 @@ export async function me(
     where: { userId: auth.userId },
     include: {
       receiveOrders: {
-        include: { sender: true, receiver: true, creator: true },
+        include: {
+          sender: true,
+          receiver: true,
+          creator: true,
+          jobs: { include: { driver: true } },
+          logs: { orderBy: { createdAt: "desc" } },
+        },
         orderBy: { orderId: "desc" },
       },
       sendOrders: {
-        include: { sender: true, receiver: true, creator: true },
+        include: {
+          sender: true,
+          receiver: true,
+          creator: true,
+          jobs: { include: { driver: true } },
+          logs: { orderBy: { createdAt: "desc" } },
+        },
         orderBy: { orderId: "desc" },
       },
       jobs: {
         include: {
           driver: true,
-          order: { include: { sender: true, receiver: true } },
+          order: {
+            include: {
+              sender: true,
+              receiver: true,
+              logs: { orderBy: { createdAt: "desc" } },
+            },
+          },
         },
-        orderBy: { jobId: "desc" },
+        orderBy: { status: "desc" },
       },
     },
   });

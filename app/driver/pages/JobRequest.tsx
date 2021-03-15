@@ -20,7 +20,7 @@ import { mapSecondsToHoursFormat } from "../utils/convert";
 import schema from "../utils/schema";
 
 function Page() {
-  const { data } = useQuery(schema.query.me);
+  const { data, refetch } = useQuery(schema.query.me);
   const [jobs, setJobs] = useState<any[]>([]);
 
   // TODO: subscription variables
@@ -34,11 +34,14 @@ function Page() {
     variables: { driverId: Number(data.me.userId) },
     onSubscriptionData: ({ subscriptionData }) => {
       const response = subscriptionData.data.newJobResponsed;
+      const success = Number(response.success) === Number(data.me.userId);
+
+      if (success) refetch();
 
       Toast.show({
-        text: `${response.order.orderId}: ${Number(response.success) === Number(data.me.userId) ? 'success' : 'fail'}`,
+        text: `${response.order.orderId}: ${success ? "success" : "fail"}`,
         buttonText: "Okay",
-        duration: 6000
+        duration: 6000,
       });
     },
   });

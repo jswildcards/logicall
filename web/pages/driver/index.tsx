@@ -29,6 +29,7 @@ import { useRouter } from "next/router";
 import AppBar from "../../components/appbar";
 import schema from "../../utils/schema";
 import DisplayName from "../../components/display-name";
+import { filterUsers } from "../../utils/convert";
 
 export default function Drivers() {
   const router = useRouter();
@@ -40,6 +41,7 @@ export default function Drivers() {
   const [keywords, setKeywords] = useState("");
   const toast = useToast();
   const [isRefetching, setRefetching] = useState(false);
+  const [marker, setMarker] = useState(undefined);
   const Map = useMemo(
     () =>
       dynamic(() => import("../../components/map"), {
@@ -85,6 +87,28 @@ export default function Drivers() {
     return a.driverId - b.driverId;
   };
 
+  const getMarkers = () => {
+    const hoveringDriver = drivers?.drivers?.find(
+      (driver) => Number(driver.userId) === Number(marker)
+    );
+
+    if (hoveringDriver?.currentLocation?.status === "online") {
+      return [
+        {
+          ...hoveringDriver.currentLocation.latLng,
+          message: <DisplayName user={hoveringDriver} />,
+        },
+      ];
+    }
+
+    return drivers?.drivers
+      ?.filter((driver) => driver.currentLocation.status === "online")
+      ?.map((user) => ({
+        ...user.currentLocation.latLng,
+        message: <DisplayName user={user} useLink />,
+      }));
+  };
+
   if (driversLoading) {
     return <></>;
   }
@@ -101,7 +125,7 @@ export default function Drivers() {
                   <BreadcrumbLink href="/">Home</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbItem isCurrentPage>
-                  <BreadcrumbLink href="/drivers">Drivers</BreadcrumbLink>
+                  <BreadcrumbLink href="/driver">Drivers</BreadcrumbLink>
                 </BreadcrumbItem>
               </Breadcrumb>
 
@@ -121,7 +145,7 @@ export default function Drivers() {
               <Text color="gray.500">Keywords</Text>
               <Input
                 value={keywords}
-                onChange={(e) => setKeywords(e.target.value)}
+                onChange={(e) => setKeywords(e.target.value.toLowerCase())}
                 placeholder="Enter Keywords..."
               />
 
@@ -146,8 +170,7 @@ export default function Drivers() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {drivers?.drivers
-                    ?.filter((driver) => driver.userId.includes(keywords))
+                  {filterUsers(keywords, drivers.drivers)
                     ?.sort(sortDrivers)
                     ?.map(
                       ({
@@ -159,8 +182,10 @@ export default function Drivers() {
                       }) => (
                         <Tr
                           key={username}
-                          _hover={{ background: "gray.100" }}
-                          onClick={() => router.push(`/drivers/${userId}`)}
+                          _hover={{ background: "gray.100", cursor: "pointer" }}
+                          onClick={() => router.push(`/driver/${userId}`)}
+                          onMouseEnter={() => setMarker(userId)}
+                          onMouseLeave={() => setMarker(undefined)}
                         >
                           <Td>
                             <Text>{userId}</Text>
@@ -203,14 +228,7 @@ export default function Drivers() {
             </Stack>
           </GridItem>
           <GridItem colSpan={1}>
-            <Map
-              markers={drivers?.drivers
-                ?.filter((driver) => driver.currentLocation.status === "online")
-                ?.map((user) => ({
-                  ...user.currentLocation.latLng,
-                  message: <DisplayName user={user} />,
-                }))}
-            />
+            <Map markers={getMarkers()} />
           </GridItem>
         </Grid>
       </Container>

@@ -30,7 +30,7 @@ export default function Home() {
           <Text color="gray.600">
             Click on the following boxes to get started.
           </Text>
-          <Link href="/orders">
+          <Link href="/order">
             <Box borderRadius="md" p="8" as="button" bg="gray.100">
               <Stack justify="center" align="center">
                 <Image height="124px" src="/orders.svg" alt="" />
@@ -38,7 +38,7 @@ export default function Home() {
               </Stack>
             </Box>
           </Link>
-          <Link href="/drivers">
+          <Link href="/driver">
             <Box borderRadius="md" p="8" as="button" bg="gray.100">
               <Stack justify="center" align="center">
                 <Image height="124px" src="/drivers.svg" alt="" />

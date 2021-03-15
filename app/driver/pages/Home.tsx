@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { StatusBar } from "react-native";
 import {
+  Badge,
   Body,
   Button,
   Card,
@@ -9,6 +10,9 @@ import {
   Content,
   H3,
   Icon,
+  Left,
+  ListItem,
+  Right,
   Text,
 } from "native-base";
 import { useMutation, useQuery } from "react-apollo";
@@ -21,6 +25,7 @@ import NoData from "../components/NoData";
 import FixedContainer from "../components/FixedContainer";
 import AvatarItem from "../components/AvatarItem";
 import HeavyBoxIcon from "../components/icons/HeavyBoxIcon";
+import { mapStatusToColor } from "../utils/convert";
 
 function Page() {
   const { loading, error, data } = useQuery(schema.query.me);
@@ -36,8 +41,12 @@ function Page() {
     const { latitude, longitude } = JSON.parse(
       (await globalCurrentLocation()) ?? '{"latitude":"","longitude":""}'
     );
-    updateCurrentLocation({ variables: { input: { latitude: Number(latitude), longitude: Number(longitude) } } });
-  }
+    updateCurrentLocation({
+      variables: {
+        input: { latitude: Number(latitude), longitude: Number(longitude) },
+      },
+    });
+  };
 
   useEffect(() => {
     updateLocation();
@@ -83,33 +92,30 @@ function Page() {
     <Container>
       <StatusBar />
       <Content>
-        <FixedContainer pad>
-          <H3 style={{ paddingTop: 12 }}>Current Job</H3>
+        <FixedContainer>
+          <ListItem itemDivider icon last>
+            <Left>
+              <Icon name="bicycle" ios="ios-bicycle" />
+            </Left>
+            <Body>
+              <Text>Current Jobs</Text>
+            </Body>
+          </ListItem>
+
           {data.me.currentJobs.map((job) => (
-            <Card transparent key={job.jobId}>
-              <AvatarItem item={job.order.sender} />
-              <CardItem>
-                <Body>
-                  <Text>{job.order.status}</Text>
-                  <Text note>
-                    {`created ${moment
-                      .tz(parseInt(job.order.createdAt), "Asia/Hong_Kong")
-                      .format("YYYY-MM-DD HH:mm")}`}
+            <ListItem key={job.jobId} noIndent onPress={() => Actions.jobDetail({ job })}>
+              <Left>
+                <Text>{job.order.orderId} </Text>
+                <Badge style={mapStatusToColor(job.order.status)}>
+                  <Text style={mapStatusToColor(job.order.status)}>
+                    {job.order.status}
                   </Text>
-                </Body>
-              </CardItem>
-              <CardItem footer>
-                <Button
-                  transparent
-                  iconRight
-                  style={{ marginLeft: "auto" }}
-                  onPress={() => Actions.map({ job })}
-                >
-                  <Text>Detail</Text>
-                  <Icon name="arrow-forward" />
-                </Button>
-              </CardItem>
-            </Card>
+                </Badge>
+              </Left>
+              <Right>
+                <Icon name="arrow-forward" ios="ios-arrow-forward" />
+              </Right>
+            </ListItem>
           ))}
         </FixedContainer>
       </Content>

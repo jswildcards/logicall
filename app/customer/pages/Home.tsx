@@ -4,30 +4,26 @@ import {
   Container,
   Text,
   Button,
-  H3,
   Body,
-  Card,
-  CardItem,
   Content,
   Fab,
   Icon,
+  List,
+  ListItem,
+  Left,
 } from "native-base";
-import { useMutation, useQuery } from "react-apollo";
+import { useQuery } from "react-apollo";
 import { Actions } from "react-native-router-flux";
-import moment from "moment-timezone";
 import EmptyIcon from "../components/icons/EmptyIcon";
 import schema from "../utils/schema";
 import NoData from "../components/NoData";
 import FixedContainer from "../components/FixedContainer";
-import AvatarItem from "../components/AvatarItem";
-import QRCodeComponent from "../components/QRCode";
+import OrderListItem from "../components/OrderListItem";
+import NoOrderItem from "../components/NoOrderItem";
 
 function Page() {
-  const { loading, error, data, refetch } = useQuery(schema.query.me, {
+  const { loading, error, data } = useQuery(schema.query.me, {
     pollInterval: 500,
-  });
-  const [updateOrderStatus] = useMutation(schema.mutation.updateOrderStatus, {
-    onCompleted: refetch,
   });
 
   if (loading) {
@@ -56,15 +52,14 @@ function Page() {
           icon={<EmptyIcon height="30%" />}
           title="No Orders Here!"
           subtitle="Do you want to create an order now?"
-          button={
+          button={(
             <Button
               onPress={() =>
-                Actions.createOrder1SelectReceiver({ me: data.me })
-              }
+                Actions.createOrder1SelectReceiver({ me: data.me })}
             >
               <Text>Create Order</Text>
             </Button>
-          }
+          )}
         />
       </Container>
     );
@@ -73,97 +68,47 @@ function Page() {
     <Container>
       <StatusBar />
       <Content>
-        <FixedContainer pad>
-          <H3 style={{ paddingTop: 12 }}>Receive Orders</H3>
-          {data.me.receiveOrders.map((order) => (
-            <Card>
-              <AvatarItem item={order.sender} />
-              <CardItem>
-                <Body>
-                  <Text>{order.status}</Text>
-                  <Text note>
-                    {`created ${moment
-                      .tz(Number(order.createdAt), "Asia/Hong_Kong")
-                      .format("YYYY-MM-DD HH:mm")}`}
-                  </Text>
-                  <QRCodeComponent
-                    data={{
-                      orderId: order.orderId,
-                      status: "Delivered",
-                      comments: `Delivered to @${data.me.username} by`,
-                    }}
-                  />
-                  {order.status === "Pending" && order.creator.userId === data.me.userId && (
-                    <Button
-                      danger
-                      style={{ marginTop: 12 }}
-                      onPress={() => {
-                        updateOrderStatus({
-                          variables: {
-                            input: {
-                              orderId: order.orderId,
-                              status: "Cancelled",
-                              comments: `Cancelled by @${data.me.username}`,
-                            },
-                          },
-                        });
-                      }}
-                    >
-                      <Text>Cancel</Text>
-                    </Button>
-                  )}
-                </Body>
-              </CardItem>
-            </Card>
-          ))}
-          {data.me.receiveOrders.length === 0 && (
-            <Text>No receive orders yet.</Text>
-          )}
-          <H3 style={{ paddingTop: 12 }}>Send Orders</H3>
-          {data.me.sendOrders.map((order) => (
-            <Card>
-              <AvatarItem item={order.receiver} />
-              <CardItem>
-                <Body>
-                  <Text>{order.status}</Text>
-                  <Text note>
-                    {`created ${moment
-                      .tz(Number(order.createdAt), "Asia/Hong_Kong")
-                      .format("YYYY-MM-DD HH:mm")}`}
-                  </Text>
-                  <QRCodeComponent
-                    data={{
-                      orderId: order.orderId,
-                      status: "Delivering",
-                      comments: `Received from @${data.me.username} by`,
-                    }}
-                  />
-                  {order.status === "Pending" && order.creator.userId === data.me.userId && (
-                    <Button
-                      danger
-                      style={{ marginTop: 12 }}
-                      onPress={() => {
-                        updateOrderStatus({
-                          variables: {
-                            input: {
-                              orderId: order.orderId,
-                              status: "Cancelled",
-                              comments: `Cancelled by @${data.me.username}`,
-                            },
-                          },
-                        });
-                      }}
-                    >
-                      <Text>Cancel</Text>
-                    </Button>
-                  )}
-                </Body>
-              </CardItem>
-            </Card>
-          ))}
-          {data.me.sendOrders.length === 0 && (
-            <Text>No send orders yet.</Text>
-          )}
+        <FixedContainer>
+          <ListItem itemDivider icon>
+            <Left>
+              <Icon
+                style={{ transform: [{ rotate: "90deg" }] }}
+                name="log-in"
+                ios="ios-log-in"
+              />
+            </Left>
+            <Body>
+              <Text>Receive</Text>
+            </Body>
+          </ListItem>
+          <List>
+            {data.me.receiveOrders.map((order) => (
+              <OrderListItem key={order.orderId} order={order} />
+            ))}
+            {data.me.receiveOrders.length === 0 && (
+              <NoOrderItem hint="No receive orders yet." />
+            )}
+          </List>
+          <ListItem itemDivider icon>
+            <Left>
+              <Icon
+                style={{ transform: [{ rotate: "-90deg" }] }}
+                name="log-out"
+                ios="ios-log-out"
+              />
+            </Left>
+            <Body>
+              <Text>Send</Text>
+            </Body>
+          </ListItem>
+          <List>
+            {data.me.sendOrders.map((order) => (
+              <OrderListItem key={order.orderId} order={order} />
+            ))}
+            {data.me.sendOrders.length === 0 && (
+              <NoOrderItem hint="No send orders yet." />
+            )}
+          </List>
         </FixedContainer>
       </Content>
       <Fab

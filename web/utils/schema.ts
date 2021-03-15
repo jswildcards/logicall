@@ -71,12 +71,14 @@ export const schema = {
                 username
                 firstName
                 lastName
+                role
               }
               receiver {
                 userId
                 username
                 firstName
                 lastName
+                role
               }
               sendAddress
               receiveAddress
@@ -92,6 +94,7 @@ export const schema = {
               lastName
               email
               phone
+              role
             }
             receiver {
               userId
@@ -100,6 +103,7 @@ export const schema = {
               lastName
               email
               phone
+              role
             }
             sendAddress
             sendLatLng {
@@ -125,6 +129,7 @@ export const schema = {
               lastName
               email
               phone
+              role
             }
             receiver {
               userId
@@ -133,6 +138,7 @@ export const schema = {
               lastName
               email
               phone
+              role
             }
             sendAddress
             sendLatLng {
@@ -179,6 +185,7 @@ export const schema = {
             lastName
             email
             phone
+            role
           }
           receiver {
             userId
@@ -187,6 +194,7 @@ export const schema = {
             lastName
             email
             phone
+            role
           }
           sendAddress
           sendLatLng {
@@ -214,6 +222,7 @@ export const schema = {
               username
               firstName
               lastName
+              role
             }
             status
           }
@@ -234,6 +243,7 @@ export const schema = {
             lastName
             email
             phone
+            role
           }
           receiver {
             userId
@@ -242,6 +252,7 @@ export const schema = {
             lastName
             email
             phone
+            role
           }
           jobs {
             polylines
@@ -251,6 +262,7 @@ export const schema = {
               username
               firstName
               lastName
+              role
             }
           }
           sendAddress
@@ -278,6 +290,7 @@ export const schema = {
             lastName
             email
             phone
+            role
           }
           latLng {
             latitude
@@ -300,12 +313,14 @@ export const schema = {
             username
             firstName
             lastName
+            role
           }
           receiver {
             userId
             username
             firstName
             lastName
+            role
           }
           jobs {
             polylines
@@ -315,6 +330,7 @@ export const schema = {
               username
               firstName
               lastName
+              role
             }
           }
           sendAddress
@@ -382,12 +398,14 @@ export const schema = {
             username
             firstName
             lastName
+            role
           }
           receiver {
             userId
             username
             firstName
             lastName
+            role
           }
           jobs {
             polylines
@@ -397,6 +415,7 @@ export const schema = {
               username
               firstName
               lastName
+              role
             }
           }
           sendAddress

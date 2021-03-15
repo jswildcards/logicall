@@ -22,13 +22,13 @@ export default function Map({ markers = [], polylines = [] }) {
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {markers?.map(({ latitude, longitude, message }) => (
-        <Marker position={[latitude, longitude]}>
+      {markers?.map(({ latitude, longitude, message }, index) => (
+        <Marker key={index} position={[latitude, longitude]}>
           <Popup>{message}</Popup>
         </Marker>
       ))}
-      {polylines?.map(([polyline, message]) => (
-        <Polyline positions={polyline}><Popup>{message.map(m => m ? <Box>{m}</Box> : null)}</Popup></Polyline>
+      {polylines?.map(([polyline, message], index) => (
+        <Polyline key={index} positions={polyline}><Popup>{message.map(m => m ? <Box>{m}</Box> : null)}</Popup></Polyline>
       ))}
     </MapContainer>
   );

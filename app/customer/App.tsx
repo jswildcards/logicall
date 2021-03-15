@@ -12,6 +12,7 @@ import { StyleProvider, View, Text, Root } from "native-base";
 import { StyleSheet } from "react-native";
 import Roboto from "native-base/Fonts/Roboto.ttf";
 import RobotoMedium from "native-base/Fonts/Roboto_medium.ttf";
+import { Provider } from "react-native-paper";
 import getTheme from "./native-base-theme/components";
 import platform from "./native-base-theme/variables/platform";
 
@@ -23,6 +24,7 @@ import CreateOrder1SelectReceiverPage from "./pages/create-order/1-SelectReceive
 import createOrder2SelectSenderAddressPage from "./pages/create-order/2-SelectSendAddress";
 import createOrder3SelectReceiverAddressPage from "./pages/create-order/3-SelectReceiverAddress";
 import createOrder4FinishPage from "./pages/create-order/4-Finish";
+import orderDetail from "./pages/OrderDetail";
 import Tab from "./components/Tab";
 
 import { client } from "./utils/schema";
@@ -54,80 +56,89 @@ function App() {
 
   return (
     <Root>
-      <ApolloProvider client={client}>
-        <StyleProvider style={getTheme(platform)}>
-          <Router>
-            <Scene key="root">
-              <Scene
-                key="signIn"
-                component={SignInPage}
-                title="Sign In"
-                hideNavBar
-              />
-              <Scene
-                key="signUp"
-                component={SignUpPage}
-                title="Sign Up"
-                hideNavBar
-              />
-              <Scene
-                key="createOrder1SelectReceiver"
-                component={CreateOrder1SelectReceiverPage}
-                title="Create Order - Receiver"
-                hideNavBar
-                clone
-              />
-              <Scene
-                key="createOrder2SelectSendAddress"
-                component={createOrder2SelectSenderAddressPage}
-                title="Create Order - Sender Address"
-                hideNavBar
-                clone
-              />
-              <Scene
-                key="createOrder3SelectReceiveAddress"
-                component={createOrder3SelectReceiverAddressPage}
-                title="Create Order - Select Receiver Address"
-                hideNavBar
-                clone
-              />
-              <Scene
-                key="createOrder4Finish"
-                component={createOrder4FinishPage}
-                title="Create Order - Confirm"
-                hideNavBar
-                clone
-              />
-              <Scene
-                key="tabbar"
-                tabs
-                hideNavBar
-                tabBarStyle={styles.tabs}
-                showLabel={false}
-              >
+      <Provider>
+        <ApolloProvider client={client}>
+          <StyleProvider style={getTheme(platform)}>
+            <Router>
+              <Scene key="root">
                 <Scene
-                  key="home"
-                  icon={Tab}
-                  iconName="home"
-                  iosIconName="ios-home"
-                  component={HomePage}
-                  title="Home"
+                  key="signIn"
+                  component={SignInPage}
+                  title="Sign In"
                   hideNavBar
                 />
                 <Scene
-                  key="profile"
-                  icon={Tab}
-                  iconName="person"
-                  iosIconName="ios-person"
-                  component={ProfilePage}
-                  title="Profile"
+                  key="signUp"
+                  component={SignUpPage}
+                  title="Sign Up"
                   hideNavBar
                 />
+                <Scene
+                  key="createOrder1SelectReceiver"
+                  component={CreateOrder1SelectReceiverPage}
+                  title="Create Order - Receiver"
+                  hideNavBar
+                  clone
+                />
+                <Scene
+                  key="createOrder2SelectSendAddress"
+                  component={createOrder2SelectSenderAddressPage}
+                  title="Create Order - Sender Address"
+                  hideNavBar
+                  clone
+                />
+                <Scene
+                  key="createOrder3SelectReceiveAddress"
+                  component={createOrder3SelectReceiverAddressPage}
+                  title="Create Order - Select Receiver Address"
+                  hideNavBar
+                  clone
+                />
+                <Scene
+                  key="createOrder4Finish"
+                  component={createOrder4FinishPage}
+                  title="Create Order - Confirm"
+                  hideNavBar
+                  clone
+                />
+                <Scene
+                  key="orderDetail"
+                  component={orderDetail}
+                  title="Order Detail"
+                  hideNavBar
+                  clone
+                />
+                <Scene
+                  key="tabbar"
+                  tabs
+                  hideNavBar
+                  tabBarStyle={styles.tabs}
+                  showLabel={false}
+                >
+                  <Scene
+                    key="home"
+                    icon={Tab}
+                    iconName="home"
+                    iosIconName="ios-home"
+                    component={HomePage}
+                    title="Home"
+                    hideNavBar
+                  />
+                  <Scene
+                    key="profile"
+                    icon={Tab}
+                    iconName="person"
+                    iosIconName="ios-person"
+                    component={ProfilePage}
+                    title="Profile"
+                    hideNavBar
+                  />
+                </Scene>
               </Scene>
-            </Scene>
-          </Router>
-        </StyleProvider>
-      </ApolloProvider>
+            </Router>
+          </StyleProvider>
+        </ApolloProvider>
+      </Provider>
     </Root>
   );
 }

@@ -48,7 +48,11 @@ export default function Orders() {
   const { data, loading, refetch } = useQuery(schema.query.orders);
 
   useSubscription(schema.subscription.orderCreated, {
-    onSubscriptionData: ({ subscriptionData: { data: { orderCreated } } }) => {
+    onSubscriptionData: ({
+      subscriptionData: {
+        data: { orderCreated },
+      },
+    }) => {
       refetch().then(() => {
         makeToast({
           title: "A New Order is Coming!",
@@ -59,7 +63,11 @@ export default function Orders() {
   });
 
   useSubscription(schema.subscription.orderStatusUpdated, {
-    onSubscriptionData: ({ subscriptionData: { data: { orderStatusUpdated } } }) => {
+    onSubscriptionData: ({
+      subscriptionData: {
+        data: { orderStatusUpdated },
+      },
+    }) => {
       refetch().then(() => {
         makeToast({
           title: "An Order Status is Updated!",
@@ -94,7 +102,7 @@ export default function Orders() {
         <Button
           variant="link"
           colorScheme="white"
-          onClick={() => router.push(`/orders/${orderId}`)}
+          onClick={() => router.push(`/order/${orderId}`)}
         >
           {orderId}
         </Button>
@@ -113,6 +121,14 @@ export default function Orders() {
     });
   };
 
+  const filterOrders = () => {
+    return orders?.filter(
+      (order) =>
+        selectedStatuses.includes(order.status) &&
+        order.orderId.toLowerCase().includes(keywords)
+    );
+  };
+
   return (
     <>
       <AppBar />
@@ -124,7 +140,7 @@ export default function Orders() {
                 <BreadcrumbLink href="/">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbItem isCurrentPage>
-                <BreadcrumbLink href="/orders">Orders</BreadcrumbLink>
+                <BreadcrumbLink href="/order">Orders</BreadcrumbLink>
               </BreadcrumbItem>
             </Breadcrumb>
 
@@ -145,7 +161,7 @@ export default function Orders() {
                 <Text color="gray.500">Keywords</Text>
                 <Input
                   value={keywords}
-                  onChange={(e) => setKeywords(e.target.value)}
+                  onChange={(e) => setKeywords(e.target.value.toLowerCase())}
                   placeholder="Enter Keywords..."
                 />
                 <Text color="gray.500">Order Status</Text>
@@ -183,56 +199,45 @@ export default function Orders() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {orders
-                    ?.filter(
-                      (order) =>
-                        selectedStatuses.includes(order.status) &&
-                        order.orderId.includes(keywords)
-                    )
-                    .map((order) => (
-                      <Tr
-                        key={order.orderId}
-                        _hover={{ background: "gray.100" }}
-                        onClick={() => router.push(`/orders/${order.orderId}`)}
-                      >
-                        <Td>{order.orderId}</Td>
-                        <Td>
-                          <Flex>
-                            <Badge colorScheme={mapStatusToColor(order.status)}>
-                              {order.status}
-                            </Badge>
-                          </Flex>
-                        </Td>
-                        <Td>
-                          <DisplayName user={order.sender} />
-                        </Td>
-                        <Td>
-                          <Text>{order.sendAddress}</Text>
-                        </Td>
-                        <Td>
-                          <DisplayName user={order.receiver} />
-                        </Td>
-                        <Td>
-                          <Text>{order.receiveAddress}</Text>
-                        </Td>
-                        <Td>
-                          <IconButton
-                            aria-label="View Order"
-                            variant="link"
-                            icon={<ArrowForwardIcon />}
-                            onClick={() =>
-                              router.push(`/orders/${order.orderId}`)}
-                          />
-                        </Td>
-                      </Tr>
-                    ))}
+                  {filterOrders().map((order) => (
+                    <Tr
+                      key={order.orderId}
+                      _hover={{ background: "gray.100", cursor: "pointer" }}
+                      onClick={() => router.push(`/order/${order.orderId}`)}
+                    >
+                      <Td>{order.orderId}</Td>
+                      <Td>
+                        <Flex>
+                          <Badge colorScheme={mapStatusToColor(order.status)}>
+                            {order.status}
+                          </Badge>
+                        </Flex>
+                      </Td>
+                      <Td>
+                        <DisplayName user={order.sender} />
+                      </Td>
+                      <Td>
+                        <Text>{order.sendAddress}</Text>
+                      </Td>
+                      <Td>
+                        <DisplayName user={order.receiver} />
+                      </Td>
+                      <Td>
+                        <Text>{order.receiveAddress}</Text>
+                      </Td>
+                      <Td>
+                        <IconButton
+                          aria-label="View Order"
+                          variant="link"
+                          icon={<ArrowForwardIcon />}
+                          onClick={() => router.push(`/order/${order.orderId}`)}
+                        />
+                      </Td>
+                    </Tr>
+                  ))}
                 </Tbody>
               </Table>
-              {orders?.filter(
-                (order) =>
-                  selectedStatuses.includes(order.status) &&
-                  order.orderId.includes(keywords)
-              ).length <= 0 && (
+              {filterOrders().length <= 0 && (
                 <Text
                   p="3"
                   textAlign="center"

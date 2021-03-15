@@ -76,7 +76,6 @@ function Page(props: {
           />
           <Button
             block
-            success
             style={styles.margin}
             onPress={() =>
               createOrder({

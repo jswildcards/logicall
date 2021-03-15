@@ -36,9 +36,19 @@ export function mapArrayToLatLng([latitude, longitude]: [
   return { latitude, longitude };
 }
 
+export function filterUsers(keywords: string, users: Record<string, string>[]) {
+  return users.filter((user) => {
+    const { userId, username, firstName, lastName } = user;
+    const compareItems = [userId, username, firstName, lastName];
+
+    return compareItems.some((item) => item.toLowerCase().includes(keywords));
+  });
+}
+
 export default {
   mapStringToLatLng,
   mapArrayToLatLng,
   mapStatusToColor,
   mapStringToPolylines,
+  filterUsers,
 };

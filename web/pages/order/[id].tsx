@@ -135,10 +135,10 @@ export default function Post() {
                     <BreadcrumbLink href="/">Home</BreadcrumbLink>
                   </BreadcrumbItem>
                   <BreadcrumbItem>
-                    <BreadcrumbLink href="/orders">Orders</BreadcrumbLink>
+                    <BreadcrumbLink href="/order">Orders</BreadcrumbLink>
                   </BreadcrumbItem>
                   <BreadcrumbItem isCurrentPage>
-                    <BreadcrumbLink href={`/orders/${order.orderId}`}>
+                    <BreadcrumbLink href={`/order/${order.orderId}`}>
                       {order.orderId}
                     </BreadcrumbLink>
                   </BreadcrumbItem>
@@ -156,7 +156,7 @@ export default function Post() {
               <Divider />
 
               <Box>
-                <Text color="gray.500" fontSize="2xl">
+                <Text color="gray.500" fontSize="xl">
                   {order.orderId}
                 </Text>
                 <Badge colorScheme={mapStatusToColor(order.status)}>
@@ -168,7 +168,7 @@ export default function Post() {
                 <>
                   <Divider />
                   <Flex justify="space-between" align="center">
-                    <Text color="gray.500" fontSize="2xl">
+                    <Text color="gray.500" fontSize="xl">
                       Actions
                     </Text>
                     <Stack direction="row">
@@ -190,10 +190,10 @@ export default function Post() {
               <Divider />
 
               <Stack spacing="2">
-                <Text color="gray.500" fontSize="2xl">
+                <Text color="gray.500" fontSize="xl">
                   Order Details
                 </Text>
-                <DisplayName user={order.sender} />
+                <DisplayName user={order.sender} useLink />
                 <Stack direction="row" align="center">
                   <Icon as={MdMap} />
                   <Text>{order.sendAddress}</Text>
@@ -201,7 +201,7 @@ export default function Post() {
                 <Flex justify="center">
                   <ArrowDownIcon />
                 </Flex>
-                <DisplayName user={order.receiver} />
+                <DisplayName user={order.receiver} useLink />
                 <Stack direction="row" align="center">
                   <Icon as={MdMap} />
                   <Text>{order.receiveAddress}</Text>
@@ -211,7 +211,7 @@ export default function Post() {
               <Divider />
 
               <Stack spacing="2">
-                <Text color="gray.500" fontSize="2xl">
+                <Text color="gray.500" fontSize="xl">
                   Driver Details
                 </Text>
                 {!(order.jobs?.[0]?.driver ?? false) && (
@@ -221,14 +221,14 @@ export default function Post() {
                   </Flex>
                 )}
                 {order.jobs?.[0]?.driver && (
-                  <DisplayName user={order.jobs[0].driver} />
+                  <DisplayName user={order.jobs[0].driver} useLink />
                 )}
               </Stack>
 
               <Divider />
 
               <Box>
-                <Text color="gray.500" fontSize="2xl">
+                <Text color="gray.500" fontSize="xl">
                   Recent Activities
                 </Text>
                 <Table variant="simple">
@@ -243,7 +243,7 @@ export default function Post() {
                     {order.logs.map((log) => (
                       <Tr
                         key={log.orderLogId}
-                        _hover={{ background: "gray.100" }}
+                        _hover={{ background: "gray.100", cursor: "pointer" }}
                       >
                         <Td>
                           {moment

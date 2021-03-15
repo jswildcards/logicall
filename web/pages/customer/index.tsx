@@ -24,6 +24,7 @@ import { ArrowForwardIcon } from "@chakra-ui/icons";
 import schema from "../../utils/schema";
 import AppBar from "../../components/appbar";
 import DisplayName from "../../components/display-name";
+import { filterUsers } from "../../utils/convert";
 
 export default function Orders() {
   const router = useRouter();
@@ -45,7 +46,7 @@ export default function Orders() {
                 <BreadcrumbLink href="/">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbItem isCurrentPage>
-                <BreadcrumbLink href="/customers">Customers</BreadcrumbLink>
+                <BreadcrumbLink href="/customer">Customers</BreadcrumbLink>
               </BreadcrumbItem>
             </Breadcrumb>
           </Flex>
@@ -58,7 +59,7 @@ export default function Orders() {
                 <Text color="gray.500">Keywords</Text>
                 <Input
                   value={keywords}
-                  onChange={(e) => setKeywords(e.target.value)}
+                  onChange={(e) => setKeywords(e.target.value.toLowerCase())}
                   placeholder="Enter Keywords..."
                 />
               </Stack>
@@ -73,32 +74,30 @@ export default function Orders() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data.customers
-                    ?.filter((customer) => customer.userId.includes(keywords))
-                    .map((customer) => (
-                      <Tr
-                        key={customer.userId}
-                        _hover={{ background: "gray.100" }}
-                        onClick={() =>
-                          router.push(`/customers/${customer.userId}`)
-                        }
-                      >
-                        <Td>{customer.userId}</Td>
-                        <Td>
-                          <DisplayName user={customer} />
-                        </Td>
-                        <Td>
-                          <IconButton
-                            aria-label="View Order"
-                            variant="link"
-                            icon={<ArrowForwardIcon />}
-                            onClick={() =>
-                              router.push(`/customers/${customer.userId}`)
-                            }
-                          />
-                        </Td>
-                      </Tr>
-                    ))}
+                  {filterUsers(keywords, data.customers)?.map((customer) => (
+                    <Tr
+                      key={customer.userId}
+                      _hover={{ background: "gray.100", cursor: "pointer" }}
+                      onClick={() =>
+                        router.push(`/customer/${customer.userId}`)
+                      }
+                    >
+                      <Td>{customer.userId}</Td>
+                      <Td>
+                        <DisplayName user={customer} />
+                      </Td>
+                      <Td>
+                        <IconButton
+                          aria-label="View Order"
+                          variant="link"
+                          icon={<ArrowForwardIcon />}
+                          onClick={() =>
+                            router.push(`/customer/${customer.userId}`)
+                          }
+                        />
+                      </Td>
+                    </Tr>
+                  ))}
                 </Tbody>
               </Table>
             </GridItem>

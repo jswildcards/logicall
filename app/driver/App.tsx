@@ -22,6 +22,7 @@ import MapPage from "./pages/Map";
 import ScannerPage from "./pages/Scanner";
 import ScannResultPage from "./pages/ScanResult";
 import JobRequestPage from "./pages/JobRequest";
+import JobDetailPage from "./pages/JobDetail";
 import Tab from "./components/Tab";
 
 import { client } from "./utils/schema";
@@ -63,16 +64,17 @@ function App() {
                 title="Sign In"
                 hideNavBar
               />
-              <Scene
-                key="map"
-                component={MapPage}
-                title="Map"
-                hideNavBar
-              />
+              <Scene key="map" component={MapPage} title="Map" hideNavBar />
               <Scene
                 key="scanResult"
                 component={ScannResultPage}
                 title="Scan Result"
+                hideNavBar
+              />
+              <Scene
+                key="jobDetail"
+                component={JobDetailPage}
+                title="Job Detail"
                 hideNavBar
               />
               <Scene

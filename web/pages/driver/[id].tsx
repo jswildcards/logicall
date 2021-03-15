@@ -20,12 +20,15 @@ import {
   IconButton,
   Badge,
   useToast,
+  Icon,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import { ArrowForwardIcon, RepeatIcon } from "@chakra-ui/icons";
 import schema from "../../utils/schema";
 import AppBar from "../../components/appbar";
 import DisplayName from "../../components/display-name";
 import { mapStatusToColor } from "../../utils/convert";
+import { MdMail, MdPhone } from "react-icons/md";
 
 export default function Post() {
   const router = useRouter();
@@ -71,10 +74,10 @@ export default function Post() {
                 <BreadcrumbLink href="/">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/drivers">Drivers</BreadcrumbLink>
+                <BreadcrumbLink href="/driver">Drivers</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbItem isCurrentPage>
-                <BreadcrumbLink href={`/drivers/${router.query.id}`}>
+                <BreadcrumbLink href={`/driver/${router.query.id}`}>
                   {router.query.id}
                 </BreadcrumbLink>
               </BreadcrumbItem>
@@ -91,11 +94,26 @@ export default function Post() {
 
           <Divider />
 
-          <Box>
-            <Text color="gray.500" fontSize="2xl">
-              <DisplayName user={data.user} />
-            </Text>
-          </Box>
+          <SimpleGrid columns={2}>
+            <DisplayName user={data.user} />
+
+            <Flex
+              color="gray.500"
+              direction="column"
+              justify="center"
+              justifySelf="end"
+            >
+              <Flex align="center">
+                <Icon as={MdPhone} />
+                <Text ml="2">{data.user.phone}</Text>
+              </Flex>
+
+              <Flex align="center">
+                <Icon as={MdMail} />
+                <Text ml="2">{data.user.email}</Text>
+              </Flex>
+            </Flex>
+          </SimpleGrid>
 
           <Table variant="simple">
             <Thead>

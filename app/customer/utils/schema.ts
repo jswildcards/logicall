@@ -57,10 +57,24 @@ export const schema = {
               latitude
               longitude
             }
+            jobs {
+              driver {
+                userId
+                username
+                firstName
+                lastName
+              }
+            }
             status
             comments
             createdAt
             updatedAt
+            logs {
+              orderLogId
+              status
+              comments
+              createdAt
+            }
           }
           receiveOrders {
             creator {
@@ -88,6 +102,14 @@ export const schema = {
               latitude
               longitude
             }
+            jobs {
+              driver {
+                userId
+                username
+                firstName
+                lastName
+              }
+            }
             receiveAddress
             receiveLatLng {
               latitude
@@ -97,6 +119,12 @@ export const schema = {
             comments
             createdAt
             updatedAt
+            logs {
+              orderLogId
+              status
+              comments
+              createdAt
+            }
           }
         }
       }

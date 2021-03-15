@@ -85,21 +85,21 @@ function AppBar() {
           </Link>
         </MenuItems>
         <MenuItems>
-          <Link href="/orders">
+          <Link href="/order">
             <Button variant="link" color="white">
               Orders
             </Button>
           </Link>
         </MenuItems>
         <MenuItems>
-          <Link href="/drivers">
+          <Link href="/driver">
             <Button variant="link" color="white">
               Drivers
             </Button>
           </Link>
         </MenuItems>
         <MenuItems>
-          <Link href="/customers">
+          <Link href="/customer">
             <Button variant="link" color="white">
               Customers
             </Button>

@@ -64,7 +64,7 @@ function Page({ sender, receiver }) {
           rowSpan={3}
           bordered
           underline={false}
-          value={receiver}
+          value={sendAddress.address}
           onChangeText={(address) =>
             setSendAddress({ ...sendAddress, address })
           }

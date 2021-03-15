@@ -49,9 +49,16 @@ export const schema = {
           phone
           username
           jobs {
+            jobId
             status
             polylines
             order {
+              logs {
+                orderLogId
+                status
+                comments
+                createdAt
+              }
               orderId
               sender {
                 userId
@@ -86,9 +93,16 @@ export const schema = {
             }
           }
           currentJobs {
+            jobId
             status
             polylines
             order {
+              logs {
+                orderLogId
+                status
+                comments
+                createdAt
+              }
               orderId
               sender {
                 userId

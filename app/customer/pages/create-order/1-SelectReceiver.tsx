@@ -146,9 +146,11 @@ function Page({ me }) {
         }}
         refreshing={isRefreshing}
         ListHeaderComponent={(
-          <FixedContainer pad>
-            <H3 style={styles.bold}>I am...</H3>
-            <ListItem>
+          <FixedContainer>
+            <ListItem itemDivider>
+              <Text>I am...</Text>
+            </ListItem>
+            <ListItem last>
               <Left>
                 <Text>Sender</Text>
               </Left>
@@ -159,7 +161,7 @@ function Page({ me }) {
                 />
               </Right>
             </ListItem>
-            <ListItem>
+            <ListItem last>
               <Left>
                 <Text>Receiver</Text>
               </Left>
@@ -170,17 +172,19 @@ function Page({ me }) {
                 />
               </Right>
             </ListItem>
-
-            <H3 style={styles.bold}>
-              Select a 
-              {' '}
-              {meRole === "sender" ? "receiver" : "sender"}
-              ...
-            </H3>
+            <ListItem itemDivider>
+              <Text>
+                Select a 
+                {' '}
+                {meRole === "sender" ? "receiver" : "sender"}
+                ...
+              </Text>
+            </ListItem>
             <Item floatingLabel last>
               <Input
                 value={search}
                 onChangeText={userSearching}
+                style={{ marginHorizontal: 8 }}
                 placeholder={`Search ${
                   meRole === "sender" ? "receiver" : "sender"
                 }`}

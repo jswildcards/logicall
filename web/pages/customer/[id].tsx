@@ -20,8 +20,11 @@ import {
   IconButton,
   Badge,
   useToast,
+  Icon,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import { ArrowForwardIcon, RepeatIcon } from "@chakra-ui/icons";
+import { MdPhone, MdMail } from "react-icons/md";
 import schema from "../../utils/schema";
 import AppBar from "../../components/appbar";
 import DisplayName from "../../components/display-name";
@@ -31,9 +34,10 @@ export default function Post() {
   const router = useRouter();
   const toast = useToast();
   const [isRefetching, setRefetching] = useState(false);
-  const [getCustomer, { data, loading: customerLoading, refetch }] = useLazyQuery(
-    schema.query.user
-  );
+  const [
+    getCustomer,
+    { data, loading: customerLoading, refetch },
+  ] = useLazyQuery(schema.query.user);
 
   useEffect(() => {
     if (router?.query) {
@@ -71,10 +75,10 @@ export default function Post() {
                 <BreadcrumbLink href="/">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/customers">Customers</BreadcrumbLink>
+                <BreadcrumbLink href="/customer">Customers</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbItem isCurrentPage>
-                <BreadcrumbLink href={`/customers/${router.query.id}`}>
+                <BreadcrumbLink href={`/customer/${router.query.id}`}>
                   {router.query.id}
                 </BreadcrumbLink>
               </BreadcrumbItem>
@@ -91,11 +95,26 @@ export default function Post() {
 
           <Divider />
 
-          <Box>
-            <Text color="gray.500" fontSize="2xl">
-              <DisplayName user={data.user} />
-            </Text>
-          </Box>
+          <SimpleGrid columns={2}>
+            <DisplayName user={data.user} />
+
+            <Flex
+              color="gray.500"
+              direction="column"
+              justify="center"
+              justifySelf="end"
+            >
+              <Flex align="center">
+                <Icon as={MdPhone} />
+                <Text ml="2">{data.user.phone}</Text>
+              </Flex>
+
+              <Flex align="center">
+                <Icon as={MdMail} />
+                <Text ml="2">{data.user.email}</Text>
+              </Flex>
+            </Flex>
+          </SimpleGrid>
 
           <Table variant="simple">
             <Thead>
@@ -117,7 +136,7 @@ export default function Post() {
                 <Tr
                   key={order.orderId}
                   _hover={{ background: "gray.100" }}
-                  onClick={() => router.push(`/orders/${order.orderId}`)}
+                  onClick={() => router.push(`/order/${order.orderId}`)}
                 >
                   <Td>{order.orderId}</Td>
                   <Td>
@@ -144,7 +163,7 @@ export default function Post() {
                       aria-label="View Order"
                       variant="link"
                       icon={<ArrowForwardIcon />}
-                      onClick={() => router.push(`/orders/${order.orderId}`)}
+                      onClick={() => router.push(`/order/${order.orderId}`)}
                     />
                   </Td>
                 </Tr>
