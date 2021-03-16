@@ -28,7 +28,9 @@ import HeavyBoxIcon from "../components/icons/HeavyBoxIcon";
 import { mapStatusToColor } from "../utils/convert";
 
 function Page() {
-  const { loading, error, data } = useQuery(schema.query.me);
+  const { loading, error, data } = useQuery(schema.query.me, {
+    pollInterval: 500,
+  });
   const [updateCurrentLocation] = useMutation(
     schema.mutation.updateCurrentLocation
   );
@@ -103,7 +105,11 @@ function Page() {
           </ListItem>
 
           {data.me.currentJobs.map((job) => (
-            <ListItem key={job.jobId} noIndent onPress={() => Actions.jobDetail({ job })}>
+            <ListItem
+              key={job.jobId}
+              noIndent
+              onPress={() => Actions.jobDetail({ job })}
+            >
               <Left>
                 <Text>{job.order.orderId} </Text>
                 <Badge style={mapStatusToColor(job.order.status)}>
