@@ -1,5 +1,6 @@
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { Container, Fab, Icon } from "native-base";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMutation } from "react-apollo";
 import { StatusBar, View } from "react-native";
 import HeaderNav from "../components/HeaderNav";
@@ -14,23 +15,52 @@ function Page({ job }) {
   const [updateCurrentLocation] = useMutation(
     schema.mutation.updateCurrentLocation
   );
+  const {
+    getItem: globalCurrentOrder,
+    setItem: setGlobalCurrentOrder,
+  } = useAsyncStorage("currentOrder");
+  const {
+    getItem: globalCurrentMove,
+    setItem: setGlobalCurrentMove,
+  } = useAsyncStorage("currentMove");
+  const { setItem: setGlobalCurrentLocation } = useAsyncStorage(
+    "currentLocation"
+  );
+
+  const getCurrentLatLng = (step: number) => {
+    const [latitude, longitude] =
+      polylineLatLngs[step] ?? polylineLatLngs[polylineLatLngs.length - 1];
+    return { latitude, longitude };
+  };
 
   const move = () => {
     if (visitedLatLng < polylineLatLngs.length) {
-      const [latitude, longitude] = polylineLatLngs[visitedLatLng];
+      const step = visitedLatLng + Math.floor(polylineLatLngs.length / 10);
+      setVisitedLatLng(step);
+      setGlobalCurrentOrder(order.orderId);
+      setGlobalCurrentMove(step.toString());
+      setGlobalCurrentLocation(JSON.stringify(getCurrentLatLng(step)));
       updateCurrentLocation({
-        variables: { input: { latitude, longitude } },
+        variables: { input: getCurrentLatLng(step) },
       });
-      setVisitedLatLng(visitedLatLng + Math.floor(polylineLatLngs.length / 10));
     }
   };
 
-  const getCurrentLatLng = () => {
-    const [latitude, longitude] =
-      polylineLatLngs[visitedLatLng] ??
-      polylineLatLngs[polylineLatLngs.length - 1];
-    return { latitude, longitude };
+  const componentDidMount = async () => {
+    const storedOrderId = await globalCurrentOrder();
+    const storedMove = await globalCurrentMove();
+
+    if (
+      storedOrderId === order.orderId &&
+      (storedMove ?? undefined) !== undefined
+    ) {
+      setVisitedLatLng(Number(storedMove));
+    }
   };
+
+  useEffect(() => {
+    componentDidMount();
+  }, []);
 
   return (
     <Container>
@@ -42,7 +72,7 @@ function Page({ job }) {
           receiveLatLng={order.receiveLatLng}
           sendAddress={order.sendAddress}
           receiveAddress={order.receiveAddress}
-          currentLatLng={getCurrentLatLng()}
+          currentLatLng={getCurrentLatLng(visitedLatLng)}
           polylines={polylines}
         />
       </View>
