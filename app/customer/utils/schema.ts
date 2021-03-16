@@ -27,6 +27,7 @@ export const schema = {
           phone
           username
           sendOrders {
+            estimatedDuration
             orderId
             creator {
               userId
@@ -58,6 +59,7 @@ export const schema = {
               longitude
             }
             jobs {
+              duration
               driver {
                 userId
                 username
@@ -78,6 +80,7 @@ export const schema = {
             }
           }
           receiveOrders {
+            estimatedDuration
             creator {
               userId
             }
@@ -104,6 +107,7 @@ export const schema = {
               longitude
             }
             jobs {
+              duration
               driver {
                 userId
                 username

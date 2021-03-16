@@ -131,6 +131,18 @@ export function OrderDetail(props) {
     );
   };
 
+  const getOrderQRCodeData = () => {
+    const isReceiver = Number(order.receiver.userId) === Number(data.me.userId);
+
+    return {
+      orderId: order.orderId,
+      status: isReceiver ? "Delivered" : "Delivering",
+      comments: `${isReceiver ? "Delivered to" : "Received from"} @${
+        data.me.username
+      } by`,
+    };
+  };
+
   const QrSection = () => (
     <>
       <ListItem icon last itemDivider>
@@ -173,17 +185,10 @@ export function OrderDetail(props) {
     </>
   );
 
-  const getOrderQRCodeData = () => {
-    const isReceiver = Number(order.receiver.userId) === Number(data.me.userId);
-
-    return {
-      orderId: order.orderId,
-      status: isReceiver ? "Delivered" : "Delivering",
-      comments: `${isReceiver ? "Delivered to" : "Received from"} @${
-        data.me.username
-      } by`,
-    };
-  };
+  const durations = [
+    order.estimatedDuration,
+    order.jobs?.[0]?.duration ?? order.estimatedDuration,
+  ];
 
   return (
     <Container>
@@ -220,6 +225,19 @@ export function OrderDetail(props) {
             </Body>
           </ListItem>
 
+          <ListItem icon last noBorder>
+            <Left>
+              <Icon name="timer" ios="ios-timer" />
+            </Left>
+            <Body>
+              <Text>
+                {`${Math.floor((durations[1] - durations[0]) / 60)} min ${
+                  (durations[1] - durations[0]) % 60
+                } sec`}
+              </Text>
+            </Body>
+          </ListItem>
+
           <View style={{ display: "flex", alignItems: "center" }}>
             <Icon name="arrow-down" ios="ios-arrow-down" />
           </View>
@@ -231,6 +249,19 @@ export function OrderDetail(props) {
             </Left>
             <Body>
               <Text>{order.receiveAddress}</Text>
+            </Body>
+          </ListItem>
+
+          <ListItem icon last noBorder>
+            <Left>
+              <Icon name="timer" ios="ios-timer" />
+            </Left>
+            <Body>
+              <Text>
+                {`${Math.floor(durations[1] / 60)} min ${
+                  durations[1] % 60
+                } sec`}
+              </Text>
             </Body>
           </ListItem>
 
@@ -280,7 +311,13 @@ export function OrderDetail(props) {
                 </Text>
               </Body>
               <Right>
-                <Badge style={{ display: "flex", width: 100, ...mapStatusToColor(log.status)}}>
+                <Badge
+                  style={{
+                    display: "flex",
+                    width: 100,
+                    ...mapStatusToColor(log.status),
+                  }}
+                >
                   <Text style={mapStatusToColor(log.status)}>{log.status}</Text>
                 </Badge>
               </Right>

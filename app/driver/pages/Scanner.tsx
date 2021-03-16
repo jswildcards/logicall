@@ -1,4 +1,12 @@
-import { Body, Container, Content, Icon, Left, ListItem, Text } from "native-base";
+import {
+  Body,
+  Container,
+  Content,
+  Icon,
+  Left,
+  ListItem,
+  Text,
+} from "native-base";
 import React from "react";
 import { useMutation, useQuery } from "react-apollo";
 import { StatusBar, View } from "react-native";
@@ -8,39 +16,31 @@ import schema from "../utils/schema";
 
 function Page() {
   const { data: me, refetch } = useQuery(schema.query.me);
-  const [updateOrderStatus] = useMutation(schema.mutation.updateOrderStatus);
-
-  // useEffect(() => {
-  // });
 
   return (
     <Container>
       <StatusBar />
       <ListItem icon itemDivider last>
-        <Left><Icon name="qr-scanner" /></Left>
-        <Body><Text>QR Scanner</Text></Body>
+        <Left>
+          <Icon name="qr-scanner" />
+        </Left>
+        <Body>
+          <Text>QR Scanner</Text>
+        </Body>
       </ListItem>
       <View style={{ flex: 1 }}>
         <QRScanner
-          onBarCodeRead={({ data }) => {
+          onBarCodeRead={async ({ data }) => {
             data = JSON.parse(data);
+
             console.log({
               input: {
                 ...data,
                 comments: `${data.comments} @${me.me.username}`,
               },
             });
-            updateOrderStatus({
-              variables: {
-                input: {
-                  ...data,
-                  comments: `${data.comments} @${me.me.username}`,
-                },
-              },
-            })
-              .then(refetch)
-              .then(Actions.scanResult)
-              .catch();
+
+            Actions.scanResult({ data, me });
           }}
         />
       </View>

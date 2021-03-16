@@ -50,7 +50,6 @@ function Page(props) {
   const componentDidMount = async () => {
     const storedOrderId = await globalCurrentOrder();
     const storedMove = await globalCurrentMove();
-    console.log(order);
 
     if (
       storedOrderId === order.orderId &&
