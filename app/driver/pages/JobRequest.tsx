@@ -32,8 +32,8 @@ function Page() {
     return jobs.map((job) => job.expiredAt > ms);
   };
 
-  const removeExpired = async (orderId) => {
-    await new Promise((resolve) => setTimeout(resolve, 60000));
+  const removeExpired = async (orderId, ms) => {
+    await new Promise((resolve) => setTimeout(resolve, ms));
     setJobs([...getValidJob().filter((job) => job.order.orderId !== orderId)]);
   };
 
@@ -43,7 +43,7 @@ function Page() {
     onSubscriptionData: ({ subscriptionData }) => {
       const newJob = subscriptionData.data.newJobRequested;
       setJobs([...getValidJob(), newJob]);
-      removeExpired(newJob.order.orderId);
+      removeExpired(newJob.order.orderId, Number(newJob.expiredAt) - new Date().valueOf());
     },
   });
   useSubscription(schema.subscription.newJobResponsed, {
@@ -135,7 +135,7 @@ function Page() {
                       <Text>
                         {moment
                           .tz(Number(job.expiredAt), "Asia/Hong_Kong")
-                          .format("YYYY-MM-DD HH:mm")}
+                          .format("YYYY-MM-DD HH:mm:ss")}
                       </Text>
                     </Body>
                   </CardItem>
