@@ -126,8 +126,17 @@ function Page() {
     const { username, password } = JSON.parse(
       (await globalUser()) ?? '{"username":"","password":""}'
     );
+    const { latitude, longitude } = JSON.parse(
+      (await globalCurrentLocation()) ??
+        '{"latitude":"","longitude":""}'
+    );
     setUser({ ...user, username, password });
     setTestMode(((await globalTestMode()) ?? "false") === "true");
+    setLastCurrentLocation({
+      latitude: latitude.toString(),
+      longitude: longitude.toString(),
+      use: false,
+    });
   };
 
   useEffect(() => {

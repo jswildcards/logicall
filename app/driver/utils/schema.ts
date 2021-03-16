@@ -275,8 +275,15 @@ export const schema = {
     newJobRequested: gql`
       subscription($driverId: Int) {
         newJobRequested(driverId: $driverId) {
+          expiredAt
           order {
             orderId
+            logs {
+              orderLogId
+              status
+              comments
+              createdAt
+            }
             sender {
               userId
               username

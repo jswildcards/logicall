@@ -8,7 +8,8 @@ import Map from "../components/Map";
 import { mapStringToPolylines } from "../utils/convert";
 import schema from "../utils/schema";
 
-function Page({ job }) {
+function Page(props) {
+  const { job, simulate } = props;
   const { order, polylines } = job;
   const [visitedLatLng, setVisitedLatLng] = useState(0);
   const polylineLatLngs = mapStringToPolylines(polylines);
@@ -49,6 +50,7 @@ function Page({ job }) {
   const componentDidMount = async () => {
     const storedOrderId = await globalCurrentOrder();
     const storedMove = await globalCurrentMove();
+    console.log(order);
 
     if (
       storedOrderId === order.orderId &&
@@ -76,13 +78,15 @@ function Page({ job }) {
           polylines={polylines}
         />
       </View>
-      <Fab
-        style={{ backgroundColor: "#5067FF" }}
-        position="bottomLeft"
-        onPress={move}
-      >
-        <Icon ios-name="ios-bicycle" name="bicycle" />
-      </Fab>
+      {simulate && (
+        <Fab
+          style={{ backgroundColor: "#5067FF" }}
+          position="bottomLeft"
+          onPress={move}
+        >
+          <Icon ios-name="ios-bicycle" name="bicycle" />
+        </Fab>
+      )}
     </Container>
   );
 }

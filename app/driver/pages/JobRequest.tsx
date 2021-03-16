@@ -1,3 +1,4 @@
+import moment from "moment-timezone";
 import {
   Body,
   Button,
@@ -5,6 +6,8 @@ import {
   CardItem,
   Container,
   Content,
+  Icon,
+  Left,
   List,
   ListItem,
   Text,
@@ -13,6 +16,7 @@ import {
 import React, { useState } from "react";
 import { useMutation, useQuery, useSubscription } from "react-apollo";
 import { StatusBar } from "react-native";
+import { Actions } from "react-native-router-flux";
 import FixedContainer from "../components/FixedContainer";
 import EmptyIcon from "../components/icons/EmptyIcon";
 import NoData from "../components/NoData";
@@ -23,11 +27,23 @@ function Page() {
   const { data, refetch } = useQuery(schema.query.me);
   const [jobs, setJobs] = useState<any[]>([]);
 
+  const getValidJob = () => {
+    const ms = new Date().valueOf();
+    return jobs.map((job) => job.expiredAt > ms);
+  };
+
+  const removeExpired = async (orderId) => {
+    await new Promise((resolve) => setTimeout(resolve, 60000));
+    setJobs([...getValidJob().filter((job) => job.order.orderId !== orderId)]);
+  };
+
   // TODO: subscription variables
   useSubscription(schema.subscription.newJobRequested, {
     variables: { driverId: Number(data.me.userId) },
     onSubscriptionData: ({ subscriptionData }) => {
-      setJobs([...jobs, subscriptionData.data.newJobRequested]);
+      const newJob = subscriptionData.data.newJobRequested;
+      setJobs([...getValidJob(), newJob]);
+      removeExpired(newJob.order.orderId);
     },
   });
   useSubscription(schema.subscription.newJobResponsed, {
@@ -68,6 +84,19 @@ function Page() {
       <Content>
         <FixedContainer>
           <List>
+            <ListItem itemDivider icon last>
+              <Left>
+                <Icon
+                  style={{ transform: [{ rotate: "90deg" }] }}
+                  name="log-in"
+                  ios="ios-log-in"
+                />
+              </Left>
+              <Body>
+                <Text>Job Requests</Text>
+              </Body>
+            </ListItem>
+
             {jobs.map((job) => {
               const myJob = job.driverRouteMapper.find(
                 ({ me: { userId } }) => userId === data.me.userId
@@ -75,7 +104,7 @@ function Page() {
               const totalDuration =
                 job.order.estimatedDuration + myJob.lastDuration;
               return (
-                <Card transparent key={job.order.orderId}>
+                <Card key={job.order.orderId}>
                   <CardItem>
                     <Body>
                       <Text note>Order ID</Text>
@@ -100,14 +129,41 @@ function Page() {
                       <Text>{mapSecondsToHoursFormat(totalDuration)}</Text>
                     </Body>
                   </CardItem>
-                  <CardItem footer>
+                  <CardItem>
+                    <Body>
+                      <Text note>Expired At</Text>
+                      <Text>
+                        {moment
+                          .tz(Number(job.expiredAt), "Asia/Hong_Kong")
+                          .format("YYYY-MM-DD HH:mm")}
+                      </Text>
+                    </Body>
+                  </CardItem>
+                  <CardItem
+                    style={{ display: "flex", justifyContent: "flex-end" }}
+                    footer
+                  >
                     <Button
+                      bordered
+                      info
                       onPress={() => {
-                        setJobs([
-                          ...jobs.filter(
-                            (o) => o.order.orderId !== job.order.orderId
-                          ),
-                        ]);
+                        Actions.map({
+                          job: {
+                            order: { ...job.order },
+                            polylines: JSON.stringify([
+                              ...JSON.parse(myJob.polylines),
+                              ...JSON.parse(job.order.suggestedPolylines),
+                            ]),
+                          },
+                        });
+                      }}
+                    >
+                      <Text>Map</Text>
+                    </Button>
+                    <Button
+                      style={{ marginLeft: 8 }}
+                      onPress={() => {
+                        setJobs([]);
                         responseNewJob({
                           variables: {
                             input: {

@@ -34,7 +34,7 @@ export function JobDetail(props) {
         <FixedContainer>
           <HeaderNav
             title="Job Detail"
-            subtitle={`Order ${job.order.orderId}`}
+            subtitle={`Order ${order.orderId}`}
           />
           <ListItem icon last itemDivider>
             <Left>
@@ -81,7 +81,7 @@ export function JobDetail(props) {
 
           <Button
             block
-            onPress={() => Actions.map({ job })}
+            onPress={() => Actions.map({ job, simulate: true })}
             style={{ margin: 8 }}
           >
             <Icon ios-name="ios-map" name="map" />

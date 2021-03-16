@@ -33,6 +33,7 @@ type NewJobRequestedSubscriptionResponse {
   driverIds: [Int]
   order: Order
   driverRouteMapper: [DriverRouteMapper]
+  expiredAt: String
 }
 
 type NewJobResponsedSubscriptionResponse {

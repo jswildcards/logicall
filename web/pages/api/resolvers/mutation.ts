@@ -132,7 +132,12 @@ export async function updateOrderStatus(
   const nextOrder = await prisma.order.update({
     where: { orderId },
     data: { status, comments },
-    include: { jobs: true },
+    include: {
+      sender: true,
+      receiver: true,
+      jobs: true,
+      logs: { orderBy: { createdAt: "desc" } },
+    },
   });
 
   if (status === "Delivered") {
@@ -209,15 +214,21 @@ export async function updateOrderStatus(
       })
     );
 
-    // find all drivers whose duration within the limit
-    // if there are none, add extra time limit and find again.
-    for (
-      let durationLimit = InitialDurationLimit;
-      driverRouteMapper.length <= 0;
-      durationLimit += ExtraDurationLimit
-    ) {
+    // find all drivers whose duration within the initial duration limit.
+    // if there are none, find the minimum duration and then
+    // find all the drivers whose duration is less than minimum duration + extra duration limit.
+    driverRouteMapper = initialDriverRouteMapper.filter(
+      ({ duration }) => duration <= InitialDurationLimit
+    );
+
+    if (driverRouteMapper.length <= 0) {
+      const minDuration = initialDriverRouteMapper.reduce(
+        (prev, { duration }) => (prev < duration ? prev : duration),
+        initialDriverRouteMapper[0].duration
+      );
+
       driverRouteMapper = initialDriverRouteMapper.filter(
-        ({ duration }) => duration <= durationLimit
+        ({ duration }) => duration <= minDuration + ExtraDurationLimit
       );
     }
 
@@ -225,8 +236,9 @@ export async function updateOrderStatus(
     pubsub.publish(REQUEST_NEW_JOB, {
       newJobRequested: {
         driverIds: driverRouteMapper.map(({ me: { userId } }) => userId),
-        order: nextOrder,
+        order: mapStringToLatLng(nextOrder),
         driverRouteMapper,
+        expiredAt: (new Date().valueOf() + 60000).toString(),
       },
     });
 
