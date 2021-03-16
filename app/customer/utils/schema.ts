@@ -63,6 +63,7 @@ export const schema = {
                 username
                 firstName
                 lastName
+                phone
               }
             }
             status
@@ -108,6 +109,7 @@ export const schema = {
                 username
                 firstName
                 lastName
+                phone
               }
             }
             receiveAddress
