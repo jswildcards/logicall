@@ -15,7 +15,7 @@ import QRScanner from "../components/QRScanner";
 import schema from "../utils/schema";
 
 function Page() {
-  const { data: me, refetch } = useQuery(schema.query.me);
+  const { data: me } = useQuery(schema.query.me);
 
   return (
     <Container>
@@ -31,16 +31,14 @@ function Page() {
       <View style={{ flex: 1 }}>
         <QRScanner
           onBarCodeRead={async ({ data }) => {
-            data = JSON.parse(data);
+            const parsedData = JSON.parse(data);
 
-            console.log({
-              input: {
-                ...data,
-                comments: `${data.comments} @${me.me.username}`,
-              },
-            });
+            const payload = {
+              ...parsedData,
+              comments: `${parsedData.comments} @${me.me.username}`,
+            }
 
-            Actions.scanResult({ data, me });
+            Actions.scanResult({ data: payload });
           }}
         />
       </View>

@@ -187,11 +187,15 @@ export const schema = {
         }
       }
     `,
-  },
-  mutation: {
-    updateOrderStatus: gql`
-      mutation($input: UpdateOrderStatusInput) {
-        updateOrderStatus(input: $input) {
+    order: gql`
+      query($orderId: String) {
+        order(orderId: $orderId) {
+          logs {
+            orderLogId
+            status
+            comments
+            createdAt
+          }
           orderId
           sender {
             userId
@@ -221,6 +225,53 @@ export const schema = {
           }
           status
           comments
+          createdAt
+          updatedAt
+        }
+      }
+    `,
+  },
+  mutation: {
+    updateOrderStatus: gql`
+      mutation($input: UpdateOrderStatusInput) {
+        updateOrderStatus(input: $input) {
+          logs {
+            orderLogId
+            status
+            comments
+            createdAt
+          }
+          orderId
+          sender {
+            userId
+            username
+            firstName
+            lastName
+            email
+            phone
+          }
+          receiver {
+            userId
+            username
+            firstName
+            lastName
+            email
+            phone
+          }
+          sendAddress
+          sendLatLng {
+            latitude
+            longitude
+          }
+          receiveAddress
+          receiveLatLng {
+            latitude
+            longitude
+          }
+          status
+          comments
+          createdAt
+          updatedAt
         }
       }
     `,
@@ -269,7 +320,7 @@ export const schema = {
       mutation($input: ResponseNewJobInput) {
         responseNewJob(input: $input)
       }
-    `
+    `,
   },
   subscription: {
     newJobRequested: gql`

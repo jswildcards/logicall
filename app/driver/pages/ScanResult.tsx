@@ -1,5 +1,18 @@
 import moment from "moment";
-import { Badge, Body, Button, Container, Content, Icon, Left, ListItem, Right, Text, View } from "native-base";
+import {
+  Badge,
+  Body,
+  Button,
+  Container,
+  Content,
+  Icon,
+  Left,
+  ListItem,
+  Right,
+  Text,
+  Toast,
+  View,
+} from "native-base";
 import React, { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-apollo";
 import { StatusBar } from "react-native";
@@ -9,19 +22,29 @@ import HeaderNav from "../components/HeaderNav";
 import { mapStatusToColor } from "../utils/convert";
 import schema from "../utils/schema";
 
-function Page({ data, me }) {
+function Page({ data }) {
+  const { data: result, refetch, loading } = useQuery(schema.query.order, {
+    variables: { orderId: data.orderId },
+  });
   const [updateOrderStatus] = useMutation(schema.mutation.updateOrderStatus);
 
   useEffect(() => {
-    updateOrderStatus({
-      variables: {
-        input: {
-          ...data,
-          comments: `${data.comments} @${me.me.username}`,
-        },
-      },
-    });
+    updateOrderStatus({ variables: { input: data } })
+      .then(refetch)
+      .then(() =>
+        Toast.show({
+          text: "Refetch Completed",
+          buttonText: "Okay",
+          duration: 6000,
+        })
+      );
   }, []);
+
+  if (loading || !result?.order) {
+    return <Text>loading</Text>;
+  }
+
+  const { order } = result;
 
   return (
     <Container>
@@ -72,15 +95,6 @@ function Page({ data, me }) {
             </Body>
           </ListItem>
 
-          <Button
-            block
-            onPress={() => Actions.map({ job, simulate: true })}
-            style={{ margin: 8 }}
-          >
-            <Icon ios-name="ios-map" name="map" />
-            <Text>Check the Map</Text>
-          </Button>
-
           <ListItem icon last itemDivider>
             <Left>
               <Icon name="walk" ios="ios-walk" />
@@ -90,7 +104,7 @@ function Page({ data, me }) {
             </Body>
           </ListItem>
 
-          {order.logs.map((log) => (
+          {order?.logs?.map((log) => (
             <ListItem key={log.orderLogId} noIndent>
               <Body>
                 <Text>{log.comments}</Text>
