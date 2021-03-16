@@ -40,6 +40,8 @@ function Page({ job }) {
         <Map
           sendLatLng={order.sendLatLng}
           receiveLatLng={order.receiveLatLng}
+          sendAddress={order.sendAddress}
+          receiveAddress={order.receiveAddress}
           currentLatLng={getCurrentLatLng()}
           polylines={polylines}
         />

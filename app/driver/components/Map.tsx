@@ -43,9 +43,10 @@ class Map extends React.Component {
   // }
 
   render() {
-    const { latitude: sLat, longitude: sLng } = this.props.sendLatLng;
-    const { latitude: rLat, longitude: rLng } = this.props.receiveLatLng;
-    const { latitude: cLat, longitude: cLng } = this.props.currentLatLng;
+    const { sendLatLng, receiveLatLng, currentLatLng, sendAddress, receiveAddress } = this.props;
+    const { latitude: sLat, longitude: sLng } = sendLatLng;
+    const { latitude: rLat, longitude: rLng } = receiveLatLng;
+    const { latitude: cLat, longitude: cLng } = currentLatLng;
     const { polyline } = this.state;
 
     return (
@@ -60,6 +61,8 @@ class Map extends React.Component {
       >
         <Marker
           key="send"
+          title="Start"
+          description={sendAddress}
           coordinate={{
             latitude: sLat,
             longitude: sLng,
@@ -67,6 +70,9 @@ class Map extends React.Component {
         />
         <Marker
           key="receive"
+          pinColor="darkgreen"
+          title="End"
+          description={receiveAddress}
           coordinate={{
             latitude: rLat,
             longitude: rLng,
@@ -74,6 +80,8 @@ class Map extends React.Component {
         />
         <Marker
           key="current"
+          pinColor="skyblue"
+          title="Your Current Position"
           coordinate={{
             latitude: cLat,
             longitude: cLng,
