@@ -227,7 +227,7 @@ export default function Post() {
 
               <Divider />
 
-              <Box>
+              <Box overflow="auto">
                 <Text color="gray.500" fontSize="xl">
                   Recent Activities
                 </Text>
