@@ -130,7 +130,7 @@ export default function Post() {
                 <Tr
                   key={job.jobId}
                   _hover={{ background: "gray.100" }}
-                  onClick={() => router.push(`/orders/${job.order.orderId}`)}
+                  onClick={() => router.push(`/order/${job.order.orderId}`)}
                 >
                   <Td>{job.jobId}</Td>
                   <Td>
@@ -158,7 +158,7 @@ export default function Post() {
                       variant="link"
                       icon={<ArrowForwardIcon />}
                       onClick={() =>
-                        router.push(`/orders/${job.order.orderId}`)
+                        router.push(`/order/${job.order.orderId}`)
                       }
                     />
                   </Td>
