@@ -116,66 +116,73 @@ export default function Post() {
             </Flex>
           </SimpleGrid>
 
-          <Table variant="simple">
-            <Thead>
-              <Tr>
-                <Th>Order ID</Th>
-                <Th>Status</Th>
-                <Th>Sender</Th>
-                <Th>Send Address</Th>
-                <Th>Receiver</Th>
-                <Th>Receive Address</Th>
-                <Th />
-              </Tr>
-            </Thead>
-            <Tbody>
-              {[
-                ...(data.user.sendOrders ?? []),
-                ...(data.user.receiveOrders ?? []),
-              ]?.map((order) => (
-                <Tr
-                  key={order.orderId}
-                  _hover={{ background: "gray.100" }}
-                  onClick={() => router.push(`/order/${order.orderId}`)}
-                >
-                  <Td>{order.orderId}</Td>
-                  <Td>
-                    <Flex>
-                      <Badge colorScheme={mapStatusToColor(order.status)}>
-                        {order.status}
-                      </Badge>
-                    </Flex>
-                  </Td>
-                  <Td>
-                    <DisplayName user={order.sender} />
-                  </Td>
-                  <Td>
-                    <Text>{order.sendAddress}</Text>
-                  </Td>
-                  <Td>
-                    <DisplayName user={order.receiver} />
-                  </Td>
-                  <Td>
-                    <Text>{order.receiveAddress}</Text>
-                  </Td>
-                  <Td>
-                    <IconButton
-                      aria-label="View Order"
-                      variant="link"
-                      icon={<ArrowForwardIcon />}
-                      onClick={() => router.push(`/order/${order.orderId}`)}
-                    />
-                  </Td>
+          <Box overflow="auto">
+            <Table variant="simple">
+              <Thead>
+                <Tr>
+                  <Th>Order ID</Th>
+                  <Th>Status</Th>
+                  <Th>Sender</Th>
+                  <Th>Send Address</Th>
+                  <Th>Receiver</Th>
+                  <Th>Receive Address</Th>
+                  <Th />
                 </Tr>
-              ))}
-            </Tbody>
-          </Table>
-          {data.user.sendOrders?.length <= 0 &&
-            data.user.receiveOrders?.length <= 0 && (
-              <Text p="3" textAlign="center" color="gray.600" fontWeight="bold">
-                No Orders Here.
-              </Text>
-            )}
+              </Thead>
+              <Tbody>
+                {[
+                  ...(data.user.sendOrders ?? []),
+                  ...(data.user.receiveOrders ?? []),
+                ]?.map((order) => (
+                  <Tr
+                    key={order.orderId}
+                    _hover={{ background: "gray.100" }}
+                    onClick={() => router.push(`/order/${order.orderId}`)}
+                  >
+                    <Td>{order.orderId}</Td>
+                    <Td>
+                      <Flex>
+                        <Badge colorScheme={mapStatusToColor(order.status)}>
+                          {order.status}
+                        </Badge>
+                      </Flex>
+                    </Td>
+                    <Td>
+                      <DisplayName user={order.sender} />
+                    </Td>
+                    <Td>
+                      <Text>{order.sendAddress}</Text>
+                    </Td>
+                    <Td>
+                      <DisplayName user={order.receiver} />
+                    </Td>
+                    <Td>
+                      <Text>{order.receiveAddress}</Text>
+                    </Td>
+                    <Td>
+                      <IconButton
+                        aria-label="View Order"
+                        variant="link"
+                        icon={<ArrowForwardIcon />}
+                        onClick={() => router.push(`/order/${order.orderId}`)}
+                      />
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+            {data.user.sendOrders?.length <= 0 &&
+              data.user.receiveOrders?.length <= 0 && (
+                <Text
+                  p="3"
+                  textAlign="center"
+                  color="gray.600"
+                  fontWeight="bold"
+                >
+                  No Orders Here.
+                </Text>
+              )}
+          </Box>
         </Stack>
       </Container>
     </>
