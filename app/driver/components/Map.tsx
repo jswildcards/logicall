@@ -43,7 +43,13 @@ class Map extends React.Component {
   // }
 
   render() {
-    const { sendLatLng, receiveLatLng, currentLatLng, sendAddress, receiveAddress } = this.props;
+    const {
+      sendLatLng,
+      receiveLatLng,
+      currentLatLng,
+      sendAddress,
+      receiveAddress,
+    } = this.props;
     const { latitude: sLat, longitude: sLng } = sendLatLng;
     const { latitude: rLat, longitude: rLng } = receiveLatLng;
     const { latitude: cLat, longitude: cLng } = currentLatLng;
