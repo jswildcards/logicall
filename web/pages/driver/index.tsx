@@ -179,7 +179,7 @@ export default function Drivers() {
                         firstName,
                         lastName,
                         currentLocation: { status, at, latLng },
-                      }) => (
+                      }: Record<string, any>) => (
                         <Tr
                           key={username}
                           _hover={{ background: "gray.100", cursor: "pointer" }}
