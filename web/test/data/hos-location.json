@@ -1,0 +1,3050 @@
+{
+  "last-revision-date": "20-7-2020",
+  "regionArray": [
+      {
+          "area": {
+              "zh-Hans": "香港岛",
+              "zh-Hant": "香港島",
+              "en": "Hong Kong Island"
+          },
+          "center": [
+              22.2641667,
+              114.2423087
+          ],
+          "district": [
+              {
+                  "estates": [
+                      {
+                          "center": [
+                              22.28166,
+                              114.22514
+                          ],
+                          "name": {
+                              "zh-Hans": "东涛苑",
+                              "zh-Hant": "東濤苑",
+                              "en": "Tung Tao Court"
+                          },
+                          "id": 10036,
+                          "aplySysId": "1321347387527"
+                      },
+                      {
+                          "center": [
+                              22.26017,
+                              114.23058
+                          ],
+                          "name": {
+                              "zh-Hans": "景翠苑",
+                              "zh-Hant": "景翠苑",
+                              "en": "King Tsui Court"
+                          },
+                          "id": 3144,
+                          "aplySysId": "1321347387590"
+                      },
+                      {
+                          "center": [
+                              22.28546,
+                              114.21617
+                          ],
+                          "name": {
+                              "zh-Hans": "康山花园",
+                              "zh-Hant": "康山花園",
+                              "en": "Kornhill"
+                          },
+                          "id": 3145,
+                          "aplySysId": "1321347387549"
+                      },
+                      {
+                          "center": [
+                              22.2636,
+                              114.24074
+                          ],
+                          "name": {
+                              "zh-Hans": "乐轩台",
+                              "zh-Hant": "樂軒臺",
+                              "en": "Lok Hin Terrace"
+                          },
+                          "id": 3146,
+                          "aplySysId": "1321347387596"
+                      },
+                      {
+                          "center": [
+                              22.26151,
+                              114.25127
+                          ],
+                          "name": {
+                              "zh-Hans": "佳翠苑",
+                              "zh-Hant": "佳翠苑",
+                              "en": "Kai Tsui Court"
+                          },
+                          "id": 3147,
+                          "aplySysId": "1321347387592"
+                      },
+                      {
+                          "center": [
+                              22.28123,
+                              114.22877
+                          ],
+                          "name": {
+                              "zh-Hans": "爱蝶湾",
+                              "zh-Hant": "愛蝶灣",
+                              "en": "Aldrich Garden"
+                          },
+                          "id": 3148,
+                          "aplySysId": "1321347387519"
+                      },
+                      {
+                          "center": [
+                              22.26305,
+                              114.25052
+                          ],
+                          "name": {
+                              "zh-Hans": "富怡花园",
+                              "zh-Hant": "富怡花園",
+                              "en": "Cheerful Garden"
+                          },
+                          "id": 3149,
+                          "aplySysId": "1321347387591"
+                      },
+                      {
+                          "center": [
+                              22.26699,
+                              114.23463
+                          ],
+                          "name": {
+                              "zh-Hans": "康翠台",
+                              "zh-Hant": "康翠臺",
+                              "en": "Greenwood Terrace"
+                          },
+                          "id": 3150,
+                          "aplySysId": "1321347387553"
+                      },
+                      {
+                          "center": [
+                              22.26258,
+                              114.25187
+                          ],
+                          "name": {
+                              "zh-Hans": "富景花园",
+                              "zh-Hant": "富景花園",
+                              "en": "Fullview Garden"
+                          },
+                          "id": 3151,
+                          "aplySysId": "1321347387593"
+                      },
+                      {
+                          "center": [
+                              22.26718,
+                              114.24145
+                          ],
+                          "name": {
+                              "zh-Hans": "杏翠苑",
+                              "zh-Hant": "杏翠苑",
+                              "en": "Hang Tsui Court"
+                          },
+                          "id": 3152,
+                          "aplySysId": "1321347387599"
+                      },
+                      {
+                          "center": [
+                              22.26332,
+                              114.24736
+                          ],
+                          "name": {
+                              "zh-Hans": "晓翠苑",
+                              "zh-Hant": "曉翠苑",
+                              "en": "Hiu Tsui Court"
+                          },
+                          "id": 3153,
+                          "aplySysId": "1321347387588"
+                      },
+                      {
+                          "center": [
+                              22.26603,
+                              114.24895
+                          ],
+                          "name": {
+                              "zh-Hans": "富欣花园",
+                              "zh-Hant": "富欣花園",
+                              "en": "Harmony Garden"
+                          },
+                          "id": 3154,
+                          "aplySysId": "1321347387589"
+                      },
+                      {
+                          "center": [
+                              22.27715,
+                              114.2228
+                          ],
+                          "name": {
+                              "zh-Hans": "东骏苑",
+                              "zh-Hant": "東駿苑",
+                              "en": "Tung Chun Court"
+                          },
+                          "id": 3155,
+                          "aplySysId": "1321347387604"
+                      },
+                      {
+                          "center": [
+                              22.28066,
+                              114.21909
+                          ],
+                          "name": {
+                              "zh-Hans": "东熹苑",
+                              "zh-Hant": "東熹苑",
+                              "en": "Tung Hei Court"
+                          },
+                          "id": 3156,
+                          "aplySysId": "1321347387600"
+                      },
+                      {
+                          "center": [
+                              22.27629,
+                              114.22644
+                          ],
+                          "name": {
+                              "zh-Hans": "东盛苑",
+                              "zh-Hant": "東盛苑",
+                              "en": "Tung Shing Court"
+                          },
+                          "id": 3157,
+                          "aplySysId": "1321347387554"
+                      },
+                      {
+                          "center": [
+                              22.28027,
+                              114.22052
+                          ],
+                          "name": {
+                              "zh-Hans": "东霖苑",
+                              "zh-Hant": "東霖苑",
+                              "en": "Tung Lam Court"
+                          },
+                          "id": 3158,
+                          "aplySysId": "1321347387551"
+                      },
+                      {
+                          "center": [
+                              22.28079,
+                              114.222
+                          ],
+                          "name": {
+                              "zh-Hans": "东欣苑",
+                              "zh-Hant": "東欣苑",
+                              "en": "Tung Yan Court"
+                          },
+                          "id": 3159,
+                          "aplySysId": "1321347387550"
+                      },
+                      {
+                          "center": [
+                              22.26462,
+                              114.2385
+                          ],
+                          "name": {
+                              "zh-Hans": "怡翠苑",
+                              "zh-Hant": "怡翠苑",
+                              "en": "Yee Tsui Court"
+                          },
+                          "id": 3160,
+                          "aplySysId": "1321347387598"
+                      },
+                      {
+                          "center": [
+                              22.26412,
+                              114.23995
+                          ],
+                          "name": {
+                              "zh-Hans": "宏德居",
+                              "zh-Hant": "宏德居",
+                              "en": "Walton Estate"
+                          },
+                          "id": 3161,
+                          "aplySysId": "1321347387597"
+                      },
+                      {
+                          "center": [
+                              22.2606,
+                              114.23799
+                          ],
+                          "name": {
+                              "zh-Hans": "悦翠苑",
+                              "zh-Hant": "悅翠苑",
+                              "en": "Yuet Chui Court"
+                          },
+                          "id": 3162,
+                          "aplySysId": "1321347387594"
+                      },
+                      {
+                          "center": [
+                              22.28228,
+                              114.22666
+                          ],
+                          "name": {
+                              "zh-Hans": "东旭苑",
+                              "zh-Hant": "東旭苑",
+                              "en": "Tung Yuk Court"
+                          },
+                          "id": 3163,
+                          "aplySysId": "1321347387606"
+                      },
+                      {
+                          "center": [
+                              22.26813,
+                              114.23443
+                          ],
+                          "name": {
+                              "zh-Hans": "乐翠台",
+                              "zh-Hant": "樂翠臺",
+                              "en": "Neptune Terrace"
+                          },
+                          "id": 3164,
+                          "aplySysId": "1321347387552"
+                      },
+                      {
+                          "center": [
+                              22.26888,
+                              114.23324
+                          ],
+                          "name": {
+                              "zh-Hans": "山翠苑",
+                              "zh-Hant": "山翠苑",
+                              "en": "Shan Tsui Court"
+                          },
+                          "id": 3165,
+                          "aplySysId": "1321347387578"
+                      },
+                      {
+                          "center": [
+                              22.26111,
+                              114.23779
+                          ],
+                          "name": {
+                              "zh-Hans": "茵翠苑",
+                              "zh-Hant": "茵翠苑",
+                              "en": "Yan Tsui Court"
+                          },
+                          "id": 3197,
+                          "aplySysId": "1321347387595"
+                      }
+                  ],
+                  "center": [
+                      22.270323,
+                      114.23446
+                  ],
+                  "name": {
+                      "zh-Hans": "东区",
+                      "zh-Hant": "東區",
+                      "en": "Eastern"
+                  },
+                  "zoom": 13,
+                  "id": 17
+              },
+              {
+                  "estates": [
+                      {
+                          "center": [
+                              22.2427,
+                              114.16545
+                          ],
+                          "name": {
+                              "zh-Hans": "雅涛阁",
+                              "zh-Hant": "雅濤閣",
+                              "en": "Broadview Court"
+                          },
+                          "id": 3077,
+                          "aplySysId": "1321347387522"
+                      },
+                      {
+                          "center": [
+                              22.25121,
+                              114.1505
+                          ],
+                          "name": {
+                              "zh-Hans": "鸿福苑",
+                              "zh-Hant": "鴻福苑",
+                              "en": "Hung Fuk Court"
+                          },
+                          "id": 3078,
+                          "aplySysId": "1321347387607"
+                      },
+                      {
+                          "center": [
+                              22.24931,
+                              114.13797
+                          ],
+                          "name": {
+                              "zh-Hans": "嘉隆苑",
+                              "zh-Hant": "嘉隆苑",
+                              "en": "Ka Lung Court"
+                          },
+                          "id": 3079,
+                          "aplySysId": "1321347387608"
+                      },
+                      {
+                          "center": [
+                              22.21959,
+                              114.20868
+                          ],
+                          "name": {
+                              "zh-Hans": "龙德苑",
+                              "zh-Hant": "龍德苑",
+                              "en": "Lung Tak Court"
+                          },
+                          "id": 3080,
+                          "aplySysId": "1321347387609"
+                      },
+                      {
+                          "center": [
+                              22.22144,
+                              114.20539
+                          ],
+                          "name": {
+                              "zh-Hans": "龙欣苑",
+                              "zh-Hant": "龍欣苑",
+                              "en": "Lung Yan Court"
+                          },
+                          "id": 3081,
+                          "aplySysId": "1321347387546"
+                      },
+                      {
+                          "center": [
+                              22.24276,
+                              114.15765
+                          ],
+                          "name": {
+                              "zh-Hans": "渔安苑",
+                              "zh-Hant": "漁安苑",
+                              "en": "Yue On Court"
+                          },
+                          "id": 3087,
+                          "aplySysId": "1321347387521"
+                      },
+                      {
+                          "center": [
+                              22.24742,
+                              114.15936
+                          ],
+                          "name": {
+                              "zh-Hans": "逸港居",
+                              "zh-Hant": "逸港居",
+                              "en": "Ocean Court"
+                          },
+                          "id": 3094,
+                          "aplySysId": "1321347387524"
+                      },
+                      {
+                          "center": [
+                              22.24456,
+                              114.16615
+                          ],
+                          "name": {
+                              "zh-Hans": "南涛阁",
+                              "zh-Hant": "南濤閣",
+                              "en": "South Wave Court"
+                          },
+                          "id": 3095,
+                          "aplySysId": "1321347387523"
+                      },
+                      {
+                          "center": [
+                              22.25026,
+                              114.1571
+                          ],
+                          "name": {
+                              "zh-Hans": "渔晖苑",
+                              "zh-Hant": "漁暉苑",
+                              "en": "Yue Fai Court"
+                          },
+                          "id": 3096,
+                          "aplySysId": "1321347387548"
+                      }
+                  ],
+                  "center": [
+                      22.241028,
+                      114.16759
+                  ],
+                  "name": {
+                      "zh-Hans": "南区",
+                      "zh-Hant": "南區",
+                      "en": "Southern"
+                  },
+                  "zoom": 12,
+                  "id": 18
+              }
+          ],
+          "zoom": 13,
+          "id": "1"
+      },
+      {
+          "area": {
+              "zh-Hans": "九龙东",
+              "zh-Hant": "九龍東",
+              "en": "Kowloon East"
+          },
+          "center": [
+              22.3158964,
+              114.1822079
+          ],
+          "district": [
+              {
+                  "estates": [
+                      {
+                          "center": [
+                              22.34056,
+                              114.21115
+                          ],
+                          "name": {
+                              "zh-Hans": "嘉峰台",
+                              "zh-Hant": "嘉峰臺",
+                              "en": "Kingsford Terrace"
+                          },
+                          "id": 10069,
+                          "aplySysId": "1321347387619"
+                      },
+                      {
+                          "center": [
+                              22.34122,
+                              114.20884
+                          ],
+                          "name": {
+                              "zh-Hans": "琼轩苑",
+                              "zh-Hant": "瓊軒苑",
+                              "en": "King Hin Court"
+                          },
+                          "id": 10385,
+                          "aplySysId": "1321347387531"
+                      },
+                      {
+                          "center": [
+                              22.335146,
+                              114.20047
+                          ],
+                          "name": {
+                              "zh-Hans": "景泰苑",
+                              "zh-Hant": "景泰苑",
+                              "en": "King Tai Court"
+                          },
+                          "id": 15381,
+                          "aplySysId": "1509013164426"
+                      },
+                      {
+                          "center": [
+                              22.34114,
+                              114.20753
+                          ],
+                          "name": {
+                              "zh-Hans": "宏景花园",
+                              "zh-Hant": "宏景花園",
+                              "en": "Grand View Garden"
+                          },
+                          "id": 3036,
+                          "aplySysId": "1321347387466"
+                      },
+                      {
+                          "center": [
+                              22.33717,
+                              114.18952
+                          ],
+                          "name": {
+                              "zh-Hans": "康强苑",
+                              "zh-Hant": "康強苑",
+                              "en": "Hong Keung Court"
+                          },
+                          "id": 3037,
+                          "aplySysId": "1321347387585"
+                      },
+                      {
+                          "center": [
+                              22.34044,
+                              114.18437
+                          ],
+                          "name": {
+                              "zh-Hans": "富强苑",
+                              "zh-Hant": "富強苑",
+                              "en": "Fu Keung Court"
+                          },
+                          "id": 3038,
+                          "aplySysId": "1321347387612"
+                      },
+                      {
+                          "center": [
+                              22.34397,
+                              114.19927
+                          ],
+                          "name": {
+                              "zh-Hans": "凤钻苑",
+                              "zh-Hant": "鳳鑽苑",
+                              "en": "Fung Chuen Court"
+                          },
+                          "id": 3039,
+                          "aplySysId": "1321347387467"
+                      },
+                      {
+                          "center": [
+                              22.34435,
+                              114.2025
+                          ],
+                          "name": {
+                              "zh-Hans": "凤礼苑",
+                              "zh-Hant": "鳳禮苑",
+                              "en": "Fung Lai Court"
+                          },
+                          "id": 3040,
+                          "aplySysId": "1321347387468"
+                      },
+                      {
+                          "center": [
+                              22.34663,
+                              114.19502
+                          ],
+                          "name": {
+                              "zh-Hans": "盈福苑",
+                              "zh-Hant": "盈福苑",
+                              "en": "Ying Fuk Court"
+                          },
+                          "id": 3041,
+                          "aplySysId": "1321347387469"
+                      },
+                      {
+                          "center": [
+                              22.33492,
+                              114.21306
+                          ],
+                          "name": {
+                              "zh-Hans": "彩峰苑",
+                              "zh-Hant": "彩峰苑",
+                              "en": "Choi Fung Court"
+                          },
+                          "id": 3042,
+                          "aplySysId": "1321347387529"
+                      },
+                      {
+                          "center": [
+                              22.34677,
+                              114.18889
+                          ],
+                          "name": {
+                              "zh-Hans": "翠竹花园",
+                              "zh-Hant": "翠竹花園",
+                              "en": "Tsui Chuk Garden"
+                          },
+                          "id": 3043,
+                          "aplySysId": "1321347387470"
+                      },
+                      {
+                          "center": [
+                              22.34456,
+                              114.18732
+                          ],
+                          "name": {
+                              "zh-Hans": "天宏苑",
+                              "zh-Hant": "天宏苑",
+                              "en": "Tin Wang Court"
+                          },
+                          "id": 3044,
+                          "aplySysId": "1321347387471"
+                      },
+                      {
+                          "center": [
+                              22.33599,
+                              114.20194
+                          ],
+                          "name": {
+                              "zh-Hans": "采颐花园",
+                              "zh-Hant": "采頤花園",
+                              "en": "Rhythm Garden"
+                          },
+                          "id": 3045,
+                          "aplySysId": "1321347387582"
+                      },
+                      {
+                          "center": [
+                              22.3388,
+                              114.18598
+                          ],
+                          "name": {
+                              "zh-Hans": "德强苑",
+                              "zh-Hant": "德強苑",
+                              "en": "Tak Keung Court"
+                          },
+                          "id": 3046,
+                          "aplySysId": "1321347387534"
+                      },
+                      {
+                          "center": [
+                              22.34087,
+                              114.20894
+                          ],
+                          "name": {
+                              "zh-Hans": "新丽花园",
+                              "zh-Hant": "新麗花園",
+                              "en": "Sun Lai Garden"
+                          },
+                          "id": 3047,
+                          "aplySysId": "1321347387472"
+                      },
+                      {
+                          "center": [
+                              22.34578,
+                              114.19072
+                          ],
+                          "name": {
+                              "zh-Hans": "鹏程苑",
+                              "zh-Hant": "鵬程苑",
+                              "en": "Pang Ching Court"
+                          },
+                          "id": 3048,
+                          "aplySysId": "1321347387539"
+                      },
+                      {
+                          "center": [
+                              22.34315,
+                              114.18798
+                          ],
+                          "name": {
+                              "zh-Hans": "天马苑",
+                              "zh-Hant": "天馬苑",
+                              "en": "Tin Ma Court"
+                          },
+                          "id": 3049,
+                          "aplySysId": "1321347387477"
+                      },
+                      {
+                          "center": [
+                              22.34164,
+                              114.18462
+                          ],
+                          "name": {
+                              "zh-Hans": "嘉强苑",
+                              "zh-Hant": "嘉強苑",
+                              "en": "Ka Keung Court"
+                          },
+                          "id": 3055,
+                          "aplySysId": "1321347387530"
+                      },
+                      {
+                          "center": [
+                              22.34136,
+                              114.21139
+                          ],
+                          "name": {
+                              "zh-Hans": "琼丽苑",
+                              "zh-Hant": "瓊麗苑",
+                              "en": "King Lai Court"
+                          },
+                          "id": 3056,
+                          "aplySysId": "1321347387473"
+                      },
+                      {
+                          "center": [
+                              22.34212,
+                              114.21061
+                          ],
+                          "name": {
+                              "zh-Hans": "琼山苑",
+                              "zh-Hant": "瓊山苑",
+                              "en": "King Shan Court"
+                          },
+                          "id": 3057,
+                          "aplySysId": "1321347387532"
+                      },
+                      {
+                          "center": [
+                              22.34204,
+                              114.19985
+                          ],
+                          "name": {
+                              "zh-Hans": "龙蟠苑",
+                              "zh-Hant": "龍蟠苑",
+                              "en": "Lung Poon Court"
+                          },
+                          "id": 3193,
+                          "aplySysId": "1321347387533"
+                      },
+                      {
+                          "center": [
+                              22.34987,
+                              114.19812
+                          ],
+                          "name": {
+                              "zh-Hans": "慈爱苑",
+                              "zh-Hant": "慈愛苑",
+                              "en": "Tsz Oi Court"
+                          },
+                          "id": 3194,
+                          "aplySysId": "1321347387583"
+                      },
+                      {
+                          "center": [
+                              22.34825,
+                              114.20129
+                          ],
+                          "name": {
+                              "zh-Hans": "慈安苑",
+                              "zh-Hant": "慈安苑",
+                              "en": "Tsz On Court"
+                          },
+                          "id": 3195,
+                          "aplySysId": "1321347387584"
+                      }
+                  ],
+                  "center": [
+                      22.342346,
+                      114.198586
+                  ],
+                  "name": {
+                      "zh-Hans": "黄大仙",
+                      "zh-Hant": "黃大仙",
+                      "en": "Wong Tai Sin"
+                  },
+                  "zoom": 14,
+                  "id": 12
+              },
+              {
+                  "estates": [
+                      {
+                          "center": [
+                              22.30034,
+                              114.23805
+                          ],
+                          "name": {
+                              "zh-Hans": "油翠苑",
+                              "zh-Hant": "油翠苑",
+                              "en": "Yau Chui Court"
+                          },
+                          "id": 11276,
+                          "aplySysId": "1321347387628"
+                      },
+                      {
+                          "center": [
+                              22.31771,
+                              114.22767
+                          ],
+                          "name": {
+                              "zh-Hans": "宝佩苑",
+                              "zh-Hant": "寶珮苑",
+                              "en": "Po Pui Court"
+                          },
+                          "id": 3123,
+                          "aplySysId": "1321347387613"
+                      },
+                      {
+                          "center": [
+                              22.332,
+                              114.22728
+                          ],
+                          "name": {
+                              "zh-Hans": "顺致苑",
+                              "zh-Hant": "順緻苑",
+                              "en": "Shun Chi Court"
+                          },
+                          "id": 3124,
+                          "aplySysId": "1321347387627"
+                      },
+                      {
+                          "center": [
+                              22.32974,
+                              114.20698
+                          ],
+                          "name": {
+                              "zh-Hans": "丽晶花园",
+                              "zh-Hant": "麗晶花園",
+                              "en": "Richland Gardens"
+                          },
+                          "id": 3125,
+                          "aplySysId": "1321347387580"
+                      },
+                      {
+                          "center": [
+                              22.32224,
+                              114.21746
+                          ],
+                          "name": {
+                              "zh-Hans": "安基苑",
+                              "zh-Hant": "安基苑",
+                              "en": "On Kay Court"
+                          },
+                          "id": 3130,
+                          "aplySysId": "1321347387605"
+                      },
+                      {
+                          "center": [
+                              22.31969,
+                              114.22703
+                          ],
+                          "name": {
+                              "zh-Hans": "祥和苑",
+                              "zh-Hant": "祥和苑",
+                              "en": "Cheung Wo Court"
+                          },
+                          "id": 3131,
+                          "aplySysId": "1321347387571"
+                      },
+                      {
+                          "center": [
+                              22.32269,
+                              114.21768
+                          ],
+                          "name": {
+                              "zh-Hans": "振华苑",
+                              "zh-Hant": "振華苑",
+                              "en": "Chun Wah Court"
+                          },
+                          "id": 3132,
+                          "aplySysId": "1321347387545"
+                      },
+                      {
+                          "center": [
+                              22.30568,
+                              114.23831
+                          ],
+                          "name": {
+                              "zh-Hans": "康雅苑",
+                              "zh-Hant": "康雅苑",
+                              "en": "Hong Nga Court"
+                          },
+                          "id": 3133,
+                          "aplySysId": "1321347387575"
+                      },
+                      {
+                          "center": [
+                              22.30191,
+                              114.24085
+                          ],
+                          "name": {
+                              "zh-Hans": "康柏苑",
+                              "zh-Hant": "康柏苑",
+                              "en": "Hong Pak Court"
+                          },
+                          "id": 3134,
+                          "aplySysId": "1321347387617"
+                      },
+                      {
+                          "center": [
+                              22.32066,
+                              114.22857
+                          ],
+                          "name": {
+                              "zh-Hans": "晓丽苑",
+                              "zh-Hant": "曉麗苑",
+                              "en": "Hiu Lai Court"
+                          },
+                          "id": 3135,
+                          "aplySysId": "1321347387547"
+                      },
+                      {
+                          "center": [
+                              22.2947,
+                              114.23835
+                          ],
+                          "name": {
+                              "zh-Hans": "油塘中心",
+                              "zh-Hant": "油塘中心",
+                              "en": "Yau Tong Centre"
+                          },
+                          "id": 3136,
+                          "aplySysId": "1321347387572"
+                      },
+                      {
+                          "center": [
+                              22.30811,
+                              114.23825
+                          ],
+                          "name": {
+                              "zh-Hans": "康盈苑",
+                              "zh-Hant": "康盈苑",
+                              "en": "Hong Ying Court"
+                          },
+                          "id": 3137,
+                          "aplySysId": "1321347387573"
+                      },
+                      {
+                          "center": [
+                              22.30843,
+                              114.23261
+                          ],
+                          "name": {
+                              "zh-Hans": "鲤安苑",
+                              "zh-Hant": "鯉安苑",
+                              "en": "Lei On Court"
+                          },
+                          "id": 3138,
+                          "aplySysId": "1321347387603"
+                      },
+                      {
+                          "center": [
+                              22.31386,
+                              114.23992
+                          ],
+                          "name": {
+                              "zh-Hans": "康华苑",
+                              "zh-Hant": "康華苑",
+                              "en": "Hong Wah Court"
+                          },
+                          "id": 3139,
+                          "aplySysId": "1321347387577"
+                      },
+                      {
+                          "center": [
+                              22.31099,
+                              114.23463
+                          ],
+                          "name": {
+                              "zh-Hans": "康逸苑",
+                              "zh-Hant": "康逸苑",
+                              "en": "Hong Yat Court"
+                          },
+                          "id": 3140,
+                          "aplySysId": "1321347387624"
+                      },
+                      {
+                          "center": [
+                              22.29906,
+                              114.24214
+                          ],
+                          "name": {
+                              "zh-Hans": "高俊苑",
+                              "zh-Hant": "高俊苑",
+                              "en": "Ko Chun Court"
+                          },
+                          "id": 3141,
+                          "aplySysId": "1321347387610"
+                      },
+                      {
+                          "center": [
+                              22.32829,
+                              114.2107
+                          ],
+                          "name": {
+                              "zh-Hans": "启泰苑",
+                              "zh-Hant": "啟泰苑",
+                              "en": "Kai Tai Court"
+                          },
+                          "id": 3142,
+                          "aplySysId": "1321347387626"
+                      },
+                      {
+                          "center": [
+                              22.32312,
+                              114.2197
+                          ],
+                          "name": {
+                              "zh-Hans": "乐雅苑",
+                              "zh-Hant": "樂雅苑",
+                              "en": "Lok Nga Court"
+                          },
+                          "id": 3143,
+                          "aplySysId": "1321347387579"
+                      },
+                      {
+                          "center": [
+                              22.30132,
+                              114.24081
+                          ],
+                          "name": {
+                              "zh-Hans": "康瑞苑",
+                              "zh-Hant": "康瑞苑",
+                              "en": "Hong Shui Court"
+                          },
+                          "id": 3185,
+                          "aplySysId": "1321347387576"
+                      },
+                      {
+                          "center": [
+                              22.30771,
+                              114.23472
+                          ],
+                          "name": {
+                              "zh-Hans": "康田苑",
+                              "zh-Hant": "康田苑",
+                              "en": "Hong Tin Court"
+                          },
+                          "id": 3186,
+                          "aplySysId": "1321347387574"
+                      }
+                  ],
+                  "center": [
+                      22.313475,
+                      114.23006
+                  ],
+                  "name": {
+                      "zh-Hans": "观塘",
+                      "zh-Hant": "觀塘",
+                      "en": "Kwun Tong"
+                  },
+                  "zoom": 13,
+                  "id": 13
+              }
+          ],
+          "zoom": 13,
+          "id": "2"
+      },
+      {
+          "area": {
+              "zh-Hans": "九龙西",
+              "zh-Hant": "九龍西",
+              "en": "Kowloon West"
+          },
+          "center": [
+              22.3158964,
+              114.1822079
+          ],
+          "district": [
+              {
+                  "estates": [
+                      {
+                          "center": [
+                              22.32806,
+                              114.1494
+                          ],
+                          "name": {
+                              "zh-Hans": "凯乐苑",
+                              "zh-Hant": "凱樂苑",
+                              "en": "Hoi Lok Court"
+                          },
+                          "id": 15620,
+                          "aplySysId": "1565664639140"
+                      },
+                      {
+                          "center": [
+                              22.334057,
+                              114.15447
+                          ],
+                          "name": {
+                              "zh-Hans": "丽翠苑",
+                              "zh-Hant": "麗翠苑",
+                              "en": "Lai Tsui Court"
+                          },
+                          "id": 15680,
+                          "aplySysId": "1574935434162"
+                      },
+                      {
+                          "center": [
+                              22.3388,
+                              114.13495
+                          ],
+                          "name": {
+                              "zh-Hans": "清丽苑",
+                              "zh-Hant": "清麗苑",
+                              "en": "Ching Lai Court"
+                          },
+                          "id": 3088,
+                          "aplySysId": "1321347387615"
+                      },
+                      {
+                          "center": [
+                              22.33621,
+                              114.15303
+                          ],
+                          "name": {
+                              "zh-Hans": "幸俊苑",
+                              "zh-Hant": "幸俊苑",
+                              "en": "Hang Chun Court"
+                          },
+                          "id": 3089,
+                          "aplySysId": "1321347387515"
+                      },
+                      {
+                          "center": [
+                              22.33214,
+                              114.15979
+                          ],
+                          "name": {
+                              "zh-Hans": "怡靖苑",
+                              "zh-Hant": "怡靖苑",
+                              "en": "Yee Ching Court"
+                          },
+                          "id": 3090,
+                          "aplySysId": "1321347387502"
+                      },
+                      {
+                          "center": [
+                              22.33325,
+                              114.1578
+                          ],
+                          "name": {
+                              "zh-Hans": "怡阁苑",
+                              "zh-Hant": "怡閣苑",
+                              "en": "Yee Kok Court"
+                          },
+                          "id": 3091,
+                          "aplySysId": "1321347387505"
+                      },
+                      {
+                          "center": [
+                              22.33728,
+                              114.15941
+                          ],
+                          "name": {
+                              "zh-Hans": "宝熙苑",
+                              "zh-Hant": "寶熙苑",
+                              "en": "Po Hei Court"
+                          },
+                          "id": 3092,
+                          "aplySysId": "1321347387503"
+                      },
+                      {
+                          "center": [
+                              22.33816,
+                              114.15819
+                          ],
+                          "name": {
+                              "zh-Hans": "宝丽苑",
+                              "zh-Hant": "寶麗苑",
+                              "en": "Po Lai Court"
+                          },
+                          "id": 3093,
+                          "aplySysId": "1321347387504"
+                      }
+                  ],
+                  "center": [
+                      22.335974,
+                      114.15386
+                  ],
+                  "name": {
+                      "zh-Hans": "深水埗",
+                      "zh-Hant": "深水埗",
+                      "en": "Sham Shui Po"
+                  },
+                  "zoom": 13,
+                  "id": 10
+              },
+              {
+                  "estates": [
+                      {
+                          "center": [
+                              22.33045,
+                              114.20111
+                          ],
+                          "name": {
+                              "zh-Hans": "启朗苑",
+                              "zh-Hant": "啟朗苑",
+                              "en": "Kai Long Court"
+                          },
+                          "id": 15720,
+                          "aplySysId": "1579166844012"
+                      },
+                      {
+                          "center": [
+                              22.3146,
+                              114.1837
+                          ],
+                          "name": {
+                              "zh-Hans": "冠德苑",
+                              "zh-Hant": "冠德苑",
+                              "en": "Kwun Tak Court"
+                          },
+                          "id": 15740,
+                          "aplySysId": "1583304100788"
+                      },
+                      {
+                          "center": [
+                              22.31406,
+                              114.18245
+                          ],
+                          "name": {
+                              "zh-Hans": "冠晖苑",
+                              "zh-Hant": "冠暉苑",
+                              "en": "Kwun Fai Court"
+                          },
+                          "id": 3169,
+                          "aplySysId": "1321347387464"
+                      },
+                      {
+                          "center": [
+                              22.31437,
+                              114.18327
+                          ],
+                          "name": {
+                              "zh-Hans": "冠熹苑",
+                              "zh-Hant": "冠熹苑",
+                              "en": "Kwun Hei Court"
+                          },
+                          "id": 3170,
+                          "aplySysId": "1321347387465"
+                      },
+                      {
+                          "center": [
+                              22.31508,
+                              114.17976
+                          ],
+                          "name": {
+                              "zh-Hans": "俊民苑",
+                              "zh-Hant": "俊民苑",
+                              "en": "Chun Man Court"
+                          },
+                          "id": 3171,
+                          "aplySysId": "1321347387614"
+                      }
+                  ],
+                  "center": [
+                      22.314505,
+                      114.18182
+                  ],
+                  "name": {
+                      "zh-Hans": "九龙城",
+                      "zh-Hant": "九龍城",
+                      "en": "Kowloon City"
+                  },
+                  "zoom": 15,
+                  "id": 11
+              },
+              {
+                  "estates": [
+                      {
+                          "center": [
+                              22.3164,
+                              114.16434
+                          ],
+                          "name": {
+                              "zh-Hans": "海富苑",
+                              "zh-Hant": "海富苑",
+                              "en": "Hoi Fu Court"
+                          },
+                          "id": 3030,
+                          "aplySysId": "1321347387506"
+                      },
+                      {
+                          "center": [
+                              22.3137,
+                              114.165
+                          ],
+                          "name": {
+                              "zh-Hans": "富荣花园",
+                              "zh-Hant": "富榮花園",
+                              "en": "Charming Garden"
+                          },
+                          "id": 3035,
+                          "aplySysId": "1321347387445"
+                      }
+                  ],
+                  "center": [
+                      22.31505,
+                      114.16467
+                  ],
+                  "name": {
+                      "zh-Hans": "油尖旺",
+                      "zh-Hant": "油尖旺",
+                      "en": "Yau Tsim Mong"
+                  },
+                  "zoom": 15,
+                  "id": 14
+              }
+          ],
+          "zoom": 13,
+          "id": "3"
+      },
+      {
+          "area": {
+              "zh-Hans": "新界东",
+              "zh-Hant": "新界東",
+              "en": "New Territories East"
+          },
+          "center": [
+              22.3803228,
+              114.2133316
+          ],
+          "district": [
+              {
+                  "estates": [
+                      {
+                          "center": [
+                              22.45187,
+                              114.1747
+                          ],
+                          "name": {
+                              "zh-Hans": "明雅苑",
+                              "zh-Hant": "明雅苑",
+                              "en": "Ming Nga Court"
+                          },
+                          "id": 3068,
+                          "aplySysId": "1321347387488"
+                      },
+                      {
+                          "center": [
+                              22.45349,
+                              114.17282
+                          ],
+                          "name": {
+                              "zh-Hans": "新兴花园",
+                              "zh-Hant": "新興花園",
+                              "en": "Sun Hing Garden"
+                          },
+                          "id": 3069,
+                          "aplySysId": "1321347387490"
+                      },
+                      {
+                          "center": [
+                              22.44086,
+                              114.16577
+                          ],
+                          "name": {
+                              "zh-Hans": "德雅苑",
+                              "zh-Hant": "德雅苑",
+                              "en": "Tak Nga Court"
+                          },
+                          "id": 3070,
+                          "aplySysId": "1321347387491"
+                      },
+                      {
+                          "center": [
+                              22.45493,
+                              114.16698
+                          ],
+                          "name": {
+                              "zh-Hans": "汀雅苑",
+                              "zh-Hant": "汀雅苑",
+                              "en": "Ting Nga Court"
+                          },
+                          "id": 3071,
+                          "aplySysId": "1321347387493"
+                      },
+                      {
+                          "center": [
+                              22.45287,
+                              114.16994
+                          ],
+                          "name": {
+                              "zh-Hans": "大埔广场",
+                              "zh-Hant": "大埔廣場",
+                              "en": "Tai Po Plaza"
+                          },
+                          "id": 3072,
+                          "aplySysId": "1321347387492"
+                      },
+                      {
+                          "center": [
+                              22.45154,
+                              114.1596
+                          ],
+                          "name": {
+                              "zh-Hans": "宝雅苑",
+                              "zh-Hant": "寶雅苑",
+                              "en": "Po Nga Court"
+                          },
+                          "id": 3073,
+                          "aplySysId": "1321347387489"
+                      },
+                      {
+                          "center": [
+                              22.45466,
+                              114.17385
+                          ],
+                          "name": {
+                              "zh-Hans": "怡雅苑",
+                              "zh-Hant": "怡雅苑",
+                              "en": "Yee Nga Court"
+                          },
+                          "id": 3076,
+                          "aplySysId": "1321347387474"
+                      },
+                      {
+                          "center": [
+                              22.4407,
+                              114.16641
+                          ],
+                          "name": {
+                              "zh-Hans": "景雅苑",
+                              "zh-Hant": "景雅苑",
+                              "en": "King Nga Court"
+                          },
+                          "id": 3082,
+                          "aplySysId": "1321347387486"
+                      },
+                      {
+                          "center": [
+                              22.45968,
+                              114.17059
+                          ],
+                          "name": {
+                              "zh-Hans": "颂雅苑",
+                              "zh-Hant": "頌雅苑",
+                              "en": "Chung Nga Court"
+                          },
+                          "id": 3083,
+                          "aplySysId": "1321347387476"
+                      },
+                      {
+                          "center": [
+                              22.44446,
+                              114.16782
+                          ],
+                          "name": {
+                              "zh-Hans": "富雅花园",
+                              "zh-Hant": "富雅花園",
+                              "en": "Elegance Garden"
+                          },
+                          "id": 3084,
+                          "aplySysId": "1321347387616"
+                      },
+                      {
+                          "center": [
+                              22.44662,
+                              114.17543
+                          ],
+                          "name": {
+                              "zh-Hans": "宏福苑",
+                              "zh-Hant": "宏福苑",
+                              "en": "Wang Fuk Court"
+                          },
+                          "id": 3085,
+                          "aplySysId": "1321347387475"
+                      },
+                      {
+                          "center": [
+                              22.44285,
+                              114.16742
+                          ],
+                          "name": {
+                              "zh-Hans": "逸雅苑",
+                              "zh-Hant": "逸雅苑",
+                              "en": "Yat Nga Court"
+                          },
+                          "id": 3086,
+                          "aplySysId": "1321347387494"
+                      }
+                  ],
+                  "center": [
+                      22.449545,
+                      114.16927
+                  ],
+                  "name": {
+                      "zh-Hans": "大埔",
+                      "zh-Hant": "大埔",
+                      "en": "Tai Po"
+                  },
+                  "zoom": 14,
+                  "id": 2
+              },
+              {
+                  "estates": [
+                      {
+                          "center": [
+                              22.37656,
+                              114.17169
+                          ],
+                          "name": {
+                              "zh-Hans": "美盈苑",
+                              "zh-Hant": "美盈苑",
+                              "en": "Mei Ying Court"
+                          },
+                          "id": 15380,
+                          "aplySysId": "1509011366415"
+                      },
+                      {
+                          "center": [
+                              22.378368,
+                              114.1724
+                          ],
+                          "name": {
+                              "zh-Hans": "美柏苑",
+                              "zh-Hant": "美柏苑",
+                              "en": "Mei Pak Court"
+                          },
+                          "id": 15400,
+                          "aplySysId": "1509012112827"
+                      },
+                      {
+                          "center": [
+                              22.361116,
+                              114.174614
+                          ],
+                          "name": {
+                              "zh-Hans": "嘉顺苑",
+                              "zh-Hant": "嘉順苑",
+                              "en": "Ka Shun Court"
+                          },
+                          "id": 15660,
+                          "aplySysId": "1572505764235"
+                      },
+                      {
+                          "center": [
+                              22.38282,
+                              114.20268
+                          ],
+                          "name": {
+                              "zh-Hans": "愉田苑",
+                              "zh-Hant": "愉田苑",
+                              "en": "Yue Tin Court"
+                          },
+                          "id": 2997,
+                          "aplySysId": "1321347387526"
+                      },
+                      {
+                          "center": [
+                              22.37875,
+                              114.19286
+                          ],
+                          "name": {
+                              "zh-Hans": "愉城苑",
+                              "zh-Hant": "愉城苑",
+                              "en": "Yue Shing Court"
+                          },
+                          "id": 3004,
+                          "aplySysId": "1321347387456"
+                      },
+                      {
+                          "center": [
+                              22.38048,
+                              114.21577
+                          ],
+                          "name": {
+                              "zh-Hans": "广林苑",
+                              "zh-Hant": "廣林苑",
+                              "en": "Kwong Lam Court"
+                          },
+                          "id": 3005,
+                          "aplySysId": "1321347387495"
+                      },
+                      {
+                          "center": [
+                              22.37932,
+                              114.17492
+                          ],
+                          "name": {
+                              "zh-Hans": "美城苑",
+                              "zh-Hant": "美城苑",
+                              "en": "May Shing Court"
+                          },
+                          "id": 3006,
+                          "aplySysId": "1321347387518"
+                      },
+                      {
+                          "center": [
+                              22.38105,
+                              114.17275
+                          ],
+                          "name": {
+                              "zh-Hans": "美松苑",
+                              "zh-Hant": "美松苑",
+                              "en": "Mei Chung Court"
+                          },
+                          "id": 3007,
+                          "aplySysId": "1321347387499"
+                      },
+                      {
+                          "center": [
+                              22.42435,
+                              114.23958
+                          ],
+                          "name": {
+                              "zh-Hans": "富宝花园",
+                              "zh-Hant": "富寶花園",
+                              "en": "Saddle Ridge Garden"
+                          },
+                          "id": 3008,
+                          "aplySysId": "1321347387454"
+                      },
+                      {
+                          "center": [
+                              22.3939,
+                              114.19449
+                          ],
+                          "name": {
+                              "zh-Hans": "穗禾苑",
+                              "zh-Hant": "穗禾苑",
+                              "en": "Sui Wo Court"
+                          },
+                          "id": 3009,
+                          "aplySysId": "1321347387496"
+                      },
+                      {
+                          "center": [
+                              22.38125,
+                              114.20488
+                          ],
+                          "name": {
+                              "zh-Hans": "愉翠苑",
+                              "zh-Hant": "愉翠苑",
+                              "en": "Yu Chui Court"
+                          },
+                          "id": 3010,
+                          "aplySysId": "1321347387581"
+                      },
+                      {
+                          "center": [
+                              22.36715,
+                              114.17947
+                          ],
+                          "name": {
+                              "zh-Hans": "景田苑",
+                              "zh-Hant": "景田苑",
+                              "en": "King Tin Court"
+                          },
+                          "id": 3011,
+                          "aplySysId": "1321347387517"
+                      },
+                      {
+                          "center": [
+                              22.3607,
+                              114.17299
+                          ],
+                          "name": {
+                              "zh-Hans": "嘉田苑　　",
+                              "zh-Hant": "嘉田苑　　",
+                              "en": "Ka Tin Court"
+                          },
+                          "id": 3012,
+                          "aplySysId": "1321347387498"
+                      },
+                      {
+                          "center": [
+                              22.42138,
+                              114.22474
+                          ],
+                          "name": {
+                              "zh-Hans": "锦丰苑",
+                              "zh-Hant": "錦豐苑",
+                              "en": "Kam Fung Court"
+                          },
+                          "id": 3013,
+                          "aplySysId": "1321347387542"
+                      },
+                      {
+                          "center": [
+                              22.42169,
+                              114.23088
+                          ],
+                          "name": {
+                              "zh-Hans": "锦禧苑",
+                              "zh-Hant": "錦禧苑",
+                              "en": "Kam Hay Court"
+                          },
+                          "id": 3014,
+                          "aplySysId": "1321347387544"
+                      },
+                      {
+                          "center": [
+                              22.42616,
+                              114.2403
+                          ],
+                          "name": {
+                              "zh-Hans": "锦龙苑",
+                              "zh-Hant": "錦龍苑",
+                              "en": "Kam Lung Court"
+                          },
+                          "id": 3015,
+                          "aplySysId": "1321347387450"
+                      },
+                      {
+                          "center": [
+                              22.41616,
+                              114.2267
+                          ],
+                          "name": {
+                              "zh-Hans": "锦鞍苑",
+                              "zh-Hant": "錦鞍苑",
+                              "en": "Kam On Court"
+                          },
+                          "id": 3016,
+                          "aplySysId": "1321347387543"
+                      },
+                      {
+                          "center": [
+                              22.40795,
+                              114.22109
+                          ],
+                          "name": {
+                              "zh-Hans": "锦泰苑",
+                              "zh-Hant": "錦泰苑",
+                              "en": "Kam Tai Court"
+                          },
+                          "id": 3017,
+                          "aplySysId": "1321347387451"
+                      },
+                      {
+                          "center": [
+                              22.42341,
+                              114.23777
+                          ],
+                          "name": {
+                              "zh-Hans": "锦英苑",
+                              "zh-Hant": "錦英苑",
+                              "en": "Kam Ying Court"
+                          },
+                          "id": 3018,
+                          "aplySysId": "1321347387620"
+                      },
+                      {
+                          "center": [
+                              22.36466,
+                              114.17418
+                          ],
+                          "name": {
+                              "zh-Hans": "嘉径苑",
+                              "zh-Hant": "嘉徑苑",
+                              "en": "Ka Keng Court"
+                          },
+                          "id": 3019,
+                          "aplySysId": "1321347387621"
+                      },
+                      {
+                          "center": [
+                              22.3686,
+                              114.17583
+                          ],
+                          "name": {
+                              "zh-Hans": "云叠花园",
+                              "zh-Hant": "雲叠花園",
+                              "en": "Carado Garden"
+                          },
+                          "id": 3021,
+                          "aplySysId": "1321347387500"
+                      },
+                      {
+                          "center": [
+                              22.40411,
+                              114.22385
+                          ],
+                          "name": {
+                              "zh-Hans": "富安花园",
+                              "zh-Hant": "富安花園",
+                              "en": "Chevalier Garden"
+                          },
+                          "id": 3022,
+                          "aplySysId": "1321347387455"
+                      },
+                      {
+                          "center": [
+                              22.42456,
+                              114.22925
+                          ],
+                          "name": {
+                              "zh-Hans": "福安花园",
+                              "zh-Hant": "福安花園",
+                              "en": "Fok On Garden"
+                          },
+                          "id": 3023,
+                          "aplySysId": "1321347387453"
+                      },
+                      {
+                          "center": [
+                              22.42475,
+                              114.23333
+                          ],
+                          "name": {
+                              "zh-Hans": "富辉花园",
+                              "zh-Hant": "富輝花園",
+                              "en": "Fu Fai Garden"
+                          },
+                          "id": 3024,
+                          "aplySysId": "1321347387452"
+                      },
+                      {
+                          "center": [
+                              22.37117,
+                              114.18809
+                          ],
+                          "name": {
+                              "zh-Hans": "丰盛苑",
+                              "zh-Hant": "豐盛苑",
+                              "en": "Fung Shing Court"
+                          },
+                          "id": 3025,
+                          "aplySysId": "1321347387497"
+                      },
+                      {
+                          "center": [
+                              22.37345,
+                              114.17805
+                          ],
+                          "name": {
+                              "zh-Hans": "富嘉花园",
+                              "zh-Hant": "富嘉花園",
+                              "en": "Grandway Garden"
+                          },
+                          "id": 3026,
+                          "aplySysId": "1321347387501"
+                      },
+                      {
+                          "center": [
+                              22.37366,
+                              114.17629
+                          ],
+                          "name": {
+                              "zh-Hans": "海福花园",
+                              "zh-Hant": "海福花園",
+                              "en": "Holford Gardens"
+                          },
+                          "id": 3027,
+                          "aplySysId": "1321347387525"
+                      },
+                      {
+                          "center": [
+                              22.38024,
+                              114.21755
+                          ],
+                          "name": {
+                              "zh-Hans": "康林苑",
+                              "zh-Hant": "康林苑",
+                              "en": "Hong Lam Court"
+                          },
+                          "id": 3028,
+                          "aplySysId": "1321347387625"
+                      }
+                  ],
+                  "center": [
+                      22.393267,
+                      114.205124
+                  ],
+                  "name": {
+                      "zh-Hans": "沙田",
+                      "zh-Hant": "沙田",
+                      "en": "Sha Tin"
+                  },
+                  "zoom": 12,
+                  "id": 7
+              },
+              {
+                  "estates": [
+                      {
+                          "center": [
+                              22.31192,
+                              114.258
+                          ],
+                          "name": {
+                              "zh-Hans": "宝明苑",
+                              "zh-Hant": "寶明苑",
+                              "en": "Po Ming Court"
+                          },
+                          "id": 3097,
+                          "aplySysId": "1321347387439"
+                      },
+                      {
+                          "center": [
+                              22.3157,
+                              114.26686
+                          ],
+                          "name": {
+                              "zh-Hans": "和明苑",
+                              "zh-Hant": "和明苑",
+                              "en": "Wo Ming Court"
+                          },
+                          "id": 3098,
+                          "aplySysId": "1321347387623"
+                      },
+                      {
+                          "center": [
+                              22.31839,
+                              114.26627
+                          ],
+                          "name": {
+                              "zh-Hans": "裕明苑",
+                              "zh-Hant": "裕明苑",
+                              "en": "Yu Ming Court"
+                          },
+                          "id": 3099,
+                          "aplySysId": "1321347387436"
+                      },
+                      {
+                          "center": [
+                              22.32579,
+                              114.25746
+                          ],
+                          "name": {
+                              "zh-Hans": "英明苑",
+                              "zh-Hant": "英明苑",
+                              "en": "Ying Ming Court"
+                          },
+                          "id": 3100,
+                          "aplySysId": "1321347387512"
+                      },
+                      {
+                          "center": [
+                              22.31449,
+                              114.26744
+                          ],
+                          "name": {
+                              "zh-Hans": "煜明苑",
+                              "zh-Hant": "煜明苑",
+                              "en": "Yuk Ming Court"
+                          },
+                          "id": 3101,
+                          "aplySysId": "1321347387440"
+                      },
+                      {
+                          "center": [
+                              22.32431,
+                              114.25856
+                          ],
+                          "name": {
+                              "zh-Hans": "欣明苑",
+                              "zh-Hant": "欣明苑",
+                              "en": "Yan Ming Court"
+                          },
+                          "id": 3102,
+                          "aplySysId": "1321347387511"
+                      },
+                      {
+                          "center": [
+                              22.3156,
+                              114.26297
+                          ],
+                          "name": {
+                              "zh-Hans": "安宁花园",
+                              "zh-Hant": "安寧花園",
+                              "en": "On Ning Garden"
+                          },
+                          "id": 3103,
+                          "aplySysId": "1321347387441"
+                      },
+                      {
+                          "center": [
+                              22.30786,
+                              114.2566
+                          ],
+                          "name": {
+                              "zh-Hans": "唐明苑",
+                              "zh-Hant": "唐明苑",
+                              "en": "Tong Ming Court"
+                          },
+                          "id": 3104,
+                          "aplySysId": "1321347387510"
+                      },
+                      {
+                          "center": [
+                              22.30826,
+                              114.2546
+                          ],
+                          "name": {
+                              "zh-Hans": "彩明苑",
+                              "zh-Hant": "彩明苑",
+                              "en": "Choi Ming Court"
+                          },
+                          "id": 3105,
+                          "aplySysId": "1321347387540"
+                      },
+                      {
+                          "center": [
+                              22.3197,
+                              114.25326
+                          ],
+                          "name": {
+                              "zh-Hans": "康盛花园",
+                              "zh-Hant": "康盛花園",
+                              "en": "Hong Sing Garden"
+                          },
+                          "id": 3106,
+                          "aplySysId": "1321347387444"
+                      },
+                      {
+                          "center": [
+                              22.3126,
+                              114.25989
+                          ],
+                          "name": {
+                              "zh-Hans": "广明苑",
+                              "zh-Hant": "廣明苑",
+                              "en": "Kwong Ming Court"
+                          },
+                          "id": 3107,
+                          "aplySysId": "1321347387438"
+                      },
+                      {
+                          "center": [
+                              22.32349,
+                              114.24995
+                          ],
+                          "name": {
+                              "zh-Hans": "景明苑",
+                              "zh-Hant": "景明苑",
+                              "en": "King Ming Court"
+                          },
+                          "id": 3108,
+                          "aplySysId": "1321347387509"
+                      },
+                      {
+                          "center": [
+                              22.30678,
+                              114.26232
+                          ],
+                          "name": {
+                              "zh-Hans": "宝盈花园",
+                              "zh-Hant": "寶盈花園",
+                              "en": "Bauhinia Garden"
+                          },
+                          "id": 3109,
+                          "aplySysId": "1321347387487"
+                      },
+                      {
+                          "center": [
+                              22.31062,
+                              114.26144
+                          ],
+                          "name": {
+                              "zh-Hans": "富康花园",
+                              "zh-Hant": "富康花園",
+                              "en": "Beverly Garden"
+                          },
+                          "id": 3110,
+                          "aplySysId": "1321347387443"
+                      },
+                      {
+                          "center": [
+                              22.3217,
+                              114.25959
+                          ],
+                          "name": {
+                              "zh-Hans": "浩明苑",
+                              "zh-Hant": "浩明苑",
+                              "en": "Ho Ming Court"
+                          },
+                          "id": 3111,
+                          "aplySysId": "1321347387508"
+                      },
+                      {
+                          "center": [
+                              22.3157,
+                              114.26866
+                          ],
+                          "name": {
+                              "zh-Hans": "显明苑",
+                              "zh-Hant": "顯明苑",
+                              "en": "Hin Ming Court"
+                          },
+                          "id": 3112,
+                          "aplySysId": "1321347387437"
+                      },
+                      {
+                          "center": [
+                              22.31939,
+                              114.26784
+                          ],
+                          "name": {
+                              "zh-Hans": "富宁花园",
+                              "zh-Hant": "富寧花園",
+                              "en": "Fu Ning Garden"
+                          },
+                          "id": 3113,
+                          "aplySysId": "1321347387442"
+                      },
+                      {
+                          "center": [
+                              22.31825,
+                              114.26276
+                          ],
+                          "name": {
+                              "zh-Hans": "颂明苑",
+                              "zh-Hant": "頌明苑",
+                              "en": "Chung Ming Court"
+                          },
+                          "id": 3114,
+                          "aplySysId": "1321347387507"
+                      }
+                  ],
+                  "center": [
+                      22.316078,
+                      114.260826
+                  ],
+                  "name": {
+                      "zh-Hans": "西贡",
+                      "zh-Hant": "西貢",
+                      "en": "Sai Kung"
+                  },
+                  "zoom": 14,
+                  "id": 8
+              },
+              {
+                  "estates": [
+                      {
+                          "center": [
+                              22.4877,
+                              114.14087
+                          ],
+                          "name": {
+                              "zh-Hans": "景盛苑",
+                              "zh-Hant": "景盛苑",
+                              "en": "King Shing Court"
+                          },
+                          "id": 3115,
+                          "aplySysId": "1321347387480"
+                      },
+                      {
+                          "center": [
+                              22.49994,
+                              114.12829
+                          ],
+                          "name": {
+                              "zh-Hans": "旭埔苑",
+                              "zh-Hant": "旭埔苑",
+                              "en": "Yuk Po Court"
+                          },
+                          "id": 3116,
+                          "aplySysId": "1321347387514"
+                      },
+                      {
+                          "center": [
+                              22.50134,
+                              114.14043
+                          ],
+                          "name": {
+                              "zh-Hans": "荣福中心",
+                              "zh-Hant": "榮福中心",
+                              "en": "Wing Fok Centre"
+                          },
+                          "id": 3117,
+                          "aplySysId": "1321347387485"
+                      },
+                      {
+                          "center": [
+                              22.48718,
+                              114.1392
+                          ],
+                          "name": {
+                              "zh-Hans": "欣盛苑",
+                              "zh-Hant": "欣盛苑",
+                              "en": "Yan Shing Court"
+                          },
+                          "id": 3118,
+                          "aplySysId": "1321347387513"
+                      },
+                      {
+                          "center": [
+                              22.48385,
+                              114.13823
+                          ],
+                          "name": {
+                              "zh-Hans": "昌盛苑",
+                              "zh-Hant": "昌盛苑",
+                              "en": "Cheong Shing Court"
+                          },
+                          "id": 3119,
+                          "aplySysId": "1321347387478"
+                      },
+                      {
+                          "center": [
+                              22.50111,
+                              114.1243
+                          ],
+                          "name": {
+                              "zh-Hans": "彩蒲苑",
+                              "zh-Hant": "彩蒲苑",
+                              "en": "Choi Po Court"
+                          },
+                          "id": 3120,
+                          "aplySysId": "1321347387516"
+                      },
+                      {
+                          "center": [
+                              22.49383,
+                              114.13414
+                          ],
+                          "name": {
+                              "zh-Hans": "嘉盛苑",
+                              "zh-Hant": "嘉盛苑",
+                              "en": "Ka Shing Court"
+                          },
+                          "id": 3121,
+                          "aplySysId": "1321347387479"
+                      },
+                      {
+                          "center": [
+                              22.48279,
+                              114.13803
+                          ],
+                          "name": {
+                              "zh-Hans": "雍盛苑",
+                              "zh-Hant": "雍盛苑",
+                              "en": "Yung Shing Court"
+                          },
+                          "id": 3122,
+                          "aplySysId": "1321347387541"
+                      },
+                      {
+                          "center": [
+                              22.50219,
+                              114.13525
+                          ],
+                          "name": {
+                              "zh-Hans": "安盛苑",
+                              "zh-Hant": "安盛苑",
+                              "en": "On Shing Court"
+                          },
+                          "id": 3126,
+                          "aplySysId": "1321347387481"
+                      },
+                      {
+                          "center": [
+                              22.5016,
+                              114.13205
+                          ],
+                          "name": {
+                              "zh-Hans": "顺欣花园",
+                              "zh-Hant": "順欣花園",
+                              "en": "Sunningdale Garden"
+                          },
+                          "id": 3127,
+                          "aplySysId": "1321347387482"
+                      },
+                      {
+                          "center": [
+                              22.50831,
+                              114.12828
+                          ],
+                          "name": {
+                              "zh-Hans": "翠丽花园",
+                              "zh-Hant": "翠麗花園",
+                              "en": "Tsui Lai Garden"
+                          },
+                          "id": 3128,
+                          "aplySysId": "1321347387483"
+                      },
+                      {
+                          "center": [
+                              22.50163,
+                              114.14315
+                          ],
+                          "name": {
+                              "zh-Hans": "荣辉中心",
+                              "zh-Hant": "榮輝中心",
+                              "en": "Wing Fai Centre"
+                          },
+                          "id": 3129,
+                          "aplySysId": "1321347387484"
+                      }
+                  ],
+                  "center": [
+                      22.495956,
+                      114.135185
+                  ],
+                  "name": {
+                      "zh-Hans": "北区",
+                      "zh-Hant": "北區",
+                      "en": "North"
+                  },
+                  "zoom": 14,
+                  "id": 1
+              }
+          ],
+          "zoom": 11,
+          "id": "4"
+      },
+      {
+          "area": {
+              "zh-Hans": "新界西",
+              "zh-Hant": "新界西",
+              "en": "New Territories West"
+          },
+          "center": [
+              22.3803228,
+              114.2133316
+          ],
+          "district": [
+              {
+                  "estates": [
+                      {
+                          "center": [
+                              22.450766,
+                              114.028175
+                          ],
+                          "name": {
+                              "zh-Hans": "宏富苑",
+                              "zh-Hant": "宏富苑",
+                              "en": "Wang Fu Court"
+                          },
+                          "id": 15440,
+                          "aplySysId": "1510816915912"
+                      },
+                      {
+                          "center": [
+                              22.445576,
+                              114.003456
+                          ],
+                          "name": {
+                              "zh-Hans": "屏欣苑",
+                              "zh-Hant": "屏欣苑",
+                              "en": "Ping Yan Court"
+                          },
+                          "id": 15580,
+                          "aplySysId": "1543912512128"
+                      },
+                      {
+                          "center": [
+                              22.45288,
+                              114.00801
+                          ],
+                          "name": {
+                              "zh-Hans": "天丽苑",
+                              "zh-Hant": "天麗苑",
+                              "en": "Tin Lai Court"
+                          },
+                          "id": 3020,
+                          "aplySysId": "1321347387447"
+                      },
+                      {
+                          "center": [
+                              22.45186,
+                              114.00605
+                          ],
+                          "name": {
+                              "zh-Hans": "天佑苑",
+                              "zh-Hant": "天祐苑",
+                              "en": "Tin Yau Court"
+                          },
+                          "id": 3029,
+                          "aplySysId": "1321347387449"
+                      },
+                      {
+                          "center": [
+                              22.44308,
+                              114.03216
+                          ],
+                          "name": {
+                              "zh-Hans": "凤庭苑",
+                              "zh-Hant": "鳳庭苑",
+                              "en": "Fung Ting Court"
+                          },
+                          "id": 3031,
+                          "aplySysId": "1321347387535"
+                      },
+                      {
+                          "center": [
+                              22.46068,
+                              114.00032
+                          ],
+                          "name": {
+                              "zh-Hans": "天颂苑",
+                              "zh-Hant": "天頌苑",
+                              "en": "Tin Chung Court"
+                          },
+                          "id": 3032,
+                          "aplySysId": "1321347387446"
+                      },
+                      {
+                          "center": [
+                              22.46509,
+                              113.99944
+                          ],
+                          "name": {
+                              "zh-Hans": "天富苑",
+                              "zh-Hant": "天富苑",
+                              "en": "Tin Fu Court"
+                          },
+                          "id": 3033,
+                          "aplySysId": "1321347387528"
+                      },
+                      {
+                          "center": [
+                              22.45396,
+                              113.99791
+                          ],
+                          "name": {
+                              "zh-Hans": "天爱苑",
+                              "zh-Hant": "天愛苑",
+                              "en": "Tin Oi Court"
+                          },
+                          "id": 3034,
+                          "aplySysId": "1321347387448"
+                      },
+                      {
+                          "center": [
+                              22.44753,
+                              114.00216
+                          ],
+                          "name": {
+                              "zh-Hans": "天盛苑",
+                              "zh-Hant": "天盛苑",
+                              "en": "Tin Shing Court"
+                          },
+                          "id": 3196,
+                          "aplySysId": "1321347387555"
+                      }
+                  ],
+                  "center": [
+                      22.453583,
+                      114.00658
+                  ],
+                  "name": {
+                      "zh-Hans": "元朗",
+                      "zh-Hant": "元朗",
+                      "en": "Yuen Long"
+                  },
+                  "zoom": 13,
+                  "id": 3
+              },
+              {
+                  "estates": [
+                      {
+                          "center": [
+                              22.4031,
+                              113.97485
+                          ],
+                          "name": {
+                              "zh-Hans": "泽丰花园",
+                              "zh-Hant": "澤豐花園",
+                              "en": "Affluence Garden"
+                          },
+                          "id": 3050,
+                          "aplySysId": "1321347387563"
+                      },
+                      {
+                          "center": [
+                              22.38758,
+                              113.97914
+                          ],
+                          "name": {
+                              "zh-Hans": "置乐花园",
+                              "zh-Hant": "置樂花園",
+                              "en": "Chi Lok Fa Yuen"
+                          },
+                          "id": 3051,
+                          "aplySysId": "1321347387564"
+                      },
+                      {
+                          "center": [
+                              22.38339,
+                              113.96552
+                          ],
+                          "name": {
+                              "zh-Hans": "富健花园",
+                              "zh-Hant": "富健花園",
+                              "en": "Glorious Garden"
+                          },
+                          "id": 3052,
+                          "aplySysId": "1321347387565"
+                      },
+                      {
+                          "center": [
+                              22.38529,
+                              113.96641
+                          ],
+                          "name": {
+                              "zh-Hans": "龙门居",
+                              "zh-Hant": "龍門居",
+                              "en": "Lung Mun Oasis"
+                          },
+                          "id": 3053,
+                          "aplySysId": "1321347387566"
+                      },
+                      {
+                          "center": [
+                              22.37339,
+                              113.96125
+                          ],
+                          "name": {
+                              "zh-Hans": "美乐花园",
+                              "zh-Hant": "美樂花園",
+                              "en": "Melody Garden"
+                          },
+                          "id": 3054,
+                          "aplySysId": "1321347387567"
+                      },
+                      {
+                          "center": [
+                              22.37495,
+                              113.96797
+                          ],
+                          "name": {
+                              "zh-Hans": "悦湖山庄",
+                              "zh-Hant": "悅湖山莊",
+                              "en": "Yuet Wu Villa"
+                          },
+                          "id": 3058,
+                          "aplySysId": "1321347387570"
+                      },
+                      {
+                          "center": [
+                              22.38889,
+                              113.97571
+                          ],
+                          "name": {
+                              "zh-Hans": "兆安苑",
+                              "zh-Hant": "兆安苑",
+                              "en": "Siu On Court"
+                          },
+                          "id": 3059,
+                          "aplySysId": "1321347387560"
+                      },
+                      {
+                          "center": [
+                              22.37807,
+                              113.96351
+                          ],
+                          "name": {
+                              "zh-Hans": "兆山苑",
+                              "zh-Hant": "兆山苑",
+                              "en": "Siu Shan Court"
+                          },
+                          "id": 3060,
+                          "aplySysId": "1321347387562"
+                      },
+                      {
+                          "center": [
+                              22.40705,
+                              113.96657
+                          ],
+                          "name": {
+                              "zh-Hans": "兆邦苑",
+                              "zh-Hant": "兆邦苑",
+                              "en": "Siu Pong Court"
+                          },
+                          "id": 3061,
+                          "aplySysId": "1321347387561"
+                      },
+                      {
+                          "center": [
+                              22.408,
+                              113.96445
+                          ],
+                          "name": {
+                              "zh-Hans": "兆隆苑",
+                              "zh-Hant": "兆隆苑",
+                              "en": "Siu Lung Court"
+                          },
+                          "id": 3062,
+                          "aplySysId": "1321347387559"
+                      },
+                      {
+                          "center": [
+                              22.40516,
+                              113.96653
+                          ],
+                          "name": {
+                              "zh-Hans": "兆畦苑",
+                              "zh-Hant": "兆畦苑",
+                              "en": "Siu Kwai Court"
+                          },
+                          "id": 3063,
+                          "aplySysId": "1321347387631"
+                      },
+                      {
+                          "center": [
+                              22.37415,
+                              113.96657
+                          ],
+                          "name": {
+                              "zh-Hans": "兆禧苑",
+                              "zh-Hant": "兆禧苑",
+                              "en": "Siu Hei Court"
+                          },
+                          "id": 3064,
+                          "aplySysId": "1321347387622"
+                      },
+                      {
+                          "center": [
+                              22.4049,
+                              113.96277
+                          ],
+                          "name": {
+                              "zh-Hans": "新围苑",
+                              "zh-Hant": "新圍苑",
+                              "en": "San Wai Court"
+                          },
+                          "id": 3065,
+                          "aplySysId": "1321347387557"
+                      },
+                      {
+                          "center": [
+                              22.38419,
+                              113.97377
+                          ],
+                          "name": {
+                              "zh-Hans": "翠宁花园",
+                              "zh-Hant": "翠寧花園",
+                              "en": "Tsui Ning Garden"
+                          },
+                          "id": 3066,
+                          "aplySysId": "1321347387569"
+                      },
+                      {
+                          "center": [
+                              22.38445,
+                              113.97584
+                          ],
+                          "name": {
+                              "zh-Hans": "兆麟苑",
+                              "zh-Hant": "兆麟苑",
+                              "en": "Siu Lun Court"
+                          },
+                          "id": 3067,
+                          "aplySysId": "1321347387558"
+                      },
+                      {
+                          "center": [
+                              22.40289,
+                              113.98017
+                          ],
+                          "name": {
+                              "zh-Hans": "景峰花园",
+                              "zh-Hant": "景峰花園",
+                              "en": "Prime View Garden"
+                          },
+                          "id": 3074,
+                          "aplySysId": "1321347387568"
+                      },
+                      {
+                          "center": [
+                              22.40773,
+                              113.96972
+                          ],
+                          "name": {
+                              "zh-Hans": "兆轩苑",
+                              "zh-Hant": "兆軒苑",
+                              "en": "Siu Hin Court"
+                          },
+                          "id": 3075,
+                          "aplySysId": "1321347387556"
+                      },
+                      {
+                          "center": [
+                              22.4132,
+                              113.97809
+                          ],
+                          "name": {
+                              "zh-Hans": "兆康苑",
+                              "zh-Hant": "兆康苑",
+                              "en": "Siu Hong Court"
+                          },
+                          "id": 3192,
+                          "aplySysId": "1321347387536"
+                      }
+                  ],
+                  "center": [
+                      22.392574,
+                      113.96993
+                  ],
+                  "name": {
+                      "zh-Hans": "屯门",
+                      "zh-Hant": "屯門",
+                      "en": "Tuen Mun"
+                  },
+                  "zoom": 13,
+                  "id": 4
+              },
+              {
+                  "estates": [
+                      {
+                          "center": [
+                              22.36737,
+                              114.120186
+                          ],
+                          "name": {
+                              "zh-Hans": "尚翠苑",
+                              "zh-Hant": "尚翠苑",
+                              "en": "Sheung Chui Court"
+                          },
+                          "id": 15360,
+                          "aplySysId": "1509013438313"
+                      }
+                  ],
+                  "center": [
+                      22.3673756,
+                      114.1179987
+                  ],
+                  "name": {
+                      "zh-Hans": "荃湾",
+                      "zh-Hant": "荃灣",
+                      "en": "Tsuen Wan"
+                  },
+                  "zoom": 15,
+                  "id": 5
+              },
+              {
+                  "estates": [
+                      {
+                          "center": [
+                              22.346355,
+                              114.10895
+                          ],
+                          "name": {
+                              "zh-Hans": "青俊苑",
+                              "zh-Hant": "青俊苑",
+                              "en": "Ching Chun Court"
+                          },
+                          "id": 15420,
+                          "aplySysId": "1509012543851"
+                      },
+                      {
+                          "center": [
+                              22.37231,
+                              114.13807
+                          ],
+                          "name": {
+                              "zh-Hans": "宁峰苑",
+                              "zh-Hant": "寧峰苑",
+                              "en": "Ning Fung Court"
+                          },
+                          "id": 2998,
+                          "aplySysId": "1321347387538"
+                      },
+                      {
+                          "center": [
+                              22.34826,
+                              114.12724
+                          ],
+                          "name": {
+                              "zh-Hans": "悦丽苑",
+                              "zh-Hant": "悅麗苑",
+                              "en": "Yuet Lai Court"
+                          },
+                          "id": 2999,
+                          "aplySysId": "1321347387611"
+                      },
+                      {
+                          "center": [
+                              22.35324,
+                              114.10757
+                          ],
+                          "name": {
+                              "zh-Hans": "海悦花园",
+                              "zh-Hant": "海悅花園",
+                              "en": "Serene Garden"
+                          },
+                          "id": 3172,
+                          "aplySysId": "1321347387618"
+                      },
+                      {
+                          "center": [
+                              22.35066,
+                              114.13167
+                          ],
+                          "name": {
+                              "zh-Hans": "翠瑶苑",
+                              "zh-Hant": "翠瑤苑",
+                              "en": "Tsui Yiu Court"
+                          },
+                          "id": 3173,
+                          "aplySysId": "1321347387629"
+                      },
+                      {
+                          "center": [
+                              22.34895,
+                              114.1266
+                          ],
+                          "name": {
+                              "zh-Hans": "贤丽苑",
+                              "zh-Hant": "賢麗苑",
+                              "en": "Yin Lai Court"
+                          },
+                          "id": 3174,
+                          "aplySysId": "1321347387587"
+                      },
+                      {
+                          "center": [
+                              22.36175,
+                              114.13891
+                          ],
+                          "name": {
+                              "zh-Hans": "怡峰苑",
+                              "zh-Hant": "怡峰苑",
+                              "en": "Yi Fung Court"
+                          },
+                          "id": 3175,
+                          "aplySysId": "1321347387630"
+                      },
+                      {
+                          "center": [
+                              22.36273,
+                              114.10458
+                          ],
+                          "name": {
+                              "zh-Hans": "青雅苑",
+                              "zh-Hant": "青雅苑",
+                              "en": "Ching Nga Court"
+                          },
+                          "id": 3176,
+                          "aplySysId": "1321347387461"
+                      },
+                      {
+                          "center": [
+                              22.34974,
+                              114.10255
+                          ],
+                          "name": {
+                              "zh-Hans": "青盛苑",
+                              "zh-Hant": "青盛苑",
+                              "en": "Ching Shing Court"
+                          },
+                          "id": 3177,
+                          "aplySysId": "1321347387457"
+                      },
+                      {
+                          "center": [
+                              22.36289,
+                              114.101
+                          ],
+                          "name": {
+                              "zh-Hans": "青泰苑",
+                              "zh-Hant": "青泰苑",
+                              "en": "Ching Tai Court"
+                          },
+                          "id": 3178,
+                          "aplySysId": "1321347387462"
+                      },
+                      {
+                          "center": [
+                              22.36176,
+                              114.10465
+                          ],
+                          "name": {
+                              "zh-Hans": "青宏苑",
+                              "zh-Hant": "青宏苑",
+                              "en": "Ching Wang Court"
+                          },
+                          "id": 3179,
+                          "aplySysId": "1321347387463"
+                      },
+                      {
+                          "center": [
+                              22.34875,
+                              114.10063
+                          ],
+                          "name": {
+                              "zh-Hans": "青华苑",
+                              "zh-Hant": "青華苑",
+                              "en": "Ching Wah Court"
+                          },
+                          "id": 3180,
+                          "aplySysId": "1321347387459"
+                      },
+                      {
+                          "center": [
+                              22.36449,
+                              114.13186
+                          ],
+                          "name": {
+                              "zh-Hans": "葵俊苑",
+                              "zh-Hant": "葵俊苑",
+                              "en": "Kwai Chun Court"
+                          },
+                          "id": 3181,
+                          "aplySysId": "1321347387601"
+                      },
+                      {
+                          "center": [
+                              22.36963,
+                              114.12579
+                          ],
+                          "name": {
+                              "zh-Hans": "葵贤苑",
+                              "zh-Hant": "葵賢苑",
+                              "en": "Kwai Yin Court"
+                          },
+                          "id": 3182,
+                          "aplySysId": "1321347387586"
+                      },
+                      {
+                          "center": [
+                              22.36284,
+                              114.13013
+                          ],
+                          "name": {
+                              "zh-Hans": "葵康苑",
+                              "zh-Hant": "葵康苑",
+                              "en": "Kwai Hong Court"
+                          },
+                          "id": 3183,
+                          "aplySysId": "1321347387602"
+                      },
+                      {
+                          "center": [
+                              22.34305,
+                              114.1367
+                          ],
+                          "name": {
+                              "zh-Hans": "荔欣苑",
+                              "zh-Hant": "荔欣苑",
+                              "en": "Lai Yan Court"
+                          },
+                          "id": 3184,
+                          "aplySysId": "1321347387537"
+                      }
+                  ],
+                  "center": [
+                      22.357403,
+                      114.12052
+                  ],
+                  "name": {
+                      "zh-Hans": "葵青",
+                      "zh-Hant": "葵青",
+                      "en": "Kwai Tsing"
+                  },
+                  "zoom": 13,
+                  "id": 6
+              },
+              {
+                  "estates": [
+                      {
+                          "center": [
+                              22.25313,
+                              113.86679
+                          ],
+                          "name": {
+                              "zh-Hans": "天利苑",
+                              "zh-Hant": "天利苑",
+                              "en": "Tin Lee Court"
+                          },
+                          "id": 15140,
+                          "aplySysId": "1414739644327"
+                      },
+                      {
+                          "center": [
+                              22.265009,
+                              113.99336
+                          ],
+                          "name": {
+                              "zh-Hans": "银河苑",
+                              "zh-Hant": "銀河苑",
+                              "en": "Ngan Ho Court"
+                          },
+                          "id": 15540,
+                          "aplySysId": "1536026890620"
+                      },
+                      {
+                          "center": [
+                              22.264732,
+                              113.99551
+                          ],
+                          "name": {
+                              "zh-Hans": "银蔚苑",
+                              "zh-Hant": "銀蔚苑",
+                              "en": "Ngan Wai Court"
+                          },
+                          "id": 15541,
+                          "aplySysId": "1536028118749"
+                      },
+                      {
+                          "center": [
+                              22.28706,
+                              113.94302
+                          ],
+                          "name": {
+                              "zh-Hans": "裕东苑",
+                              "zh-Hant": "裕東苑",
+                              "en": "Yu Tung Court"
+                          },
+                          "id": 3167,
+                          "aplySysId": "1321347387458"
+                      },
+                      {
+                          "center": [
+                              22.25304,
+                              113.86266
+                          ],
+                          "name": {
+                              "zh-Hans": "龙轩苑",
+                              "zh-Hant": "龍軒苑",
+                              "en": "Lung Hin Court"
+                          },
+                          "id": 3168,
+                          "aplySysId": "1321347387460"
+                      }
+                  ],
+                  "center": [
+                      22.275488,
+                      113.94749
+                  ],
+                  "name": {
+                      "zh-Hans": "离岛",
+                      "zh-Hant": "離島",
+                      "en": "Islands"
+                  },
+                  "zoom": 11,
+                  "id": 9
+              }
+          ],
+          "zoom": 11,
+          "id": "5"
+      }
+  ]
+}

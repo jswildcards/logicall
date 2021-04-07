@@ -120,3 +120,5 @@ dist
 
 .DS_Store
 .sql
+key.json
+out.json
