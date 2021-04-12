@@ -1,7 +1,5 @@
 import moment from "moment-timezone";
 import {
-  Card,
-  CardItem,
   Body,
   Button,
   Icon,
@@ -12,7 +10,6 @@ import {
   Left,
   ListItem,
   View,
-  Fab,
   Right,
 } from "native-base";
 import React from "react";
@@ -81,7 +78,7 @@ export function JobDetail(props) {
 
           <Button
             block
-            onPress={() => Actions.map({ job, simulate: true })}
+            onPress={() => Actions.map({ job })}
             style={{ margin: 8 }}
           >
             <Icon ios-name="ios-map" name="map" />

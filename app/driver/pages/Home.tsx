@@ -4,11 +4,8 @@ import {
   Badge,
   Body,
   Button,
-  Card,
-  CardItem,
   Container,
   Content,
-  H3,
   Icon,
   Left,
   ListItem,
@@ -17,13 +14,10 @@ import {
 } from "native-base";
 import { useMutation, useQuery } from "react-apollo";
 import { Actions } from "react-native-router-flux";
-// import * as Location from 'expo-location';
-import moment from "moment-timezone";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import schema from "../utils/schema";
 import NoData from "../components/NoData";
 import FixedContainer from "../components/FixedContainer";
-import AvatarItem from "../components/AvatarItem";
 import HeavyBoxIcon from "../components/icons/HeavyBoxIcon";
 import { mapStatusToColor } from "../utils/convert";
 
@@ -34,20 +28,36 @@ function Page() {
   const [updateCurrentLocation] = useMutation(
     schema.mutation.updateCurrentLocation
   );
-  const {
-    getItem: globalCurrentLocation,
-    setItem: setGlobalCurrentLocation,
-  } = useAsyncStorage("currentLocation");
+  const { getItem: globalCurrentLocation } = useAsyncStorage("currentLocation");
+  const { getItem: globalTestMode } = useAsyncStorage("testMode");
 
-  const updateLocation = async () => {
-    const { latitude, longitude } = JSON.parse(
-      (await globalCurrentLocation()) ?? '{"latitude":"","longitude":""}'
-    );
+  const updateServerLocation = (location) => {
+    const { latitude, longitude } = location;
+
     updateCurrentLocation({
       variables: {
         input: { latitude: Number(latitude), longitude: Number(longitude) },
       },
     });
+  };
+
+  const updateLocation = async () => {
+    const testMode = ((await globalTestMode()) ?? "false") === "true";
+
+    if (testMode) {
+      const { latitude, longitude } = JSON.parse(
+        (await globalCurrentLocation()) ?? '{"latitude":"","longitude":""}'
+      );
+      updateServerLocation({ latitude, longitude });
+    } else {
+      navigator.geolocation.getCurrentPosition(({ coords }) => {
+        updateServerLocation(coords);
+      });
+
+      navigator.geolocation.watchPosition(({ coords }) => {
+        updateServerLocation(coords);
+      });
+    }
   };
 
   useEffect(() => {

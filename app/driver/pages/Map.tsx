@@ -9,9 +9,10 @@ import { mapStringToPolylines } from "../utils/convert";
 import schema from "../utils/schema";
 
 function Page(props) {
-  const { job, simulate } = props;
+  const { job } = props;
   const { order, polylines } = job;
   const [visitedLatLng, setVisitedLatLng] = useState(0);
+  const [simulate, setSimulate] = useState(false);
   const polylineLatLngs = mapStringToPolylines(polylines);
   const [updateCurrentLocation] = useMutation(
     schema.mutation.updateCurrentLocation
@@ -27,6 +28,7 @@ function Page(props) {
   const { setItem: setGlobalCurrentLocation } = useAsyncStorage(
     "currentLocation"
   );
+  const { getItem: globalTestMode } = useAsyncStorage("testMode");
 
   const getCurrentLatLng = (step: number) => {
     const [latitude, longitude] =
@@ -50,6 +52,7 @@ function Page(props) {
   const componentDidMount = async () => {
     const storedOrderId = await globalCurrentOrder();
     const storedMove = await globalCurrentMove();
+    setSimulate(((await globalTestMode()) ?? "false") === "true");
 
     if (
       storedOrderId === order.orderId &&
