@@ -46,6 +46,14 @@ export default function Home() {
               </Stack>
             </Box>
           </Link>
+          <Link href="/customer">
+            <Box borderRadius="md" p="8" as="button" bg="gray.100">
+              <Stack justify="center" align="center">
+                <Image height="124px" src="/customers.svg" alt="" />
+                <Text>Customers</Text>
+              </Stack>
+            </Box>
+          </Link>
         </Stack>
       </Container>
     </>
