@@ -27,7 +27,7 @@ function Page() {
     username: "",
     email: "",
     password: "",
-    role: "",
+    role: "customer",
   });
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
