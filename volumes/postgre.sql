@@ -17,21 +17,23 @@ CREATE TABLE "User" (
 );
 
 CREATE TABLE "Order" (
-  "orderId"             VARCHAR(255) PRIMARY KEY NOT NULL,
-  "creatorId"           INTEGER NOT NULL REFERENCES "User"("userId"),
-  "senderId"            INTEGER NOT NULL REFERENCES "User"("userId"),
-  "sendAddress"         TEXT NULL,
-  "sendLatLng"          TEXT NULL,
-  "receiverId"          INTEGER NOT NULL REFERENCES "User"("userId"),
-  "receiveAddress"      TEXT NULL,
-  "receiveLatLng"       TEXT NULL,
-  "suggestedPolylines"  TEXT NULL,
-  "status"              STATUS NULL,
-  "comments"            TEXT NULL,
-  "estimatedDuration"   INTEGER NULL,
-  "createdAt"           TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  "updatedAt"           TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  "deletedAt"           TIMESTAMP NULL
+  "orderId"               VARCHAR(255) PRIMARY KEY NOT NULL,
+  "creatorId"             INTEGER NOT NULL REFERENCES "User"("userId"),
+  "senderId"              INTEGER NOT NULL REFERENCES "User"("userId"),
+  "sendAddress"           TEXT NULL,
+  "sendLatLng"            TEXT NULL,
+  "receiverId"            INTEGER NOT NULL REFERENCES "User"("userId"),
+  "receiveAddress"        TEXT NULL,
+  "receiveLatLng"         TEXT NULL,
+  "suggestedPolylines"    TEXT NULL,
+  "status"                STATUS NULL,
+  "comments"              TEXT NULL,
+  "estimatedDuration"     INTEGER NULL,
+  "expectedCollectedTime" INTEGER NULL,
+  "expectedDeliveredTime" INTEGER NULL,
+  "createdAt"             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt"             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "deletedAt"             TIMESTAMP NULL
 );
 
 CREATE TABLE "OrderLog" (

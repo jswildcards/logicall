@@ -83,10 +83,14 @@ export const schema = {
               sendAddress
               receiveAddress
               status
+              expectedCollectedTime
+              expectedDeliveredTime
             }
           }
           sendOrders {
             orderId
+            expectedCollectedTime
+            expectedDeliveredTime
             sender {
               userId
               username
@@ -122,6 +126,8 @@ export const schema = {
           }
           receiveOrders {
             orderId
+            expectedCollectedTime
+            expectedDeliveredTime
             sender {
               userId
               username
@@ -178,6 +184,8 @@ export const schema = {
           estimatedDuration
           duration
           orderId
+          expectedCollectedTime
+          expectedDeliveredTime
           sender {
             userId
             username
@@ -236,6 +244,8 @@ export const schema = {
           estimatedDuration
           duration
           orderId
+          expectedCollectedTime
+          expectedDeliveredTime
           sender {
             userId
             username
@@ -308,6 +318,8 @@ export const schema = {
           estimatedDuration
           duration
           orderId
+          expectedCollectedTime
+          expectedDeliveredTime
           sender {
             userId
             username
@@ -393,6 +405,8 @@ export const schema = {
           estimatedDuration
           duration
           orderId
+          expectedCollectedTime
+          expectedDeliveredTime
           sender {
             userId
             username

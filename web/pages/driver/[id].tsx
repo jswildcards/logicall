@@ -24,11 +24,11 @@ import {
   SimpleGrid,
 } from "@chakra-ui/react";
 import { ArrowForwardIcon, RepeatIcon } from "@chakra-ui/icons";
+import { MdMail, MdPhone } from "react-icons/md";
 import schema from "../../utils/schema";
 import AppBar from "../../components/appbar";
 import DisplayName from "../../components/display-name";
 import { mapStatusToColor } from "../../utils/convert";
-import { MdMail, MdPhone } from "react-icons/md";
 
 export default function Post() {
   const router = useRouter();

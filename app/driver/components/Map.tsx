@@ -67,7 +67,7 @@ class Map extends React.Component {
       >
         <Marker
           key="send"
-          title="Start"
+          title="Send Address"
           description={sendAddress}
           coordinate={{
             latitude: sLat,
@@ -77,7 +77,7 @@ class Map extends React.Component {
         <Marker
           key="receive"
           pinColor="darkgreen"
-          title="End"
+          title="Receive Address"
           description={receiveAddress}
           coordinate={{
             latitude: rLat,
@@ -87,7 +87,7 @@ class Map extends React.Component {
         <Marker
           key="current"
           pinColor="skyblue"
-          title="Your Current Position"
+          title="Your Start Position"
           coordinate={{
             latitude: cLat,
             longitude: cLng,

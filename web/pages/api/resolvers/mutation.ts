@@ -255,7 +255,11 @@ export async function updateOrderStatus(
       user,
       polylines: suggestedPolylines,
       lastDuration: estimatedDuration,
+      duration,
     } = success;
+
+    const expectedCollectedTime = Number(duration);
+    const expectedDeliveredTime = expectedCollectedTime + Number(nextOrder.estimatedDuration);
 
     // update order status to "Collecting"
     const updatedOrder = await prisma.order.update({
@@ -263,6 +267,8 @@ export async function updateOrderStatus(
       data: {
         status: "Collecting",
         comments: `Assigned to @${user.username}`,
+        expectedCollectedTime,
+        expectedDeliveredTime,
       },
     });
 

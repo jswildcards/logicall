@@ -1,6 +1,5 @@
 import moment from "moment-timezone";
 import {
-  CardItem,
   Body,
   Button,
   Text,
@@ -225,18 +224,27 @@ export function OrderDetail(props) {
             </Body>
           </ListItem>
 
-          <ListItem icon last noBorder>
-            <Left>
-              <Icon name="timer" ios="ios-timer" />
-            </Left>
-            <Body>
-              <Text>
-                {`${Math.floor((durations[1] - durations[0]) / 60)} min ${
-                  (durations[1] - durations[0]) % 60
-                } sec`}
-              </Text>
-            </Body>
-          </ListItem>
+          {order.expectedCollectedTime && (
+            <ListItem icon last noBorder>
+              <Left>
+                <Icon name="timer" ios="ios-timer" />
+              </Left>
+              <Body>
+                <Text>
+                  {moment
+                    .tz(
+                      Number(
+                        order.logs.find((log) => log.status === "Collecting")
+                          .createdAt
+                      ) +
+                        Number(order.expectedCollectedTime) * 1000,
+                      "Asia/Hong_Kong"
+                    )
+                    .format("YYYY-MM-DD HH:mm")}
+                </Text>
+              </Body>
+            </ListItem>
+          )}
 
           <View style={{ display: "flex", alignItems: "center" }}>
             <Icon name="arrow-down" ios="ios-arrow-down" />
@@ -252,18 +260,27 @@ export function OrderDetail(props) {
             </Body>
           </ListItem>
 
-          <ListItem icon last noBorder>
-            <Left>
-              <Icon name="timer" ios="ios-timer" />
-            </Left>
-            <Body>
-              <Text>
-                {`${Math.floor(durations[1] / 60)} min ${
-                  durations[1] % 60
-                } sec`}
-              </Text>
-            </Body>
-          </ListItem>
+          {order.expectedDeliveredTime && (
+            <ListItem icon last noBorder>
+              <Left>
+                <Icon name="timer" ios="ios-timer" />
+              </Left>
+              <Body>
+                <Text>
+                  {moment
+                    .tz(
+                      Number(
+                        order.logs.find((log) => log.status === "Collecting")
+                          .createdAt
+                      ) +
+                        Number(order.expectedDeliveredTime) * 1000,
+                      "Asia/Hong_Kong"
+                    )
+                    .format("YYYY-MM-DD HH:mm")}
+                </Text>
+              </Body>
+            </ListItem>
+          )}
 
           <ListItem icon last itemDivider>
             <Left>

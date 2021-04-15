@@ -8,26 +8,28 @@ datasource db {
 }
 
 model Order {
-  orderId            String     @id
-  creatorId          Int
-  senderId           Int
-  sendAddress        String?
-  sendLatLng         String?
-  receiverId         Int
-  receiveAddress     String?
-  receiveLatLng      String?
-  suggestedPolylines String?
-  status             status?
-  comments           String?
-  estimatedDuration  Int?
-  createdAt          DateTime   @default(now())
-  updatedAt          DateTime   @default(now())
-  deletedAt          DateTime?
-  creator            User       @relation("Order_creatorIdToUser", fields: [creatorId], references: [userId])
-  receiver           User       @relation("Order_receiverIdToUser", fields: [receiverId], references: [userId])
-  sender             User       @relation("Order_senderIdToUser", fields: [senderId], references: [userId])
-  jobs               Job[]
-  logs               OrderLog[]
+  orderId               String     @id
+  creatorId             Int
+  senderId              Int
+  sendAddress           String?
+  sendLatLng            String?
+  receiverId            Int
+  receiveAddress        String?
+  receiveLatLng         String?
+  suggestedPolylines    String?
+  status                status?
+  comments              String?
+  estimatedDuration     Int?
+  expectedCollectedTime Int?
+  expectedDeliveredTime Int?
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @default(now())
+  deletedAt             DateTime?
+  creator               User       @relation("Order_creatorIdToUser", fields: [creatorId], references: [userId])
+  receiver              User       @relation("Order_receiverIdToUser", fields: [receiverId], references: [userId])
+  sender                User       @relation("Order_senderIdToUser", fields: [senderId], references: [userId])
+  jobs                  Job[]
+  logs                  OrderLog[]
 }
 
 model OrderLog {

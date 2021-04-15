@@ -90,6 +90,8 @@ type Order {
   receiveLatLng: LatLng
   suggestedPolylines: String
   estimatedDuration: Int
+  expectedCollectedTime: Int
+  expectedDeliveredTime: Int
   duration: Int
   status: String
   comments: String

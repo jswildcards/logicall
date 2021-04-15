@@ -29,6 +29,8 @@ export const schema = {
           sendOrders {
             estimatedDuration
             orderId
+            expectedCollectedTime
+            expectedDeliveredTime
             creator {
               userId
             }
@@ -85,6 +87,8 @@ export const schema = {
               userId
             }
             orderId
+            expectedCollectedTime
+            expectedDeliveredTime
             sender {
               userId
               username
@@ -152,6 +156,8 @@ export const schema = {
       {
         orders {
           orderId
+          expectedCollectedTime
+          expectedDeliveredTime
           sender {
             userId
             username
@@ -189,6 +195,8 @@ export const schema = {
       mutation updateOrderStatus($input: UpdateOrderStatusInput) {
         updateOrderStatus(input: $input) {
           orderId
+          expectedCollectedTime
+          expectedDeliveredTime
           sender {
             userId
             username
@@ -224,6 +232,8 @@ export const schema = {
       mutation createOrder($input: CreateOrderInput) {
         createOrder(input: $input) {
           orderId
+          expectedCollectedTime
+          expectedDeliveredTime
           sender {
             userId
             username

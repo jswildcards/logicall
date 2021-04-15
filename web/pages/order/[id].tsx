@@ -41,7 +41,7 @@ import {
 import dynamic from "next/dynamic";
 import moment from "moment-timezone";
 import { ArrowDownIcon, RepeatIcon, SmallCloseIcon } from "@chakra-ui/icons";
-import { MdMap } from "react-icons/md";
+import { MdMap, MdTimer } from "react-icons/md";
 import schema from "../../utils/schema";
 import AppBar from "../../components/appbar";
 import DisplayName from "../../components/display-name";
@@ -57,6 +57,16 @@ export default function Post() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isRefetching, setRefetching] = useState(false);
   const [updateOrderStatus] = useMutation(schema.mutation.updateOrderStatus);
+  const { data: drivers, refetch: refetchDrivers } = useQuery(
+    schema.query.drivers
+  );
+  useSubscription(schema.subscription.currentLocationUpdated, {
+    onSubscriptionData: async () => {
+      setRefetching(true);
+      await refetchDrivers();
+      setRefetching(false);
+    },
+  });
 
   useSubscription(schema.subscription.orderStatusUpdated, {
     onSubscriptionData: () => refetch({ orderId: router.query.id }),
@@ -198,6 +208,24 @@ export default function Post() {
                   <Icon as={MdMap} />
                   <Text>{order.sendAddress}</Text>
                 </Stack>
+                {order.expectedCollectedTime && (
+                  <Stack direction="row" align="center">
+                    <Icon as={MdTimer} />
+                    <Text>
+                      {moment
+                        .tz(
+                          Number(
+                            order.logs.find(
+                              (log) => log.status === "Collecting"
+                            ).createdAt
+                          ) +
+                            Number(order.expectedCollectedTime) * 1000,
+                          "Asia/Hong_Kong"
+                        )
+                        .format("YYYY-MM-DD HH:mm")}
+                    </Text>
+                  </Stack>
+                )}
                 <Flex justify="center">
                   <ArrowDownIcon />
                 </Flex>
@@ -206,6 +234,24 @@ export default function Post() {
                   <Icon as={MdMap} />
                   <Text>{order.receiveAddress}</Text>
                 </Stack>
+                {order.expectedDeliveredTime && (
+                  <Stack direction="row" align="center">
+                    <Icon as={MdTimer} />
+                    <Text>
+                      {moment
+                        .tz(
+                          Number(
+                            order.logs.find(
+                              (log) => log.status === "Collecting"
+                            ).createdAt
+                          ) +
+                            Number(order.expectedDeliveredTime) * 1000,
+                          "Asia/Hong_Kong"
+                        )
+                        .format("YYYY-MM-DD HH:mm")}
+                    </Text>
+                  </Stack>
+                )}
               </Stack>
 
               <Divider />
@@ -266,10 +312,25 @@ export default function Post() {
           <GridItem colSpan={2}>
             <Map
               markers={[
-                { ...order.sendLatLng, message: `Start: ${order.sendAddress}` },
+                {
+                  ...order.sendLatLng,
+                  message: `Send Address: ${order.sendAddress}`,
+                },
                 {
                   ...order.receiveLatLng,
-                  message: `End: ${order.receiveAddress}`,
+                  message: `Receive Address: ${order.receiveAddress}`,
+                },
+                drivers?.drivers?.find(
+                  (driver) =>
+                    Number(driver.userId) ===
+                    Number(order.jobs?.[0]?.driver?.userId)
+                ) && {
+                  ...drivers?.drivers?.find(
+                    (driver) =>
+                      Number(driver.userId) ===
+                      Number(order.jobs?.[0]?.driver?.userId)
+                  ).currentLocation?.latLng,
+                  message: `Driver Current Location`,
                 },
               ]}
               polylines={[
