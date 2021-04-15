@@ -15,6 +15,7 @@ import {
 import { useMutation, useQuery } from "react-apollo";
 import { Actions } from "react-native-router-flux";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
+import * as Location from "expo-location";
 import schema from "../utils/schema";
 import NoData from "../components/NoData";
 import FixedContainer from "../components/FixedContainer";
@@ -50,11 +51,12 @@ function Page() {
       );
       updateServerLocation({ latitude, longitude });
     } else {
-      navigator.geolocation.getCurrentPosition(({ coords }) => {
-        updateServerLocation(coords);
-      });
+      await Location.requestPermissionsAsync();
 
-      navigator.geolocation.watchPosition(({ coords }) => {
+      const { coords } = await Location.getCurrentPositionAsync({ enableHighAccuracy: true }).catch(console.log);
+      updateServerLocation(coords);
+
+      Location.watchPositionAsync({ enableHighAccuracy: true }, ({ coords }) => {
         updateServerLocation(coords);
       });
     }
