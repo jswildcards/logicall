@@ -176,7 +176,7 @@ function Page() {
                 onPress={() => setPasswordVisible(!isPasswordVisible)}
               />
             </Item>
-            <ListItem>
+            {/* <ListItem>
               <CheckBox
                 checked={testMode}
                 onPress={() => setTestMode(!testMode)}
@@ -242,7 +242,7 @@ function Page() {
                   </Item>
                 </Form>
               </>
-            )}
+            )} */}
             <Button
               style={styles.textSignUp}
               disabled={isLoading}

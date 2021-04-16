@@ -332,7 +332,7 @@ export default function Post() {
                   ).currentLocation?.latLng,
                   message: `Driver Current Location`,
                 },
-              ]}
+              ].filter(Boolean)}
               polylines={[
                 [
                   polylines,
