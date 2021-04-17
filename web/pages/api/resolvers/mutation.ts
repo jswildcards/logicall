@@ -55,7 +55,10 @@ export async function signIn(
   throw new Error("Your username/password is wrong. Please try again.");
 }
 
-export async function signOut(_parent: any, _args: any, { response }: Context) {
+export async function signOut(_parent: any, _args: any, { auth, redis, response }: Context) {
+  if (auth?.role === "driver") {
+    await redis.hdel("location", auth?.username);
+  }
   setCookie(response, CookieConfig.token, "", {
     maxAge: 0,
     httpOnly: true,
