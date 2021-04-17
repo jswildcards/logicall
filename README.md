@@ -28,6 +28,8 @@ When docker build is done, open http://localhost to view the homepage.
 
 First, create an Emulator from Android Studio, or prepare a mobile phone connected to the computer.
 
+Note: You will need "Expo" app installed in your phone. Please see https://expo.io/client for more.
+
 Then, run the following command:
 
 For Customer App:
@@ -46,6 +48,6 @@ For Driver App:
 
 Then, press `a` in the command prompt to open app in Android Phone or `i` to open app in iPhone.
 
-## Sign In Account
+## Application Sign In Account
 
 In the admin web application, use `heavybutterfly271` for username and `password` for password. Go to driver page or customer page to get the corresponding username. The password for all accounts is `password`.
