@@ -14,6 +14,18 @@ Install Expo using Npm:
 > npm install --global expo-cli
 ```
 
+Copy the environment variable from .env.example:
+
+```bash
+> cp ./web/.env.example ./web/.env
+> cp ./app/customer/.env.example ./app/customer/.env
+> cp ./app/driver/.env.example ./app/driver/.env
+```
+
+Check the IP address of you local machine, and update the field `EXPO_HOST` for both `./app/customer/.env` and `./app/driver/.env`.
+
+Sign up for a free acount from [HERE Platform](https://developer.here.com/sign-up?create=Freemium-Basic&keepState=true&step=account), then create an API Key at HERE REST APIs. Copy the key to the field `HERE_API_KEY` of `./web/.env`.
+
 ### Build
 
 #### Web Application
@@ -51,3 +63,5 @@ Then, press `a` in the command prompt to open app in Android Phone or `i` to ope
 ## Application Sign In Account
 
 In the admin web application, use `heavybutterfly271` for username and `password` for password. Go to driver page or customer page to get the corresponding username. The password for all accounts is `password`.
+
+Note that you cannot sign in an account for another role platform. For example, you cann sign in a `customer` account for `admin` web application.
