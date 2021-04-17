@@ -48,6 +48,7 @@ For Customer App:
 
 ```bash
 > cd ./app/customer
+> yarn
 > yarn start
 ```
 
@@ -55,6 +56,7 @@ For Driver App:
 
 ```bash
 > cd ./app/driver
+> yarn
 > yarn start
 ```
 
