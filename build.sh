@@ -2,7 +2,7 @@
 
 case $1 in
   init)
-    for dir in '.' './web' './app/customer'
+    for dir in '.' './web' './app/customer' './app/driver'
     do
       cp "$dir/.env.example" "$dir/.env"
       [ -f "$dir/.env" ] && echo "Created: $dir/.env"
