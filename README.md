@@ -6,20 +6,18 @@
 
 - [Docker v20.10.5](https://www.docker.com/get-started)
 - [Node v12.18.4](https://nodejs.org/en/)
-- Npm v6.14.6
+- NPM v6.14.6
 
-Install Expo using Npm:
+Install Expo using NPM:
 
 ```bash
 > npm install --global expo-cli
 ```
 
-Copy the environment variable from .env.example:
+Initialize the project (build environment files):
 
 ```bash
-> cp ./web/.env.example ./web/.env
-> cp ./app/customer/.env.example ./app/customer/.env
-> cp ./app/driver/.env.example ./app/driver/.env
+> ./build.sh init
 ```
 
 Check the IP address of you local machine, and update the field `EXPO_HOST` for both `./app/customer/.env` and `./app/driver/.env`.
